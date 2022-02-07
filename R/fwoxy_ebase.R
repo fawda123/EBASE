@@ -180,7 +180,6 @@ ebasemetab <- fwoxyebase %>%
   mutate(
     var = factor(var, levels = c('D', 'Pg_vol', 'Rt_vol', 'dDO'), labels = c('gasexd', 'gppd', 'erd', 'dcdtd')) 
   )
-  na.omit()
   
 # plot colors
 colors <- c(gasexd = "red3", gppd = "orange", erd = "purple4", dcdtd = "steelblue3")
