@@ -29,6 +29,7 @@ example <- fwoxy(oxy_ic = oxy_ic, a_param = a_param, er_param = er_param,
 
 # number of seconds between observations
 interval <- 900
+troc <- 86400 / interval
 
 # number of MCMC iterations 
 n.iter <- 10000
@@ -67,7 +68,7 @@ dates <- unique(data$Date)
 
 # evaluate dates with complete record
 n.records <- tapply(data$Date, INDEX=data$Date, FUN=length)
-dates <- dates[n.records == (86400/interval)] # select only dates with full days
+dates <- dates[n.records == troc] # select only dates with full days
 
 # iterate through each date to estimate metabolism ------------------------
 
@@ -80,7 +81,7 @@ registerDoParallel(cl)
 strt <- Sys.time()
 
 # process
-output <- foreach(d = dates, .packages = c('here', 'R2jags'), .export = c('interval')) %dopar% { 
+output <- foreach(d = dates, .packages = c('here', 'R2jags'), .export = 'troc') %dopar% { 
   
   sink(here('log.txt'))
   cat('Log entry time', as.character(Sys.time()), '\n')
@@ -100,13 +101,14 @@ output <- foreach(d = dates, .packages = c('here', 'R2jags'), .export = c('inter
   U10 <- data.sub$U10
   
   # Initial values, leave as NULL if no convergence issues
-  inits <- NULL
-  # inits <- function(){
-  #   list(
-  #     A = A.init,
-  #     R = R.init / (86400 / interval)
-  #   )
-  # }
+  # inits <- NULL
+  inits <- function(){
+    list(
+      a = 0.2, # / troc, 
+      r = 20, # / troc, 
+      b = 0.06# / troc
+    )
+  }
   
   # Different random seeds
   kern <- as.integer(runif(1000,min=1,max=10000))
@@ -115,7 +117,7 @@ output <- foreach(d = dates, .packages = c('here', 'R2jags'), .export = c('inter
   # Set 
   n.chains <- 3
   n.thin <- 10
-  data.list <- list("num.measurements", "interval", "DO.meas", "PAR", "DO.sat", "sc", "H", "U10")
+  data.list <- list("num.measurements", "troc", "DO.meas", "PAR", "DO.sat", "sc", "H", "U10")
   
   # Define monitoring variables (returned by jags)
   params <- c("ats", "bts", "gppts", "erts", "gets", "DO.modelled")
@@ -161,10 +163,10 @@ fwoxyebase <- do.call('rbind', output) %>%
   unite(DateTimeStamp, c('Date', 'Time'), sep = '_') %>% 
   mutate(
     DateTimeStamp = lubridate::ymd_hms(DateTimeStamp, tz = 'America/Jamaica'),
-    Pg_vol = gppts * (86400 / interval), # O2 mmol/m3/d
-    Rt_vol = erts * (86400 / interval), # O2 mmol/m3/d
-    D = -1 * gets * (86400 / interval), # O2 mmol/m3/d
-    dDO = dDO * (86400 / interval) # O2 mmol/m3/d
+    Pg_vol = gppts * troc, # O2 mmol/m3/d
+    Rt_vol = erts * troc, # O2 mmol/m3/d
+    D = -1 * gets * troc, # O2 mmol/m3/d
+    dDO = dDO * troc # O2 mmol/m3/d
   )
 
 # plot colors
