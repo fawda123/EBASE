@@ -104,9 +104,9 @@ output <- foreach(d = dates, .packages = c('here', 'R2jags'), .export = 'troc') 
   # inits <- NULL
   inits <- function(){
     list(
-      a = 0.2, # / troc, 
-      r = 20, # / troc, 
-      b = 0.06# / troc
+      a = 0.2, 
+      r = 20,
+      b = 0.06 # dys/m
     )
   }
   

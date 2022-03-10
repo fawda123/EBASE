@@ -27,8 +27,8 @@
         + troc * (a * PAR[i] -  r - (1 / H[i]) * (-b * pow(U10[i], 2) * pow(sc[i] / 600, -0.5) * (DO.sat[i]-DO.modelled[i])))
       
       # posterior predictive assessment nodes #
-      ats[i] <- a
-      bts[i] <- b
+      ats[i] <- a * troc
+      bts[i] <- b * troc
       gppts[i] <- troc * (a * PAR[i])
       erts[i] <- troc * r
       gets[i] <- troc * ((1 / H[i]) * (b * pow(U10[i], 2) * pow(sc[i] / 600, -0.5) * (DO.sat[i]-DO.modelled[i])))
