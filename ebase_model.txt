@@ -16,9 +16,9 @@
     # bsd <- 1.341 * bmean
     # btau <- 1 / (bsd * bsd)
     
-    a ~ dunif(0.8 * amean, 1.2 * amean)
+    a ~ dunif(0.9 * amean, 1.1 * amean)
     r ~ dnorm(0, 0.01)T(0,)
-    b ~ dunif(0.8 * bmean, 1.2 * bmean)
+    b ~ dunif(0.9 * bmean, 1.1 * bmean)
     
     tau ~ dgamma(1,0.001)
     

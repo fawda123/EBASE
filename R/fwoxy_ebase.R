@@ -157,17 +157,20 @@ output <- foreach(d = dates, .packages = c('here', 'R2jags'), .export = 'troc') 
 
 stopCluster(cl)
 
-# correct instantanous obs to daily, g to mmol
+# correct instantaneous obs to daily, g to mmol
 fwoxyebase <- do.call('rbind', output) %>% 
   na.omit() %>% 
   unite(DateTimeStamp, c('Date', 'Time'), sep = '_') %>% 
   mutate(
     DateTimeStamp = lubridate::ymd_hms(DateTimeStamp, tz = 'America/Jamaica'),
-    Pg_vol = gppts * troc, # O2 mmol/m3/d
-    Rt_vol = erts * troc, # O2 mmol/m3/d
-    D = -1 * gets * troc, # O2 mmol/m3/d
-    dDO = dDO * troc # O2 mmol/m3/d
-  )
+    a = ats * troc, # 
+    b = bts * 100 * 3600 / interval, # ts/m to hr/cm 
+    Pg_vol = gppts * troc, # O2 mmol/m3/ts to O2 mmol/m3/d
+    Rt_vol = erts * troc, # O2 mmol/m3/ts to O2 mmol/m3/d
+    D = -1 * gets * troc, #  # O2 mmol/m3/ts to O2 mmol/m3/d
+    dDO = dDO * troc #  # O2 mmol/m3/ts to O2 mmol/m3/d
+  ) %>% 
+  select(-ats, -bts, -gppts, -erts, -gets)
 
 # plot colors
 colors <- c(gasexd = "red3", gppd = "orange", erd = "purple4", dcdtd = "steelblue3")
