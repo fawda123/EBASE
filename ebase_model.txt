@@ -7,20 +7,20 @@
   
     # set priors
     amean <- 0.2 / troc
-    asd <- 0.01 * amean
-    atau <- 1 / (asd * asd)
-    rmean <- 20 / troc
-    rsd <- 1.341 * rmean
-    rtau <- 1 / (rsd * rsd)
+    # asd <- 0.01 * amean
+    # atau <- 1 / (asd * asd)
+    # rmean <- 20 / troc
+    # rsd <- 1.341 * rmean
+    # rtau <- 1 / (rsd * rsd)
     bmean <- 0.251 / 400
-    bsd <- 1.341 * bmean
-    btau <- 1 / (bsd * bsd)
+    # bsd <- 1.341 * bmean
+    # btau <- 1 / (bsd * bsd)
     
-    a ~ dunif(0.9 * amean, 1.1 * amean)
-    r ~ dnorm(rmean, rtau)
-    b ~ dunif(0.9 * bmean, 1.1 * bmean)
+    a ~ dunif(0.8 * amean, 1.2 * amean)
+    r ~ dnorm(0, 0.01)T(0,)
+    b ~ dunif(0.8 * bmean, 1.2 * bmean)
     
-    tau~dgamma(1,0.001)
+    tau ~ dgamma(1,0.001)
     
     #--------
 

@@ -101,14 +101,14 @@ output <- foreach(d = dates, .packages = c('here', 'R2jags'), .export = 'troc') 
   U10 <- data.sub$U10
   
   # Initial values, leave as NULL if no convergence issues
-  # inits <- NULL
-  inits <- function(){
-    list(
-      a = 0.2 / troc, 
-      r = 20 / troc,
-      b = 0.251 / 400
-    )
-  }
+  inits <- NULL
+  # inits <- function(){
+  #   list(
+  #     a = 0.2 / troc, 
+  #     r = 20 / troc,
+  #     b = 0.251 / 400
+  #   )
+  # }
   
   # Different random seeds
   kern <- as.integer(runif(1000,min=1,max=10000))
