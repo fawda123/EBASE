@@ -142,12 +142,12 @@ output <- foreach(d = dates, .packages = c('here', 'R2jags'), .export = 'troc') 
                        DO.meas = data.sub$DO.meas,
                        DO.modelled = metabfit$BUGSoutput$mean$DO.modelled,
                        Time = data.sub$Time,
-                       ats = c(NA, metabfit$BUGSoutput$mean$ats), 
-                       bts = c(NA, metabfit$BUGSoutput$mean$bts),
-                       gppts = c(NA, metabfit$BUGSoutput$mean$gppts), # O2, mmol/m3/15 min
-                       erts = c(NA, metabfit$BUGSoutput$mean$erts), # O2, mmol/m3/15 min 
-                       gets = c(NA, metabfit$BUGSoutput$mean$gets), # O2, mmol/m3/15 min
-                       dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO.modelled)) # O2 mmol/m3/15 min
+                       ats = c(NA, metabfit$BUGSoutput$mean$ats), # (mmol/m3/ts)/(W/m2)
+                       bts = c(NA, metabfit$BUGSoutput$mean$bts), # ts/m
+                       gppts = c(NA, metabfit$BUGSoutput$mean$gppts), # O2, mmol/m3/ts
+                       erts = c(NA, metabfit$BUGSoutput$mean$erts), # O2, mmol/m3/ts 
+                       gets = c(NA, metabfit$BUGSoutput$mean$gets), # O2, mmol/m3/ts
+                       dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO.modelled)) # O2 mmol/m3/ts
                        
   )
   
@@ -158,12 +158,12 @@ output <- foreach(d = dates, .packages = c('here', 'R2jags'), .export = 'troc') 
 stopCluster(cl)
 
 # correct instantaneous obs to daily, g to mmol
-fwoxyebase <- do.call('rbind', output) %>% 
+out <- do.call('rbind', output) %>% 
   na.omit() %>% 
   unite(DateTimeStamp, c('Date', 'Time'), sep = '_') %>% 
   mutate(
     DateTimeStamp = lubridate::ymd_hms(DateTimeStamp, tz = 'America/Jamaica'),
-    a = ats * troc, # 
+    a = ats * troc, # (mmol/m3/ts)/(W/m2) to (mmol/m3/d)/(W/m2)
     b = bts * 100 * 3600 / interval, # ts/m to hr/cm 
     Pg_vol = gppts * troc, # O2 mmol/m3/ts to O2 mmol/m3/d
     Rt_vol = erts * troc, # O2 mmol/m3/ts to O2 mmol/m3/d
@@ -172,44 +172,3 @@ fwoxyebase <- do.call('rbind', output) %>%
   ) %>% 
   select(-ats, -bts, -gppts, -erts, -gets)
 
-# plot colors
-colors <- c(gasexd = "red3", gppd = "orange", erd = "purple4", dcdtd = "steelblue3")
-
-ebasemetab <- fwoxyebase %>%
-  mutate(
-    secs = getsec(DateTimeStamp), 
-    typ = 'EBASE'
-  ) %>% 
-  select(secs, typ, Pg_vol, Rt_vol, D, dDO) %>% 
-  gather(var, val, -secs, -typ) %>% 
-  mutate(
-    var = factor(var, levels = c('D', 'Pg_vol', 'Rt_vol', 'dDO'), labels = c('gasexd', 'gppd', 'erd', 'dcdtd')) 
-  )
-  
-# plot colors
-colors <- c(gasexd = "red3", gppd = "orange", erd = "purple4", dcdtd = "steelblue3")
-brks <- seq(1, 518400,by = 43200)
-labs <- rep(c(0, 12), length.out = length(brks))
-
-ggplot(ebasemetab, aes(x = secs, y = val, color = var)) + 
-  geom_line() +
-  # facet_wrap(~typ, ncol = 1) +
-  scale_color_manual(values = colors) +
-  scale_x_continuous(labels = labs, breaks = brks) +
-  theme_bw() + 
-  labs(
-    y = 'Flux, mmol/m3/d', 
-    x = 'Hour of day'
-  ) +
-  theme(
-    legend.title = element_blank(), 
-    strip.background = element_blank()
-  )
-
-toplo <- fwoxyebase %>% 
-  select(DateTimeStamp, DO.meas, DO.modelled) %>% 
-  gather('var', 'val', -DateTimeStamp)
-
-ggplot(toplo, aes(x = DateTimeStamp, y = val, color = var)) + 
-  geom_line() + 
-  theme_minimal()

@@ -16,9 +16,9 @@
     # bsd <- 1.341 * bmean
     # btau <- 1 / (bsd * bsd)
     
-    a ~ dunif(0.9 * amean, 1.1 * amean)
+    a ~ dunif(0 * amean, 2 * amean)
     r ~ dnorm(0, 0.01)T(0,)
-    b ~ dunif(0.9 * bmean, 1.1 * bmean)
+    b ~ dunif(0.8 * bmean, 1.2 * bmean) # note that Wanninkhof reports uncertainty of this parametes at +/- 20%
     
     tau ~ dgamma(1,0.001)
     

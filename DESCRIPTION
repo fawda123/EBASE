@@ -1,0 +1,60 @@
+Package: EBASE
+Title: Estuarine Bayesian Single-station Estimation method for ecosystem metabolism
+Version: 0.0.0.9000
+Date: 2022-03-24
+Authors@R: c(
+    person(given = "Marcus",
+      family = "Beck",
+      role = c("aut", "cre"),
+      email = "mbeck@tbep.org",
+      comment = c(ORCID = "0000-0002-4996-0059")
+    ),
+    person(given = "Maria",
+      family = "Herrmann",
+      role = c("aut"),
+      email = "mxh367@psu.edu"
+    ),
+    person(given = "Jill",
+      family = "Arriola",
+      role = c("aut"),
+      email = "jva5648@psu.edu",
+      comment = c(ORCID = "0000-0003-2173-8349")
+    ),
+    person(given = "Raymond",
+      family = "Najjar",
+      role = c("aut"),
+      email = "rgn1@psu.edu",
+      comment = c(ORCID = "0000-0002-2960-5965")
+    ),
+    person(given = "Wade",
+      family = "McGillis",
+      role = c("aut"),
+      email = "wmcgillis@nd.edu",
+      comment = c(ORCID = "0000-0002-7591-7281")
+    )
+  )
+Description: Bayesian estimation methods for ecosystem metabolism at
+  indivdual estuarine monitoring stations with continuous dissolved 
+  oxygen time series. A mass balance equation is used that provides
+  estimates of parameters for gross primary production, respiration, 
+  and gas exchange.
+Depends: 
+  R (>= 3.5)
+Imports:
+  dplyr,
+  foreach,
+  ggplot2,
+  lubridate,
+  Rsjags,
+  tidyr
+Suggests:
+  doParallel,
+  fwoxy
+Remotes:
+  jmarriola/fwoxy
+License: CC0
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+URL: https://github.com/fawda123/EBASE
+BugReports: https://github.com/fawda123/EBASE/issues
