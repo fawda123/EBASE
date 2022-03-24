@@ -43,13 +43,13 @@ Depends:
 Imports:
   dplyr,
   foreach,
+  fwoxy,
   ggplot2,
   lubridate,
   Rsjags,
   tidyr
 Suggests:
-  doParallel,
-  fwoxy
+  doParallel
 Remotes:
   jmarriola/fwoxy
 License: CC0
