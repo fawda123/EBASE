@@ -15,7 +15,9 @@
 #' 
 #' @import here
 #' @import foreach
-
+#'
+#' @return A data frame with metabolic estimates as mmol/m3/d
+#' 
 #' @examples 
 #' \dontrun{
 #' 
