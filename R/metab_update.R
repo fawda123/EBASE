@@ -8,6 +8,8 @@
 #' 
 #' @return Updated jags metabolism output
 #'
+#' @export
+#' 
 #' @details This function is used by \code{\link{ebase}} and is not to be called directly by the user.  It provides additional model iterations if convergence is not achieved.
 metab_update <- function(metabfit, update.chains, n.iter){
   

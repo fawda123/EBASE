@@ -15,8 +15,11 @@
 #' 
 #' @details The DO time series has been detided using weighted regression in WtRegDO: \url{https://github.com/fawda123/WtRegDO}
 #' 
-#'\dontrun{
+#' @examples 
+#' 
+#' \dontrun{
 #' library(dplyr)
+#' library(tidyr)
 #'
 #' exdat <- read.csv('data-raw/APNERR2012dtd.csv') %>% 
 #'   rename(
@@ -31,6 +34,6 @@
 #'   ) %>% 
 #'   select(DateTimeStamp, DO_obs, Temp, Sal, PAR, WSpd) 
 #' 
-#' save(exdat, file = 'data/exdat.RData')
+#' save(exdat, file = 'data/exdat.RData', compression = 'xz')
 #'}
 "exdat"
