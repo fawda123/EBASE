@@ -38,6 +38,9 @@ ebase(
 
 \item{progress}{logical if progress saved to a txt file names 'log.txt' in the working directory}
 }
+\value{
+A data frame with metabolic estimates as mmol/m3/d
+}
 \description{
 Estuarine Bayesian Single-station Estimation method for ecosystem metabolism
 }
