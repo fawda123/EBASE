@@ -21,6 +21,8 @@ options(repos = c(
 install.packages('EBASE')
 ```
 
+The [JAGS](https://mcmc-jags.sourceforge.io/) software must also be installed to use this package.  Follow the instructions in the link to download and install the version appropriate for your operating system.   
+
 ### Minimal example
 
 ```
