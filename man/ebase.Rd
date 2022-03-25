@@ -39,10 +39,19 @@ ebase(
 \item{progress}{logical if progress saved to a txt file names 'log.txt' in the working directory}
 }
 \value{
-A data frame with metabolic estimates as mmol/m3/d
+A data frame with metabolic estimates for volumetric gross production (\code{Pg_vol}, O2 mmol/m3/d), respiration (\code{Rt_vol},  O2 mmol/m3/d), and gas exchange (\code{D}, O2 mmol/m3/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in hr/cm (provided as 0.251 in eqn. 4 in Wanninkhof 2004).
 }
 \description{
 Estuarine Bayesian Single-station Estimation method for ecosystem metabolism
+}
+\details{
+Required input data are time series for dissolved oxygen (mg/L), water temperature (C), salinity (psu), total PAR (W/m2/s), and wind speed (m/s).  See the \code{\link{exdat}} example data file for a representation of the required data.  Data are typically from continuously monitored water quality and weather parameters are hourly of sub-hourly time steps.  Oxygen concentrations are converted to mmol/m3 prior to metabolic estimation. Water column depth is also required to return volumetric estimates.  This can be supplied as a single value or a vector of length equal to the number of rows in \code{dat}.
+
+The metabolic estimates are based on a mass balance equation in Grace et al. 2015 with the gas exchange estimate from Wanninkhof 2004.  It is similar to that provided by the BASEmetab R package at \url{https://github.com/dgiling/BASEmetab}, with modifications to estimate different parameters. The equation optimized in the JAGS model is:
+
+\deqn{ \frac{\delta{C_d}}{\delta{t}} = [\,aPAR]\, - [\,r]\, - \frac{1}{H}\left[-bU_{10}^2\left(\frac{s_c}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )\right]}
+
+Gross production is provided by \emph{aPAR}, respiration is provided by \emph{r}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{r}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The estimated concentration is also returned for comparison to observed as one measure of model performance.
 }
 \examples{
 \dontrun{
@@ -88,4 +97,9 @@ res <- ebase(dat, interval = 900, H = 1.85, progress = T, inits = inits)
 stopCluster(cl)
 
 }
+}
+\references{
+Grace, M.R., Giling, D.P., Hladyz, S., Caron, V., Thompson, R.M., Nally, R.M., 2015. Fast processing of diel oxygen curves: Estimating stream metabolism with BASE (BAyesian Single-station Estimation). Limnology and Oceanography: Methods 13, e10011. https://doi.org/10.1002/lom3.10011
+
+Wanninkhof, R., 2014. Relationship between wind speed and gas exchange over the ocean revisited. Limnology and Oceanography: Methods 12, 351–362. https://doi.org/10.4319/lom.2014.12.351
 }

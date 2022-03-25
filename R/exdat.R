@@ -9,7 +9,7 @@
 #'   \item{Temp}{water temperature, C}
 #'   \item{Sal}{salinity, psu}
 #'   \item{PAR}{total PAR, W/m2/s}
-#'   \item{WSpd}{num}
+#'   \item{WSpd}{num, m/s}
 #' }
 #' @family utilities
 #' 
