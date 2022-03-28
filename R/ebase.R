@@ -13,6 +13,8 @@
 #' @param n.thin number of nth iterations to save for each chain, passed to \code{\link[R2jags]{jags}}
 #' @param progress logical if progress saved to a txt file names 'log.txt' in the working directory
 #' 
+#' @export
+#' 
 #' @import here
 #' @import foreach
 #'
