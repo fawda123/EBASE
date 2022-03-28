@@ -127,7 +127,7 @@ ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains 
     ## Call jags ##
     metabfit <- do.call(R2jags::jags.parallel,
                         list(data = dat.list, inits = inits, parameters.to.save = params, 
-                             model.file = here::here("inst/ebase_model.txt"),
+                             model.file = file.path(system.file(package="EBASE"), "ebase_model.txt"),
                              n.chains = n.chains, n.iter = n.iter, n.burnin = n.burnin,
                              n.thin = n.thin, n.cluster = n.chains, DIC = TRUE,
                              jags.seed = 123, digits = 5)
