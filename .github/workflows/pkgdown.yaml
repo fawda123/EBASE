@@ -45,6 +45,7 @@ jobs:
           sudo apt-get install -y jags
       - name: Install Ubuntu depends
         run: |
+          sudo apt-get install libcurl4-openssl-dev
           sudo apt-get install libharfbuzz-dev
           sudo apt-get install libfribidi-dev
       - name: Install dependencies
