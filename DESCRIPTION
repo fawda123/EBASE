@@ -51,7 +51,9 @@ Imports:
   tidyr
 Suggests:
     testthat (>= 3.0.0),
-    doParallel
+    doParallel,
+    knitr,
+    rmarkdown
 Remotes:
   jmarriola/fwoxy
 License: CC0
@@ -63,3 +65,4 @@ BugReports: https://github.com/fawda123/EBASE/issues
 LazyData: true
 LazyDataCompression: xz
 Config/testthat/edition: 3
+VignetteBuilder: knitr
