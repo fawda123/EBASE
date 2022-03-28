@@ -47,7 +47,7 @@
 #' ##
 #' # run ebase with defaults, sequential
 #'   
-#' res <- ebase(dat, interval = 900, H = 1.85, progress = T)
+#' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE)
 #'
 #' \dontrun{
 #' ##
@@ -58,7 +58,7 @@
 #' cl <- makeCluster(ncores - 2)
 #' registerDoParallel(cl)
 #'   
-#' res <- ebase(dat, interval = 900, H = 1.85, progress = T)
+#' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE)
 #'
 #' stopCluster(cl)
 #' 
@@ -78,7 +78,7 @@
 #' cl <- makeCluster(ncores - 2)
 #' registerDoParallel(cl)
 #'   
-#' res <- ebase(dat, interval = 900, H = 1.85, progress = T, inits = inits)
+#' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, inits = inits)
 #'
 #' stopCluster(cl)
 #' 

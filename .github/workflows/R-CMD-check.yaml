@@ -18,6 +18,8 @@ jobs:
       fail-fast: false
       matrix:
         config:
+          - {os: windows-latest, r: 'release'}
+          - {os: macOS-latest, r: 'release'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
@@ -41,11 +43,26 @@ jobs:
         with:
           extra-packages: rcmdcheck
 
-      - name: Install JAGS
+      - name: Install JAGS (ubuntu-latest)
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update -y
           sudo apt-get install -y jags
       
+      - name: Install JAGS (windows-latest)
+        if: runner.os == 'Windows'
+        run: |
+          curl.exe -o wjags.exe --url https://deac-fra.dl.sourceforge.net/project/mcmc-jags/JAGS/4.x/Windows/JAGS-4.2.0-Rtools33.exe
+          wjags.exe /S
+          del wjags.exe
+        shell: cmd
+
+      - name: Install JAGS (macOS-latest)
+        if: runner.os == 'macOS'
+        run : |
+          rm '/usr/local/bin/gfortran'
+          brew install jags
+          
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
