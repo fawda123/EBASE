@@ -42,7 +42,7 @@ ncores <- detectCores()
 cl <- makeCluster(ncores - 2)
 registerDoParallel(cl)
 
-res <- ebase(dat, interval = 900, H = 1.85, progress = T)
+res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE)
 
 stopCluster(cl)
 ```
