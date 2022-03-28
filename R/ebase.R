@@ -45,20 +45,13 @@
 #'   filter(month(exdat$DateTimeStamp) == 6 & day(exdat$DateTimeStamp) %in% 1:4)
 #' 
 #' ##
-#' # run ebase with defaults, sequential
-#'
-#' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
-#'
-#' \dontrun{
-#' ##
 #' # run ebase with defaults, parallel
 #' 
 #' # setup parallel backend
-#' ncores <- detectCores()
-#' cl <- makeCluster(ncores - 2)
+#' cl <- makeCluster(2)
 #' registerDoParallel(cl)
 #'   
-#' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE)
+#' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
 #'
 #' stopCluster(cl)
 #' 
@@ -74,15 +67,12 @@
 #' }
 #' 
 #' # setup parallel backend
-#' ncores <- detectCores()
-#' cl <- makeCluster(ncores - 2)
+#' cl <- makeCluster(2)
 #' registerDoParallel(cl)
 #'   
-#' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, inits = inits)
+#' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, inits = inits, n.chains = 2)
 #'
 #' stopCluster(cl)
-#' 
-#' }
 ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, 
                   n.thin = 10, progress = FALSE){
   

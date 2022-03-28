@@ -64,20 +64,13 @@ dat <- exdat \%>\%
   filter(month(exdat$DateTimeStamp) == 6 & day(exdat$DateTimeStamp) \%in\% 1:4)
 
 ##
-# run ebase with defaults, sequential
-
-res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
-
-\dontrun{
-##
 # run ebase with defaults, parallel
 
 # setup parallel backend
-ncores <- detectCores()
-cl <- makeCluster(ncores - 2)
+cl <- makeCluster(2)
 registerDoParallel(cl)
   
-res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE)
+res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
 
 stopCluster(cl)
 
@@ -93,15 +86,12 @@ inits <- function(){
 }
 
 # setup parallel backend
-ncores <- detectCores()
-cl <- makeCluster(ncores - 2)
+cl <- makeCluster(2)
 registerDoParallel(cl)
   
-res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, inits = inits)
+res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, inits = inits, n.chains = 2)
 
 stopCluster(cl)
-
-}
 }
 \references{
 Grace, M.R., Giling, D.P., Hladyz, S., Caron, V., Thompson, R.M., Nally, R.M., 2015. Fast processing of diel oxygen curves: Estimating stream metabolism with BASE (BAyesian Single-station Estimation). Limnology and Oceanography: Methods 13, e10011. https://doi.org/10.1002/lom3.10011
