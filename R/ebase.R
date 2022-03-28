@@ -33,7 +33,6 @@
 #' Wanninkhof, R., 2014. Relationship between wind speed and gas exchange over the ocean revisited. Limnology and Oceanography: Methods 12, 351–362. https://doi.org/10.4319/lom.2014.12.351
 
 #' @examples 
-#' \dontrun{
 #' 
 #' library(dplyr)
 #' library(lubridate)
@@ -55,6 +54,7 @@
 #'
 #' stopCluster(cl)
 #' 
+#' \dontrun{
 #' ##
 #' # run ebase with different initial starting values for the three parameters
 #' 

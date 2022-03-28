@@ -54,7 +54,6 @@ The metabolic estimates are based on a mass balance equation in Grace et al. 201
 Gross production is provided by \emph{aPAR}, respiration is provided by \emph{r}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{r}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The estimated concentration is also returned for comparison to observed as one measure of model performance.
 }
 \examples{
-\dontrun{
 
 library(dplyr)
 library(lubridate)
@@ -76,6 +75,7 @@ res <- ebase(dat, interval = 900, H = 1.85, progress = T)
 
 stopCluster(cl)
 
+\dontrun{
 ##
 # run ebase with different initial starting values for the three parameters
 
