@@ -148,7 +148,7 @@ ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains 
   
     # check final convergence
     srf <- metabfit$BUGSoutput$summary[,8]
-    Rhat.test <- ifelse(any(srf > 1.1, na.rm = T) == TRUE, "Check convergence", "Fine")
+    Rhat.test <- ifelse(any(srf > 1.1, na.rm = TRUE) == TRUE, "Check convergence", "Fine")
   
     # insert results to table and write table
     result <- data.frame(Date = as.character(d),
