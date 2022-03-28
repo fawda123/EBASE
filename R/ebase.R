@@ -46,7 +46,9 @@
 #' 
 #' ##
 #' # run ebase with defaults, sequential
-#'   
+#'
+#' options(mc.cores=2)   
+#' 
 #' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE)
 #'
 #' \dontrun{
