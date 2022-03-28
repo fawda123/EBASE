@@ -64,7 +64,13 @@ dat <- exdat \%>\%
   filter(month(exdat$DateTimeStamp) == 6 & day(exdat$DateTimeStamp) \%in\% 1:4)
 
 ##
-# run ebase with defaults
+# run ebase with defaults, sequential
+  
+res <- ebase(dat, interval = 900, H = 1.85, progress = T)
+
+\dontrun{
+##
+# run ebase with defaults, parallel
 
 # setup parallel backend
 ncores <- detectCores()
@@ -75,9 +81,8 @@ res <- ebase(dat, interval = 900, H = 1.85, progress = T)
 
 stopCluster(cl)
 
-\dontrun{
 ##
-# run ebase with different initial starting values for the three parameters
+# run ebase with different initial starting values for the three parameters, parallel
 
 inits <- function(){
   list(
