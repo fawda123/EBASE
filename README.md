@@ -6,7 +6,7 @@
 [![codecov](https://codecov.io/gh/fawda123/EBASE/branch/main/graph/badge.svg?token=45Y7PDEHXA)](https://codecov.io/gh/fawda123/EBASE)
 <!-- badges: end -->
 
-This an R package for Estuarine Bayesian Single-station Estimation method for ecosystem metabolism.  
+This an R package for Estuarine BAyesian Single-station Estimation method for ecosystem metabolism.  
 
 ### Installation
 
@@ -26,7 +26,7 @@ The [JAGS](https://mcmc-jags.sourceforge.io/) software must also be installed to
 
 ### Minimal example
 
-```
+``` r
 library(dplyr)
 library(lubridate)
 library(doParallel)

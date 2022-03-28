@@ -7,13 +7,36 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>", 
+  message = F, 
+  warning = F
 )
 ```
 
-```{r setup}
+## Installation 
+
+This vignette provides an overview of the theory and use of the EBASE R package or Estuarine BAyesian Single-station Estimation method for ecosystem metabolism.  Use the following to install the package from R-Universe.  The [JAGS](https://mcmc-jags.sourceforge.io/) software must also be installed to use this package.  Follow the instructions in the link to download and install the version appropriate for your operating system.   
+
+
+``` r
+# Enable the r-universe repo
+options(repos = c(
+    fawda123 = 'https://fawda123.r-universe.dev',
+    CRAN = 'https://cloud.r-project.org'))
+
+# Install
+install.packages('EBASE')
+```
+
+Load the package after installation to use the functions. 
+
+```{r}
 library(EBASE)
 ```
+
+## Usage
+
+The core function to estimate metabolism is `ebase()`.  An example file called `exdat` is included with the package that demonstrates the required time series to use the package.  It includes nearly a year of continuously monitored water quality and meteorological data at the Appalachicola National Estuarine Research Reserve.

@@ -50,10 +50,10 @@ Imports:
   R2jags,
   tidyr
 Suggests:
-    testthat (>= 3.0.0),
-    doParallel,
-    knitr,
-    rmarkdown
+  testthat (>= 3.0.0),
+  doParallel,
+  knitr,
+  rmarkdown
 Remotes:
   jmarriola/fwoxy
 License: CC0
