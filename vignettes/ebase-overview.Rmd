@@ -48,9 +48,7 @@ head(exdat)
 
 The core function to estimate metabolism is `ebase()`.  The metabolic estimates are based on a mass balance equation in Grace et al. 2015 [@Grace15] with the gas exchange estimate from Wanninkhof 2014 [@Wanninkhof14].  It is similar to that provided by the BASEmetab R package at https://github.com/dgiling/BASEmetab, with modifications to estimate different parameters. The equation optimized in the JAGS model is: 
 
-$$
-\frac{\delta{C_d}}{\delta{t}} = [\,aPAR]\, - [\,r]\, - \frac{1}{H}\left[-bU_{10}^2\left(\frac{s_c}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )\right]}
-$$
+\deqn{ \frac{\delta{C_d}}{\delta{t}} = [\,aPAR]\, - [\,r]\, - \frac{1}{H}\left[-bU_{10}^2\left(\frac{s_c}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )\right]}
 
 Gross production is provided by *aPAR*, respiration is provided by *r*, and gas exchange is provided by the remainder.  The likelihood of the parameters *a*, *r*, and *b* given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The estimated concentration is also returned for comparison to observed as one measure of model performance.
 
