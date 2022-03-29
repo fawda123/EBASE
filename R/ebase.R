@@ -48,12 +48,9 @@
 #' # run ebase with defaults, parallel
 #' 
 #' # setup parallel backend
-#' cl <- makeCluster(2)
-#' registerDoParallel(cl)
+#' registerDoParallel(cores = 2)
 #'   
 #' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
-#'
-#' stopCluster(cl)
 #' 
 #' ##
 #' # run ebase with different initial starting values for the three parameters, parallel
@@ -67,12 +64,9 @@
 #' }
 #' 
 #' # setup parallel backend
-#' cl <- makeCluster(2)
-#' registerDoParallel(cl)
+#' registerDoParallel(cores = 2)
 #'   
 #' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, inits = inits, n.chains = 2)
-#'
-#' stopCluster(cl)
 ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, 
                   n.thin = 10, progress = FALSE){
   
