@@ -48,10 +48,13 @@
 #' # run ebase with defaults, parallel
 #' 
 #' # setup parallel backend
-#' registerDoParallel(cores = 2)
-#'   
+#' cl <- makeCluster(2)
+#' registerDoParallel(cl)
+#'
 #' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
 #' 
+#' stopCluster(cl)
+#'
 #' ##
 #' # run ebase with different initial starting values for the three parameters, parallel
 #' 
@@ -64,9 +67,12 @@
 #' }
 #' 
 #' # setup parallel backend
-#' registerDoParallel(cores = 2)
+#' cl <- makeCluster(2)
+#' registerDoParallel(cl)
 #'   
 #' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, inits = inits, n.chains = 2)
+#'
+#' stopCluster(cl)
 ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, 
                   n.thin = 10, progress = FALSE){
   
@@ -86,7 +92,7 @@ ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains 
   # iterate through each date to estimate metabolism ------------------------
 
   # process
-  output <- foreach(d = dts, .packages = c('here', 'R2jags'), .export = c('troc', 'metab_update')
+  output <- foreach(d = dts, .packages = c('here', 'R2jags'), .export = c('troc', 'metab_update', 'ebase_model')
                                                                          ) %dopar% {
   
     if(progress){
@@ -119,9 +125,9 @@ ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains 
     params <- c("ats", "bts", "gppts", "erts", "gets", "DO_mod")
   
     ## Call jags ##
-    metabfit <- do.call(R2jags::jags.parallel,
+    metabfit <- do.call(jags.parallel,
                         list(data = dat.list, inits = inits, parameters.to.save = params, 
-                             model.file = file.path(system.file(package="EBASE"), "ebase_model.txt"),
+                             model.file = ebase_model,
                              n.chains = n.chains, n.iter = n.iter, n.burnin = n.burnin,
                              n.thin = n.thin, n.cluster = n.chains, DIC = TRUE,
                              jags.seed = 123, digits = 5)
@@ -156,6 +162,7 @@ ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains 
   out <- do.call('rbind', output) %>%
     na.omit() %>%
     dplyr::mutate(
+      Date = lubridate::ymd(Date), 
       a = ats * troc, # (mmol/m3/ts)/(W/m2) to (mmol/m3/d)/(W/m2)
       b = bts * 100 * 3600 / interval, # ts/m to hr/cm
       Pg_vol = gppts * troc, # O2 mmol/m3/ts to O2 mmol/m3/d

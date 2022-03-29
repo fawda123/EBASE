@@ -40,7 +40,10 @@ dat <- exdat %>%
 # run ebase with defaults
 
 # setup parallel backend
-registerDoParallel(cores = 2)
+cl <- makeCluster(2)
+registerDoParallel(cl)
 
 res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE)
+
+stopCluster(cl)
 ```

@@ -16,7 +16,8 @@
 #' @export
 #' 
 #' @examples 
-#' ebase_prep(exdat, H = 1.85)
+#' dat <- ebase_prep(exdat, H = 1.85)
+#' head(dat)
 ebase_prep <- function(dat, H){
   
   ##

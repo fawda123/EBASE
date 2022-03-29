@@ -21,5 +21,6 @@ Prepare data for ebase
 Checks if all columns are present by matching those in \code{\link{exdat}}, converts dissolved oxygen from mg/L to mmol/m3, calculates the Schmidt number (unitless) from water temp (C) and salinity (psu), and calculates dissolved oxygen equilibrium concentration (mmol/m3) from salinity and temperature
 }
 \examples{
-ebase_prep(exdat, H = 1.85)
+dat <- ebase_prep(exdat, H = 1.85)
+head(dat)
 }
