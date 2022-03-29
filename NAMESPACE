@@ -3,6 +3,7 @@
 export(ebase)
 export(ebase_prep)
 export(metab_update)
+import(R2jags)
 import(foreach)
 import(here)
 importFrom(dplyr,"%>%")
