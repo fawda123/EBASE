@@ -115,9 +115,7 @@
 <span class="co">#&gt; 5 2012-02-23 01:00:00 8.191786 16.4 22.7   0  3.6</span>
 <span class="co">#&gt; 6 2012-02-23 01:15:00 8.186632 16.4 23.4   0  4.1</span></code></pre></div>
 <p>The core function to estimate metabolism is <code><a href="../reference/ebase.html">ebase()</a></code>. The metabolic estimates are based on a mass balance equation in Grace et al. 2015 <span class="citation">(Grace et al. 2015)</span> with the gas exchange estimate from Wanninkhof 2014 <span class="citation">(Wanninkhof 2014)</span>. It is similar to that provided by the BASEmetab R package at <a href="https://github.com/dgiling/BASEmetab" class="external-link uri">https://github.com/dgiling/BASEmetab</a>, with modifications to estimate different parameters. The equation optimized in the JAGS model is:</p>
-<p><span class="math display">\[
-\frac{\delta{C_d}}{\delta{t}} = [\,aPAR]\, - [\,r]\, - \frac{1}{H}\left[-bU_{10}^2\left(\frac{s_c}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )\right]}
-\]</span></p>
+
 <p>Gross production is provided by <em>aPAR</em>, respiration is provided by <em>r</em>, and gas exchange is provided by the remainder. The likelihood of the parameters <em>a</em>, <em>r</em>, and <em>b</em> given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration. The estimated concentration is also returned for comparison to observed as one measure of model performance.</p>
 <p>The following shows how to use the <code><a href="../reference/ebase.html">ebase()</a></code> function with a subset of four days from the <code><a href="../reference/exdat.html">exdat()</a></code> example dataset. The subset is first created:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
