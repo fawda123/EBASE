@@ -104,7 +104,7 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>An example file called <code><a href="../reference/exdat.html">exdat()</a></code> is included with the package that demonstrates the required time series format to use the package. It includes nearly a year of continuously monitored water quality and meteorological data at the Appalachicola National Estuarine Research Reserve. The required data include a date and time vector, dissolve oxygen (mg/L), water temperature (C), salinity (psu), PAR (W/m2/s), and wind speed (m/s). The time step should be consistent throughout the dataset and is indicated as an argument to the <code><a href="../reference/ebase.html">ebase()</a></code> function (see below). The <code><a href="../reference/exdat.html">exdat()</a></code> dataset can be viewed at any time after the package is loaded and is used in the examples in the help files:</p>
+<p>An example file called <code><a href="../reference/exdat.html">exdat()</a></code> is included with the package that demonstrates the required time series format to use the functions. It includes nearly a year of continuously monitored water quality and meteorological data at the Appalachicola National Estuarine Research Reserve. The required data include a date and time vector, dissolve oxygen (mg/L), water temperature (C), salinity (psu), PAR (W/m2/s), and wind speed (m/s). The time step should be consistent throughout the dataset and is indicated as an argument to the <code><a href="../reference/ebase.html">ebase()</a></code> function (see below). The <code><a href="../reference/exdat.html">exdat()</a></code> dataset can be viewed at any time after the package is loaded and is used in the examples in the help files:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">exdat</span><span class="op">)</span>
 <span class="co">#&gt;         DateTimeStamp   DO_obs Temp  Sal PAR WSpd</span>
@@ -115,7 +115,9 @@
 <span class="co">#&gt; 5 2012-02-23 01:00:00 8.191786 16.4 22.7   0  3.6</span>
 <span class="co">#&gt; 6 2012-02-23 01:15:00 8.186632 16.4 23.4   0  4.1</span></code></pre></div>
 <p>The core function to estimate metabolism is <code><a href="../reference/ebase.html">ebase()</a></code>. The metabolic estimates are based on a mass balance equation in Grace et al. 2015 <span class="citation">(Grace et al. 2015)</span> with the gas exchange estimate from Wanninkhof 2014 <span class="citation">(Wanninkhof 2014)</span>. It is similar to that provided by the BASEmetab R package at <a href="https://github.com/dgiling/BASEmetab" class="external-link uri">https://github.com/dgiling/BASEmetab</a>, with modifications to estimate different parameters. The equation optimized in the JAGS model is:</p>
-
+<p><span class="math display">\[
+\frac{\delta{C_d}}{\delta{t}} = [\,aPAR]\, - [\,r]\, - \frac{1}{H}\left[-bU_{10}^2\left(\frac{s_c}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )\right]
+\]</span></p>
 <p>Gross production is provided by <em>aPAR</em>, respiration is provided by <em>r</em>, and gas exchange is provided by the remainder. The likelihood of the parameters <em>a</em>, <em>r</em>, and <em>b</em> given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration. The estimated concentration is also returned for comparison to observed as one measure of model performance.</p>
 <p>The following shows how to use the <code><a href="../reference/ebase.html">ebase()</a></code> function with a subset of four days from the <code><a href="../reference/exdat.html">exdat()</a></code> example dataset. The subset is first created:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -137,20 +139,75 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
-<span class="co">#&gt;         Date   DO_obs   DO_mod       DateTimeStamp       dDO           a</span>
-<span class="co">#&gt; 2 2012-06-01 161.7030 161.9897 2012-06-01 00:15:00 -6.397271 0.007665909</span>
-<span class="co">#&gt; 3 2012-06-01 161.3734 161.9472 2012-06-01 00:30:00 -4.081800 0.007665909</span>
-<span class="co">#&gt; 4 2012-06-01 161.0672 161.8877 2012-06-01 00:45:00 -5.707063 0.007665909</span>
-<span class="co">#&gt; 5 2012-06-01 160.7834 161.8207 2012-06-01 01:00:00 -6.428347 0.007665909</span>
-<span class="co">#&gt; 6 2012-06-01 160.5211 161.7329 2012-06-01 01:15:00 -8.430377 0.007665909</span>
-<span class="co">#&gt; 7 2012-06-01 160.2787 161.6505 2012-06-01 01:30:00 -7.911351 0.007665909</span>
+<span class="co">#&gt;         Date   DO_obs   DO_mod       DateTimeStamp       dDO          a</span>
+<span class="co">#&gt; 2 2012-06-01 161.7030 161.9898 2012-06-01 00:15:00 -6.392482 0.00766078</span>
+<span class="co">#&gt; 3 2012-06-01 161.3734 161.9472 2012-06-01 00:30:00 -4.082373 0.00766078</span>
+<span class="co">#&gt; 4 2012-06-01 161.0672 161.8878 2012-06-01 00:45:00 -5.703880 0.00766078</span>
+<span class="co">#&gt; 5 2012-06-01 160.7834 161.8209 2012-06-01 01:00:00 -6.423503 0.00766078</span>
+<span class="co">#&gt; 6 2012-06-01 160.5211 161.7332 2012-06-01 01:15:00 -8.420908 0.00766078</span>
+<span class="co">#&gt; 7 2012-06-01 160.2787 161.6509 2012-06-01 01:30:00 -7.903096 0.00766078</span>
 <span class="co">#&gt;           b Pg_vol   Rt_vol         D</span>
-<span class="co">#&gt; 2 0.2264261      0 13.76921 -7.371940</span>
-<span class="co">#&gt; 3 0.2264261      0 13.76921 -9.687412</span>
-<span class="co">#&gt; 4 0.2264261      0 13.76921 -8.062149</span>
-<span class="co">#&gt; 5 0.2264261      0 13.76921 -7.340864</span>
-<span class="co">#&gt; 6 0.2264261      0 13.76921 -5.338834</span>
-<span class="co">#&gt; 7 0.2264261      0 13.76921 -5.857861</span></code></pre></div>
+<span class="co">#&gt; 2 0.2259031      0 13.74739 -7.354905</span>
+<span class="co">#&gt; 3 0.2259031      0 13.74739 -9.665015</span>
+<span class="co">#&gt; 4 0.2259031      0 13.74739 -8.043508</span>
+<span class="co">#&gt; 5 0.2259031      0 13.74739 -7.323884</span>
+<span class="co">#&gt; 6 0.2259031      0 13.74739 -5.326479</span>
+<span class="co">#&gt; 7 0.2259031      0 13.74739 -5.844291</span></code></pre></div>
+<p>The results are returned as a data frame with instantaneous metabolic estimates for volumetric gross production (<code>Pg_vol</code>, O2 mmol/m3/d), respiration (<code>Rt_vol</code>, O2 mmol/m3/d), and gas exchange (<code>D</code>, O2 mmol/m3/d). Additional parameters estimated by the model that are returned include <code>a</code> and <code>b</code> as shown in the above equation. The <code>a</code> parameter is a constant that represents the primary production per quantum of light with units of (mmol/m3/d)(W/m2) and is used to estimate gross production <span class="citation">(Grace et al. 2015)</span>. The <code>b</code> parameter is a constant used to estimate gas exchange in hr/cm (provided as 0.251 in eqn. 4 in <span class="citation">Wanninkhof (2014)</span>).</p>
+<p>A plot of the results can easily be made with , which is a dependeny of EBASE. The instantaneous rates at the daily scale can be plotted after some wrangling with <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> and <a href="https://tidyr.tidyverse.org/" class="external-link">tidyr</a>.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span>
+
+<span class="va">toplo</span> <span class="op">&lt;-</span> <span class="va">res</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">DateTimeStamp</span>, <span class="va">Pg_vol</span>, <span class="va">Rt_vol</span>, <span class="va">D</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">matches</a></span><span class="op">(</span><span class="st">'DateTimeStamp'</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">toplo</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">DateTimeStamp</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>
+    legend.position <span class="op">=</span> <span class="st">'top'</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>
+    y <span class="op">=</span> <span class="st">'Instantaneous O2 mmol/m3/d'</span>, 
+    color <span class="op">=</span> <span class="cn">NULL</span>, 
+    x <span class="op">=</span> <span class="cn">NULL</span>
+  <span class="op">)</span></code></pre></div>
+<p><img src="ebase-overview_files/figure-html/unnamed-chunk-5-1.png" width="864" style="display: block; margin: auto;"></p>
+<p>The daily averages can also be plotted after summarizing the results.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">toplo</span> <span class="op">&lt;-</span> <span class="va">res</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Date</span>, <span class="va">Pg_vol</span>, <span class="va">Rt_vol</span>, <span class="va">D</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">matches</a></span><span class="op">(</span><span class="st">'Date'</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Date</span>, <span class="va">name</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">'drop'</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">toplo</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Date</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>
+    legend.position <span class="op">=</span> <span class="st">'top'</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>
+    y <span class="op">=</span> <span class="st">'Daily avg. O2 mmol/m3/d'</span>, 
+    color <span class="op">=</span> <span class="cn">NULL</span>, 
+    x <span class="op">=</span> <span class="cn">NULL</span>
+  <span class="op">)</span></code></pre></div>
+<p><img src="ebase-overview_files/figure-html/unnamed-chunk-6-1.png" width="700" style="display: block; margin: auto;"></p>
+<p>Execution time of the model can also be reduced by registering a parallel backend.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># setup parallel backend</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RevolutionAnalytics/doparallel" class="external-link">doParallel</a></span><span class="op">)</span>
+<span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span>
+
+<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></code></pre></div>
 <div id="refs" class="references">
 <div id="ref-Grace15">
 <p>Grace, Michael R, Darren P Giling, Sally Hladyz, Valerie Caron, Ross M Thompson, and Ralph Mac Nally. 2015. “Fast Processing of Diel Oxygen Curves: Estimating Stream Metabolism with Base (Ba Yesian S Ingle-Station E Stimation).” <em>Limnology and Oceanography: Methods</em> 13 (3): 103–14. <a href="https://doi.org/10.1002/lom3.10011" class="external-link">https://doi.org/10.1002/lom3.10011</a>.</p>
