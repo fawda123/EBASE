@@ -18,6 +18,7 @@
 #' @import here
 #' @import foreach
 #' @import R2jags
+#' @import rjags
 #'
 #' @details Required input data are time series for dissolved oxygen (mg/L), water temperature (C), salinity (psu), total PAR (W/m2/s), and wind speed (m/s).  See the \code{\link{exdat}} example data file for a representation of the required data.  Data are typically from continuously monitored water quality and weather parameters are hourly of sub-hourly time steps.  Oxygen concentrations are converted to mmol/m3 prior to metabolic estimation. Water column depth is also required to return volumetric estimates.  This can be supplied as a single value or a vector of length equal to the number of rows in \code{dat}.
 #' 
@@ -27,7 +28,7 @@
 #' 
 #' Gross production is provided by \emph{aPAR}, respiration is provided by \emph{r}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{r}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The estimated concentration is also returned for comparison to observed as one measure of model performance.   
 #' 
-#' @return A data frame with metabolic estimates for volumetric gross production (\code{Pg_vol}, O2 mmol/m3/d), respiration (\code{Rt_vol},  O2 mmol/m3/d), and gas exchange (\code{D}, O2 mmol/m3/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in hr/cm (provided as 0.251 in eqn. 4 in Wanninkhof 2004).
+#' @return A data frame with metabolic estimates for volumetric gross production (\code{Pg_vol}, O2 mmol/m3/d), respiration (\code{Rt_vol},  O2 mmol/m3/d), and gas exchange (\code{D}, O2 mmol/m3/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in hr/cm (provided as 0.251 in eqn. 4 in Wanninkhof 2014).
 #' 
 #' @references 
 #' 

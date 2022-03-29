@@ -1,6 +1,7 @@
 ---
 title: "EBASE overview"
 output: rmarkdown::html_vignette
+bibliography: refs.bib
 vignette: >
   %\VignetteIndexEntry{EBASE overview}
   %\VignetteEngine{knitr::rmarkdown}
@@ -39,4 +40,35 @@ library(EBASE)
 
 ## Usage
 
-The core function to estimate metabolism is `ebase()`.  An example file called `exdat` is included with the package that demonstrates the required time series to use the package.  It includes nearly a year of continuously monitored water quality and meteorological data at the Appalachicola National Estuarine Research Reserve.
+An example file called `exdat()` is included with the package that demonstrates the required time series format to use the package.  It includes nearly a year of continuously monitored water quality and meteorological data at the Appalachicola National Estuarine Research Reserve.  The required data include a date and time vector, dissolve oxygen (mg/L), water temperature (C), salinity (psu), PAR (W/m2/s), and wind speed (m/s).  The time step should be consistent throughout the dataset and is indicated as an argument to the `ebase()` function (see below).  The `exdat()` dataset can be viewed at any time after the package is loaded and is used in the examples in the help files:
+
+```{r}
+head(exdat)
+```
+
+The core function to estimate metabolism is `ebase()`.  The metabolic estimates are based on a mass balance equation in Grace et al. 2015 [@Grace15] with the gas exchange estimate from Wanninkhof 2014 [@Wanninkhof14].  It is similar to that provided by the BASEmetab R package at https://github.com/dgiling/BASEmetab, with modifications to estimate different parameters. The equation optimized in the JAGS model is: 
+
+$$
+\frac{\delta{C_d}}{\delta{t}} = [\,aPAR]\, - [\,r]\, - \frac{1}{H}\left[-bU_{10}^2\left(\frac{s_c}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )\right]}
+$$
+
+Gross production is provided by *aPAR*, respiration is provided by *r*, and gas exchange is provided by the remainder.  The likelihood of the parameters *a*, *r*, and *b* given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The estimated concentration is also returned for comparison to observed as one measure of model performance.
+
+The following shows how to use the `ebase()` function with a subset of four days from the `exdat()` example dataset.  The subset is first created: 
+
+```{r}
+library(dplyr)
+library(lubridate)
+
+dat <- exdat %>%
+  filter(month(exdat$DateTimeStamp) == 6 & day(exdat$DateTimeStamp) %in% 1:4)
+
+head(dat)
+```
+
+Then, the `ebase()` function is used to estimate the metabolic rates with the appropriate function arguments.  The timestep `interval` is 900 seconds (15 minutes), the water column depth (`H`) is 1.85 meters, a log file of the model iterations for each day is created by setting `progress = TRUE`, and only two Markov chains are used (`n.chains` = 2). In practice, a larger number for `n.chains` should be used to verify model convergence.  
+
+```{r}
+res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
+head(res)
+```
