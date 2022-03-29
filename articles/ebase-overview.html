@@ -104,7 +104,63 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>The core function to estimate metabolism is <code><a href="../reference/ebase.html">ebase()</a></code>. An example file called <code>exdat</code> is included with the package that demonstrates the required time series to use the package. It includes nearly a year of continuously monitored water quality and meteorological data at the Appalachicola National Estuarine Research Reserve.</p>
+<p>An example file called <code><a href="../reference/exdat.html">exdat()</a></code> is included with the package that demonstrates the required time series format to use the package. It includes nearly a year of continuously monitored water quality and meteorological data at the Appalachicola National Estuarine Research Reserve. The required data include a date and time vector, dissolve oxygen (mg/L), water temperature (C), salinity (psu), PAR (W/m2/s), and wind speed (m/s). The time step should be consistent throughout the dataset and is indicated as an argument to the <code><a href="../reference/ebase.html">ebase()</a></code> function (see below). The <code><a href="../reference/exdat.html">exdat()</a></code> dataset can be viewed at any time after the package is loaded and is used in the examples in the help files:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">exdat</span><span class="op">)</span>
+<span class="co">#&gt;         DateTimeStamp   DO_obs Temp  Sal PAR WSpd</span>
+<span class="co">#&gt; 1 2012-02-23 00:00:00 8.217998 16.4 23.0   0  3.6</span>
+<span class="co">#&gt; 2 2012-02-23 00:15:00 8.210692 16.4 22.8   0  3.5</span>
+<span class="co">#&gt; 3 2012-02-23 00:30:00 8.203855 16.4 22.7   0  3.6</span>
+<span class="co">#&gt; 4 2012-02-23 00:45:00 8.197538 16.4 22.9   0  4.2</span>
+<span class="co">#&gt; 5 2012-02-23 01:00:00 8.191786 16.4 22.7   0  3.6</span>
+<span class="co">#&gt; 6 2012-02-23 01:15:00 8.186632 16.4 23.4   0  4.1</span></code></pre></div>
+<p>The core function to estimate metabolism is <code><a href="../reference/ebase.html">ebase()</a></code>. The metabolic estimates are based on a mass balance equation in Grace et al. 2015 <span class="citation">(Grace et al. 2015)</span> with the gas exchange estimate from Wanninkhof 2014 <span class="citation">(Wanninkhof 2014)</span>. It is similar to that provided by the BASEmetab R package at <a href="https://github.com/dgiling/BASEmetab" class="external-link uri">https://github.com/dgiling/BASEmetab</a>, with modifications to estimate different parameters. The equation optimized in the JAGS model is:</p>
+<p><span class="math display">\[
+\frac{\delta{C_d}}{\delta{t}} = [\,aPAR]\, - [\,r]\, - \frac{1}{H}\left[-bU_{10}^2\left(\frac{s_c}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )\right]}
+\]</span></p>
+<p>Gross production is provided by <em>aPAR</em>, respiration is provided by <em>r</em>, and gas exchange is provided by the remainder. The likelihood of the parameters <em>a</em>, <em>r</em>, and <em>b</em> given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration. The estimated concentration is also returned for comparison to observed as one measure of model performance.</p>
+<p>The following shows how to use the <code><a href="../reference/ebase.html">ebase()</a></code> function with a subset of four days from the <code><a href="../reference/exdat.html">exdat()</a></code> example dataset. The subset is first created:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span>
+
+<span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">exdat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html" class="external-link">month</a></span><span class="op">(</span><span class="va">exdat</span><span class="op">$</span><span class="va">DateTimeStamp</span><span class="op">)</span> <span class="op">==</span> <span class="fl">6</span> <span class="op">&amp;</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/day.html" class="external-link">day</a></span><span class="op">(</span><span class="va">exdat</span><span class="op">$</span><span class="va">DateTimeStamp</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>
+<span class="co">#&gt;         DateTimeStamp   DO_obs Temp  Sal PAR WSpd</span>
+<span class="co">#&gt; 1 2012-06-01 00:00:00 5.185803 29.5 23.0   0  2.0</span>
+<span class="co">#&gt; 2 2012-06-01 00:15:00 5.174494 29.5 23.3   0  2.3</span>
+<span class="co">#&gt; 3 2012-06-01 00:30:00 5.163948 29.5 23.4   0  2.1</span>
+<span class="co">#&gt; 4 2012-06-01 00:45:00 5.154150 29.5 23.3   0  2.0</span>
+<span class="co">#&gt; 5 2012-06-01 01:00:00 5.145070 29.5 23.1   0  1.7</span>
+<span class="co">#&gt; 6 2012-06-01 01:15:00 5.136675 29.5 24.0   0  1.8</span></code></pre></div>
+<p>Then, the <code><a href="../reference/ebase.html">ebase()</a></code> function is used to estimate the metabolic rates with the appropriate function arguments. The timestep <code>interval</code> is 900 seconds (15 minutes), the water column depth (<code>H</code>) is 1.85 meters, a log file of the model iterations for each day is created by setting <code>progress = TRUE</code>, and only two Markov chains are used (<code>n.chains</code> = 2). In practice, a larger number for <code>n.chains</code> should be used to verify model convergence.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
+<span class="co">#&gt;         Date   DO_obs   DO_mod       DateTimeStamp       dDO           a</span>
+<span class="co">#&gt; 2 2012-06-01 161.7030 161.9897 2012-06-01 00:15:00 -6.397271 0.007665909</span>
+<span class="co">#&gt; 3 2012-06-01 161.3734 161.9472 2012-06-01 00:30:00 -4.081800 0.007665909</span>
+<span class="co">#&gt; 4 2012-06-01 161.0672 161.8877 2012-06-01 00:45:00 -5.707063 0.007665909</span>
+<span class="co">#&gt; 5 2012-06-01 160.7834 161.8207 2012-06-01 01:00:00 -6.428347 0.007665909</span>
+<span class="co">#&gt; 6 2012-06-01 160.5211 161.7329 2012-06-01 01:15:00 -8.430377 0.007665909</span>
+<span class="co">#&gt; 7 2012-06-01 160.2787 161.6505 2012-06-01 01:30:00 -7.911351 0.007665909</span>
+<span class="co">#&gt;           b Pg_vol   Rt_vol         D</span>
+<span class="co">#&gt; 2 0.2264261      0 13.76921 -7.371940</span>
+<span class="co">#&gt; 3 0.2264261      0 13.76921 -9.687412</span>
+<span class="co">#&gt; 4 0.2264261      0 13.76921 -8.062149</span>
+<span class="co">#&gt; 5 0.2264261      0 13.76921 -7.340864</span>
+<span class="co">#&gt; 6 0.2264261      0 13.76921 -5.338834</span>
+<span class="co">#&gt; 7 0.2264261      0 13.76921 -5.857861</span></code></pre></div>
+<div id="refs" class="references">
+<div id="ref-Grace15">
+<p>Grace, Michael R, Darren P Giling, Sally Hladyz, Valerie Caron, Ross M Thompson, and Ralph Mac Nally. 2015. “Fast Processing of Diel Oxygen Curves: Estimating Stream Metabolism with Base (Ba Yesian S Ingle-Station E Stimation).” <em>Limnology and Oceanography: Methods</em> 13 (3): 103–14. <a href="https://doi.org/10.1002/lom3.10011" class="external-link">https://doi.org/10.1002/lom3.10011</a>.</p>
+</div>
+<div id="ref-Wanninkhof14">
+<p>Wanninkhof, Rik. 2014. “Relationship Between Wind Speed and Gas Exchange over the Ocean Revisited.” <em>Limnology and Oceanography: Methods</em> 12 (6): 351–62. <a href="https://doi.org/10.4319/lom.2014.12.351" class="external-link">https://doi.org/10.4319/lom.2014.12.351</a>.</p>
+</div>
+</div>
 </div>
   </div>
 
