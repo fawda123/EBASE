@@ -43,7 +43,7 @@ exdat <- read.csv('data-raw/APNERR2012dtd.csv') \%>\%
   ) \%>\% 
   select(DateTimeStamp, DO_obs, Temp, Sal, PAR, WSpd) 
 
-save(exdat, file = 'data/exdat.RData', compression = 'xz')
+save(exdat, file = 'data/exdat.RData', compress = 'xz')
 }
 }
 \concept{utilities}
