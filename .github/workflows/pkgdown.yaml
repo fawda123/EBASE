@@ -11,7 +11,7 @@ name: pkgdown
 
 jobs:
   pkgdown:
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -29,9 +29,9 @@ jobs:
           needs: website
 
       - name: Install JAGS
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y jags
+        run : |
+          rm '/usr/local/bin/gfortran'
+          brew install jags
           
       - name: Deploy package
         run: |
