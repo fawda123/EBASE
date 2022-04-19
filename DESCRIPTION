@@ -39,9 +39,7 @@ Description: Bayesian estimation methods for ecosystem metabolism at
   estimates of parameters for gross primary production, respiration, 
   and gas exchange.
 Depends: 
-  R (>= 3.5),
-  rjags (== 4-12), 
-  R2jags
+  R (>= 3.5)
 Imports:
   dplyr,
   here,
@@ -49,6 +47,9 @@ Imports:
   fwoxy,
   ggplot2,
   lubridate,
+  R2jags (>= 0.6.1),
+  rjags (>= 4.10),
+  rlang (>= 0.4.10),
   tidyr
 Suggests:
   testthat (>= 3.0.0),
@@ -58,6 +59,7 @@ Suggests:
 Remotes:
   jmarriola/fwoxy
 License: CC0
+SystemRequirements: JAGS 4.x.y (https://mcmc-jags.sourceforge.net)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
