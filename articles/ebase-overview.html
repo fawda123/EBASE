@@ -127,7 +127,7 @@
 <span class="co">#&gt; 4 2012-06-01 00:45:00 5.154150 29.5 23.3   0  2.0</span>
 <span class="co">#&gt; 5 2012-06-01 01:00:00 5.145070 29.5 23.1   0  1.7</span>
 <span class="co">#&gt; 6 2012-06-01 01:15:00 5.136675 29.5 24.0   0  1.8</span></code></pre></div>
-<p>Then, the <code><a href="../reference/ebase.html">ebase()</a></code> function is used to estimate the metabolic rates with the appropriate function arguments. The timestep <code>interval</code> is 900 seconds (15 minutes), the water column depth (<code>H</code>) is 1.85 meters, a log file of the model iterations for each day is created by setting <code>progress = TRUE</code>, and only two Markov chains are used (<code>n.chains = 2</code>). In practice, a larger number for <code>n.chains</code> should be used to verify model convergence.</p>
+<p>Then, the <code><a href="../reference/ebase.html">ebase()</a></code> function is used to estimate the metabolic rates with the appropriate function arguments. The timestep <code>interval</code> is 900 seconds (15 minutes), the water column depth <code>H</code> is 1.85 meters, a log file of the model iterations for each day is created by setting <code>progress = TRUE</code>, and only two Markov chains are used with <code>n.chains = 2</code>. In practice, a larger number for <code>n.chains</code> should be used to verify model convergence.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
@@ -189,7 +189,7 @@
     color <span class="op">=</span> <span class="cn">NULL</span>, 
     x <span class="op">=</span> <span class="cn">NULL</span>
   <span class="op">)</span></code></pre></div>
-<p><img src="ebase-overview_files/figure-html/unnamed-chunk-6-1.png" width="700" style="display: block; margin: auto;"></p>
+<p><img src="ebase-overview_files/figure-html/unnamed-chunk-6-1.png" width="864" style="display: block; margin: auto;"></p>
 <p>Execution time of the model can also be reduced by registering a parallel backend.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># setup parallel backend</span>
