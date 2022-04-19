@@ -68,7 +68,7 @@ dat <- exdat %>%
 head(dat)
 ```
 
-Then, the `ebase()` function is used to estimate the metabolic rates with the appropriate function arguments.  The timestep `interval` is 900 seconds (15 minutes), the water column depth (`H`) is 1.85 meters, a log file of the model iterations for each day is created by setting `progress = TRUE`, and only two Markov chains are used (`n.chains = 2`). In practice, a larger number for `n.chains` should be used to verify model convergence.  
+Then, the `ebase()` function is used to estimate the metabolic rates with the appropriate function arguments.  The timestep `interval` is 900 seconds (15 minutes), the water column depth `H` is 1.85 meters, a log file of the model iterations for each day is created by setting `progress = TRUE`, and only two Markov chains are used with `n.chains = 2`. In practice, a larger number for `n.chains` should be used to verify model convergence.  
 
 ```{r}
 res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
@@ -104,7 +104,7 @@ ggplot(toplo, aes(x = DateTimeStamp, y = value, color = name)) +
 
 The daily averages can also be plotted after summarizing the results.
 
-```{r}
+```{r, fig.height = 3, fig.width = 9}
 toplo <- res %>% 
   select(Date, Pg_vol, Rt_vol, D) %>% 
   pivot_longer(cols = -matches('Date')) %>% 

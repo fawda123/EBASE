@@ -98,7 +98,7 @@ ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains 
   # iterate through each date to estimate metabolism ------------------------
 
   # process
-  output <- foreach(d = dts, .packages = c('here', 'R2jags'), .export = c('troc', 'metab_update', 'mod_in')
+  output <- foreach(d = dts, .packages = c('here', 'R2jags', 'rjags'), .export = c('troc', 'metab_update', 'mod_in')
                                                                          ) %dopar% {
   
     if(progress){

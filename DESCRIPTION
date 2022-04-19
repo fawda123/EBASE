@@ -48,6 +48,7 @@ Imports:
   ggplot2,
   lubridate,
   R2jags,
+  rjags,
   tidyr
 Suggests:
   testthat (>= 3.0.0),
