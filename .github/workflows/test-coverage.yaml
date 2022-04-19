@@ -24,8 +24,9 @@ jobs:
 
       - name: Install rjags binary
         run: |
-          install.packages('rjags', type  = 'win.binary')
-          
+          install.packages('rjags', type = 'win.binary')
+        shell: Rscript {0}
+        
       - name: Query dependencies
         run: |
           install.packages('remotes')
