@@ -58,7 +58,7 @@
 #' ##
 #' # run ebase with different initial starting values for the three parameters, parallel
 #' 
-#' inits <- function(){
+#' inits <- function(troc = 86400 / 900){
 #'   list(
 #'     a = 0.2 / troc,
 #'     r = 20 / troc,
