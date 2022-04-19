@@ -12,6 +12,7 @@
 #' @param n.chains number of MCMC chains to run, passed to \code{\link[R2jags]{jags}}
 #' @param n.thin number of nth iterations to save for each chain, passed to \code{\link[R2jags]{jags}}
 #' @param progress logical if progress saved to a txt file names 'log.txt' in the working directory
+#' @param model_file \code{NULL} to use \code{\link{ebase_model}} or a path to a model text file can be used
 #' 
 #' @export
 #' 
@@ -74,7 +75,7 @@
 #'
 #' stopCluster(cl)
 ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, 
-                  n.thin = 10, progress = FALSE){
+                  n.thin = 10, progress = FALSE, model_file = NULL){
   
   # prep data
   dat <- ebase_prep(dat, H)
@@ -86,13 +87,18 @@ ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains 
   dts <- unique(dat$Date) %>% 
     .[table(dat$Date) == troc] 
   
+  # use model function or model file
+  mod_in <- ebase_model 
+  if(!is.null(model_file))
+    mod_in <- model_file
+    
   # setup log file
   strt <- Sys.time()
   
   # iterate through each date to estimate metabolism ------------------------
 
   # process
-  output <- foreach(d = dts, .packages = c('here', 'R2jags'), .export = c('troc', 'metab_update', 'ebase_model')
+  output <- foreach(d = dts, .packages = c('here', 'R2jags'), .export = c('troc', 'metab_update', 'mod_in')
                                                                          ) %dopar% {
   
     if(progress){
@@ -127,7 +133,7 @@ ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains 
     ## Call jags ##
     metabfit <- do.call(jags.parallel,
                         list(data = dat.list, inits = inits, parameters.to.save = params, 
-                             model.file = ebase_model,
+                             model.file = mod_in,
                              n.chains = n.chains, n.iter = n.iter, n.burnin = n.burnin,
                              n.thin = n.thin, n.cluster = n.chains, DIC = TRUE,
                              jags.seed = 123, digits = 5)

@@ -14,7 +14,8 @@ ebase(
   n.burnin = n.iter * 0.5,
   n.chains = 3,
   n.thin = 10,
-  progress = FALSE
+  progress = FALSE,
+  model_file = NULL
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ ebase(
 \item{n.thin}{number of nth iterations to save for each chain, passed to \code{\link[R2jags]{jags}}}
 
 \item{progress}{logical if progress saved to a txt file names 'log.txt' in the working directory}
+
+\item{model_file}{\code{NULL} to use \code{\link{ebase_model}} or a path to a model text file can be used}
 }
 \value{
 A data frame with metabolic estimates for volumetric gross production (\code{Pg_vol}, O2 mmol/m3/d), respiration (\code{Rt_vol},  O2 mmol/m3/d), and gas exchange (\code{D}, O2 mmol/m3/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in hr/cm (provided as 0.251 in eqn. 4 in Wanninkhof 2014).
