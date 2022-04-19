@@ -45,12 +45,6 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y jags
       
-      - name: Install rjags binary (windows-latest)
-        if: runner.os == 'Windows'
-        run: |
-          install.packages('rjags', type = 'win.binary')
-        shell: Rscript {0}
-      
       - name: Install JAGS (windows-latest)
         if: runner.os == 'Windows'
         run: |
