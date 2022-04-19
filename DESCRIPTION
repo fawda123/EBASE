@@ -39,7 +39,8 @@ Description: Bayesian estimation methods for ecosystem metabolism at
   estimates of parameters for gross primary production, respiration, 
   and gas exchange.
 Depends: 
-  R (>= 3.5)
+  R (>= 3.5),
+  rjags (== 4-12)
 Imports:
   dplyr,
   here,
@@ -48,7 +49,6 @@ Imports:
   ggplot2,
   lubridate,
   R2jags,
-  rjags (== 4-12),
   tidyr
 Suggests:
   testthat (>= 3.0.0),
