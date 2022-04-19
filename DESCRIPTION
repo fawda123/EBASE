@@ -40,7 +40,7 @@ Description: Bayesian estimation methods for ecosystem metabolism at
   and gas exchange.
 Depends: 
   R (>= 3.5),
-  rjags (>= 4-12), 
+  rjags (== 4-12), 
   R2jags
 Imports:
   dplyr,
