@@ -3,3 +3,6 @@
 ^\.Rproj\.user$
 ^\.github$
 ^log\.txt$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
