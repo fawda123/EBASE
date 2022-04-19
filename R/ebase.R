@@ -18,6 +18,8 @@
 #' 
 #' @import here
 #' @import foreach
+#' @import rjags
+#' @import R2jags
 #'
 #' @details Required input data are time series for dissolved oxygen (mg/L), water temperature (C), salinity (psu), total PAR (W/m2/s), and wind speed (m/s).  See the \code{\link{exdat}} example data file for a representation of the required data.  Data are typically from continuously monitored water quality and weather parameters are hourly of sub-hourly time steps.  Oxygen concentrations are converted to mmol/m3 prior to metabolic estimation. Water column depth is also required to return volumetric estimates.  This can be supplied as a single value or a vector of length equal to the number of rows in \code{dat}.
 #' 
