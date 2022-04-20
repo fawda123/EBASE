@@ -77,52 +77,16 @@ head(res)
 
 The results are returned as a data frame with instantaneous metabolic estimates for volumetric gross production (O2 mmol/m3/d, `Pg_vol` or $aPAR$ from above), respiration (O2 mmol/m3/d, `Rt_vol` or $r$ from above), and gas exchange (O2 mmol/m3/d, `D` or the remainder of the equation from abov).  Additional parameters estimated by the model that are returned include `a` and `b` as shown in the above equation.  The `a` parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)(W/m2) and is used to estimate gross production [@Grace15].  The `b` parameter is a constant used to estimate gas exchange in hr/cm (provided as 0.251 in eqn. 4 in @Wanninkhof14).
 
-A plot of the results can easily be made with [ggplot](https://ggplot2.tidyverse.org/).  The instantaneous rates at the daily scale can be plotted after some wrangling with [dplyr](https://dplyr.tidyverse.org/) and [tidyr](https://tidyr.tidyverse.org/).  These packages are dependencies for EBASE and do not need to be separately installed.
+A plot of the results can be made with `ebase_plot()`.
 
 ```{r, fig.height = 3, fig.width = 9}
-library(ggplot2)
-library(dplyr)
-library(tidyr)
-
-toplo <- res %>% 
-  select(DateTimeStamp, Pg_vol, Rt_vol, D) %>% 
-  pivot_longer(cols = -matches('DateTimeStamp'))
-
-ggplot(toplo, aes(x = DateTimeStamp, y = value, color = name)) +
-  geom_line() + 
-  geom_point() + 
-  theme_minimal() + 
-  theme(
-    legend.position = 'top'
-  ) +
-  labs(
-    y = 'Instantaneous O2 mmol/m3/d', 
-    color = NULL, 
-    x = NULL
-  )
+ebase_plot(res)
 ```
 
-The daily averages can also be plotted after summarizing the results.
+The daily averages can also be plotted by using `instantaneous = FALSE`.
 
 ```{r, fig.height = 3, fig.width = 9}
-toplo <- res %>% 
-  select(Date, Pg_vol, Rt_vol, D) %>% 
-  pivot_longer(cols = -matches('Date')) %>% 
-  group_by(Date, name) %>% 
-  summarise(value = mean(value, na.rm = T), .groups = 'drop')
-
-ggplot(toplo, aes(x = Date, y = value, color = name)) +
-  geom_line() + 
-  geom_point() + 
-  theme_minimal() + 
-  theme(
-    legend.position = 'top'
-  ) +
-  labs(
-    y = 'Daily avg. O2 mmol/m3/d', 
-    color = NULL, 
-    x = NULL
-  )
+ebase_plot(res, instantaneous = FALSE)
 ```
 
 Execution time of the model can also be reduced by registering a parallel backend. 

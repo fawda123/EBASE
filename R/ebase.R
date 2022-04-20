@@ -175,7 +175,7 @@ ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains 
       b = bts * 100 * 3600 / interval, # ts/m to hr/cm
       Pg_vol = gppts * troc, # O2 mmol/m3/ts to O2 mmol/m3/d
       Rt_vol = erts * troc, # O2 mmol/m3/ts to O2 mmol/m3/d
-      D = -1 * gets * troc, #  # O2 mmol/m3/ts to O2 mmol/m3/d
+      D = gets * troc, #  # O2 mmol/m3/ts to O2 mmol/m3/d
       dDO = dDO * troc #  # O2 mmol/m3/ts to O2 mmol/m3/d
     ) %>%
     dplyr::select(-ats, -bts, -gppts, -erts, -gets)

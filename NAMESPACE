@@ -2,6 +2,7 @@
 
 export(ebase)
 export(ebase_model)
+export(ebase_plot)
 export(ebase_prep)
 export(metab_update)
 import(R2jags)
