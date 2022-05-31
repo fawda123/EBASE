@@ -11,7 +11,7 @@
 #' @param n.burnin number of MCMC chains to delete, passed to \code{\link[R2jags]{jags}}
 #' @param n.chains number of MCMC chains to run, passed to \code{\link[R2jags]{jags}}
 #' @param n.thin number of nth iterations to save for each chain, passed to \code{\link[R2jags]{jags}}
-#' @param progress logical if progress saved to a txt file names 'log.txt' in the working directory
+#' @param progress logical if progress saved to a txt file named 'log.txt' in the working directory
 #' @param model_file \code{NULL} to use \code{\link{ebase_model}} or a path to a model text file can be used
 #' 
 #' @export

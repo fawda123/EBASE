@@ -37,7 +37,7 @@ ebase(
 
 \item{n.thin}{number of nth iterations to save for each chain, passed to \code{\link[R2jags]{jags}}}
 
-\item{progress}{logical if progress saved to a txt file names 'log.txt' in the working directory}
+\item{progress}{logical if progress saved to a txt file named 'log.txt' in the working directory}
 
 \item{model_file}{\code{NULL} to use \code{\link{ebase_model}} or a path to a model text file can be used}
 }
