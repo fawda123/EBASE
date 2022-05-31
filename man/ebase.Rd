@@ -42,7 +42,7 @@ ebase(
 \item{model_file}{\code{NULL} to use \code{\link{ebase_model}} or a path to a model text file can be used}
 }
 \value{
-A data frame with metabolic estimates for volumetric gross production (\code{Pg_vol}, O2 mmol/m3/d), respiration (\code{Rt_vol},  O2 mmol/m3/d), and gas exchange (\code{D}, O2 mmol/m3/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in hr/cm (provided as 0.251 in eqn. 4 in Wanninkhof 2014).
+A data frame with metabolic estimates for volumetric gross production (\code{Pg_vol}, O2 mmol/m3/d), respiration (\code{Rt_vol},  O2 mmol/m3/d), and gas exchange (\code{D}, O2 mmol/m3/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).
 }
 \description{
 Estuarine Bayesian Single-station Estimation method for ecosystem metabolism
@@ -80,10 +80,10 @@ stopCluster(cl)
 ##
 # run ebase with different initial starting values for the three parameters, parallel
 
-inits <- function(troc = 86400 / 900){
+inits <- function(nstepd = 86400 / 900){
   list(
-    a = 0.2 / troc,
-    r = 20 / troc,
+    a = 0.2 / nstepd,
+    r = 20 / nstepd,
     b = 0.251 / 400
   )
 }

@@ -29,7 +29,7 @@
 #' 
 #' Gross production is provided by \emph{aPAR}, respiration is provided by \emph{r}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{r}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The estimated concentration is also returned for comparison to observed as one measure of model performance.   
 #' 
-#' @return A data frame with metabolic estimates for volumetric gross production (\code{Pg_vol}, O2 mmol/m3/d), respiration (\code{Rt_vol},  O2 mmol/m3/d), and gas exchange (\code{D}, O2 mmol/m3/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in hr/cm (provided as 0.251 in eqn. 4 in Wanninkhof 2014).
+#' @return A data frame with metabolic estimates for volumetric gross production (\code{Pg_vol}, O2 mmol/m3/d), respiration (\code{Rt_vol},  O2 mmol/m3/d), and gas exchange (\code{D}, O2 mmol/m3/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).
 #' 
 #' @references 
 #' 
@@ -61,10 +61,10 @@
 #' ##
 #' # run ebase with different initial starting values for the three parameters, parallel
 #' 
-#' inits <- function(troc = 86400 / 900){
+#' inits <- function(nstepd = 86400 / 900){
 #'   list(
-#'     a = 0.2 / troc,
-#'     r = 20 / troc,
+#'     a = 0.2 / nstepd,
+#'     r = 20 / nstepd,
 #'     b = 0.251 / 400
 #'   )
 #' }
@@ -83,11 +83,11 @@ ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains 
   dat <- ebase_prep(dat, H)
   
   # time rate of change per day
-  troc <- 86400 / interval
+  nstepd <- 86400 / interval
   
   # dates in data, get those with complete timesteps
   dts <- unique(dat$Date) %>% 
-    .[table(dat$Date) == troc] 
+    .[table(dat$Date) == nstepd] 
   
   # use model function or model file
   mod_in <- ebase_model 
@@ -100,7 +100,7 @@ ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains 
   # iterate through each date to estimate metabolism ------------------------
 
   # process
-  output <- foreach(d = dts, .packages = c('here', 'R2jags', 'rjags'), .export = c('troc', 'metab_update', 'mod_in')
+  output <- foreach(d = dts, .packages = c('here', 'R2jags', 'rjags'), .export = c('nstepd', 'metab_update', 'mod_in')
                                                                          ) %dopar% {
   
     if(progress){
@@ -127,7 +127,7 @@ ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains 
     iters <- sample(kern,1)
   
     # Set
-    dat.list <- list("num.measurements", "troc", "DO_obs", "PAR", "DO_sat", "sc", "H", "U10")
+    dat.list <- list("num.measurements", "nstepd", "DO_obs", "PAR", "DO_sat", "sc", "H", "U10")
   
     # Define monitoring variables (returned by jags)
     params <- c("ats", "bts", "gppts", "erts", "gets", "DO_mod")
@@ -171,12 +171,12 @@ ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains 
     na.omit() %>%
     dplyr::mutate(
       Date = lubridate::ymd(Date), 
-      a = ats * troc, # (mmol/m3/ts)/(W/m2) to (mmol/m3/d)/(W/m2)
-      b = bts * 100 * 3600 / interval, # ts/m to hr/cm
-      Pg_vol = gppts * troc, # O2 mmol/m3/ts to O2 mmol/m3/d
-      Rt_vol = erts * troc, # O2 mmol/m3/ts to O2 mmol/m3/d
-      D = gets * troc, #  # O2 mmol/m3/ts to O2 mmol/m3/d
-      dDO = dDO * troc #  # O2 mmol/m3/ts to O2 mmol/m3/d
+      a = ats * nstepd, # (mmol/m3/ts)/(W/m2) to (mmol/m3/d)/(W/m2)
+      b = bts * 100 * 3600 / interval, # (m/d)/(m2/s2) to (cm/hr)/(m2/s2)
+      Pg_vol = gppts * nstepd, # O2 mmol/m3/ts to O2 mmol/m3/d
+      Rt_vol = erts * nstepd, # O2 mmol/m3/ts to O2 mmol/m3/d
+      D = gets * nstepd, #  # O2 mmol/m3/ts to O2 mmol/m3/d
+      dDO = dDO * nstepd #  # O2 mmol/m3/ts to O2 mmol/m3/d
     ) %>%
     dplyr::select(-ats, -bts, -gppts, -erts, -gets)
   
