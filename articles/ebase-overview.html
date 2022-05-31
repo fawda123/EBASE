@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EBASE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9001</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -145,7 +145,7 @@
 <span class="co">#&gt; 5 0.2259031      0 13.74739 7.323884</span>
 <span class="co">#&gt; 6 0.2259031      0 13.74739 5.326479</span>
 <span class="co">#&gt; 7 0.2259031      0 13.74739 5.844291</span></code></pre></div>
-<p>The results are returned as a data frame with instantaneous metabolic estimates for volumetric gross production (O2 mmol/m3/d, <code>Pg_vol</code> or <span class="math inline">\(aPAR\)</span> from above), respiration (O2 mmol/m3/d, <code>Rt_vol</code> or <span class="math inline">\(r\)</span> from above), and gas exchange (O2 mmol/m3/d, <code>D</code> or the remainder of the equation from above). Additional parameters estimated by the model that are returned include <code>a</code> and <code>b</code> as shown in the above equation. The <code>a</code> parameter is a constant that represents the primary production per quantum of light with units of (mmol/m3/d)(W/m2) and is used to estimate gross production <span class="citation">(Grace et al. 2015)</span>. The <code>b</code> parameter is a constant used to estimate gas exchange in hr/cm (provided as 0.251 in eqn. 4 in <span class="citation">Wanninkhof (2014)</span>).</p>
+<p>The results are returned as a data frame with instantaneous metabolic estimates for volumetric gross production (O2 mmol/m3/d, <code>Pg_vol</code> or <span class="math inline">\(aPAR\)</span> from above), respiration (O2 mmol/m3/d, <code>Rt_vol</code> or <span class="math inline">\(r\)</span> from above), and gas exchange (O2 mmol/m3/d, <code>D</code> or the remainder of the equation from above). Additional parameters estimated by the model that are returned include <code>a</code> and <code>b</code> as shown in the above equation. The <code>a</code> parameter is a constant that represents the primary production per quantum of light with units of (mmol/m3/d)(W/m2) and is used to estimate gross production <span class="citation">(Grace et al. 2015)</span>. The <code>b</code> parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in <span class="citation">Wanninkhof (2014)</span>).</p>
 <p>A plot of the results can be made with <code><a href="../reference/ebase_plot.html">ebase_plot()</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/ebase_plot.html">ebase_plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></code></pre></div>
