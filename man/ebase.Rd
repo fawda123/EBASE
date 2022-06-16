@@ -8,6 +8,7 @@ ebase(
   dat,
   H,
   interval,
+  ndays = 1,
   inits = NULL,
   n.iter = 10000,
   update.chains = TRUE,
@@ -24,6 +25,8 @@ ebase(
 \item{H}{numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}}
 
 \item{interval}{timestep interval in seconds}
+
+\item{ndays}{numeric for number of days in \code{dat} for optimizing the metabolic equation, see details}
 
 \item{inits}{\code{NULL} or a function that returns a named list of starting values for the parameters to be estimated in the jags model, see examples}
 
@@ -55,6 +58,8 @@ The metabolic estimates are based on a mass balance equation in Grace et al. 201
 \deqn{ \frac{\delta{C_d}}{\delta{t}} = [\,aPAR]\, - [\,r]\, - \frac{1}{H}\left[-bU_{10}^2\left(\frac{s_c}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )\right]}
 
 Gross production is provided by \emph{aPAR}, respiration is provided by \emph{r}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{r}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The estimated concentration is also returned for comparison to observed as one measure of model performance.
+
+The \code{ndays} argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., \code{ndays= 1} such that only observations within a single day are used to inform the parameter estimates.   However, more days can be used to include additional data across the time series as the basis for estimating the unknown model parameters.
 }
 \examples{
 
