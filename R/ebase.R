@@ -5,6 +5,7 @@
 #' @param dat input data frame
 #' @param H numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}
 #' @param interval timestep interval in seconds
+#' @param ndays numeric for number of days in \code{dat} for optimizing the metabolic equation, see details
 #' @param inits \code{NULL} or a function that returns a named list of starting values for the parameters to be estimated in the jags model, see examples
 #' @param n.iter number of MCMC iterations, passed to \code{\link[R2jags]{jags}}
 #' @param update.chains logical to run \code{\link{metab_update}} if chains do not converge
@@ -28,6 +29,8 @@
 #' \deqn{ \frac{\delta{C_d}}{\delta{t}} = [\,aPAR]\, - [\,r]\, - \frac{1}{H}\left[-bU_{10}^2\left(\frac{s_c}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )\right]}
 #' 
 #' Gross production is provided by \emph{aPAR}, respiration is provided by \emph{r}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{r}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The estimated concentration is also returned for comparison to observed as one measure of model performance.   
+#' 
+#' The \code{ndays} argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., \code{ndays= 1} such that only observations within a single day are used to inform the parameter estimates.   However, more days can be used to include additional data across the time series as the basis for estimating the unknown model parameters.
 #' 
 #' @return A data frame with metabolic estimates for volumetric gross production (\code{Pg_vol}, O2 mmol/m3/d), respiration (\code{Rt_vol},  O2 mmol/m3/d), and gas exchange (\code{D}, O2 mmol/m3/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).
 #' 
@@ -76,14 +79,14 @@
 #' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, inits = inits, n.chains = 2)
 #'
 #' stopCluster(cl)
-ebase <- function(dat, H, interval, inits = NULL, n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, 
+ebase <- function(dat, H, interval, ndays = 1, inits = NULL, n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, 
                   n.thin = 10, progress = FALSE, model_file = NULL){
   
   # prep data
   dat <- ebase_prep(dat, H)
   
-  # time rate of change per day
-  nstepd <- 86400 / interval
+  # the number of time steps for each iteration of the loop
+  nstepd <- (86400 * ndays) / interval
   
   # dates in data, get those with complete timesteps
   dts <- unique(dat$Date) %>% 
