@@ -3,7 +3,7 @@ test_that("Checking ebase_prep names", {
     names
   
   expect_equal(result, c("Date", "DateTimeStamp", "DO_obs", "DO_sat", "H", "Temp", "Sal", 
-                         "PAR", "WSpd", "sc"))
+                         "PAR", "WSpd", "sc", "grp"))
 })
 
 test_that("Checking ebase_prep incorrect input", {

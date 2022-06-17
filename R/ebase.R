@@ -30,7 +30,7 @@
 #' 
 #' Gross production is provided by \emph{aPAR}, respiration is provided by \emph{r}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{r}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The estimated concentration is also returned for comparison to observed as one measure of model performance.   
 #' 
-#' The \code{ndays} argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., \code{ndays= 1} such that only observations within a single day are used to inform the parameter estimates.   However, more days can be used to include additional data across the time series as the basis for estimating the unknown model parameters.
+#' The \code{ndays} argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., \code{ndays= 1} such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for \emph{a}, \emph{r}, and \emph{b} are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every \code{ndays} specified by the argument.  The \code{ndays} argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to \code{ndays}.  The final block may not include the complete number of days specified by \code{ndays} if the number of unique dates in the input data includes a remainder when divided by \code{ndays}, e.g., if seven days are in the input data and \code{ndays = 5}, there will be two groups where the first has five days and the second has two days. The output data from \code{ebase} includes a column that specifies the grouping that was used based on \code{ndays}.
 #' 
 #' @return A data frame with metabolic estimates for volumetric gross production (\code{Pg_vol}, O2 mmol/m3/d), respiration (\code{Rt_vol},  O2 mmol/m3/d), and gas exchange (\code{D}, O2 mmol/m3/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).
 #' 
@@ -83,14 +83,13 @@ ebase <- function(dat, H, interval, ndays = 1, inits = NULL, n.iter = 10000, upd
                   n.thin = 10, progress = FALSE, model_file = NULL){
   
   # prep data
-  dat <- ebase_prep(dat, H)
+  dat <- ebase_prep(dat, H, ndays = ndays)
   
   # the number of time steps for each iteration of the loop
   nstepd <- (86400 * ndays) / interval
-  
-  # dates in data, get those with complete timesteps
-  dts <- unique(dat$Date) %>% 
-    .[table(dat$Date) == nstepd] 
+
+  # groups in data
+  grps <- unique(dat$grp)
   
   # use model function or model file
   mod_in <- ebase_model 
@@ -103,18 +102,18 @@ ebase <- function(dat, H, interval, ndays = 1, inits = NULL, n.iter = 10000, upd
   # iterate through each date to estimate metabolism ------------------------
 
   # process
-  output <- foreach(d = dts, .packages = c('here', 'R2jags', 'rjags'), .export = c('nstepd', 'metab_update', 'mod_in')
+  output <- foreach(i = grps, .packages = c('here', 'R2jags', 'rjags'), .export = c('nstepd', 'metab_update', 'mod_in')
                                                                          ) %dopar% {
   
     if(progress){
       sink(here('log.txt'))
       cat('Log entry time', as.character(Sys.time()), '\n')
-      cat(which(d == dts), ' of ', length(dts), '\n')
+      cat('Group ', which(i == grps), ' of ', length(grps), '\n')
       print(Sys.time() - strt)
       sink()
     }
     
-    dat.sub <- dat[dat$Date == d,]
+    dat.sub <- dat[dat$grp == i,]
   
     # Define vectors for JAGS
     num.measurements <- nrow(dat.sub)
@@ -152,23 +151,24 @@ ebase <- function(dat, H, interval, ndays = 1, inits = NULL, n.iter = 10000, upd
     Rhat.test <- ifelse(any(srf > 1.1, na.rm = TRUE) == TRUE, "Check convergence", "Fine")
   
     # insert results to table and write table
-    result <- data.frame(Date = as.character(d),
-                         DO_obs = dat.sub$DO_obs,
-                         DO_mod = metabfit$BUGSoutput$mean$DO_mod,
-                         DateTimeStamp = dat.sub$DateTimeStamp,
-                         ats = c(NA, metabfit$BUGSoutput$mean$ats), # (mmol/m3/ts)/(W/m2)
-                         bts = c(NA, metabfit$BUGSoutput$mean$bts), # ts/m
-                         gppts = c(NA, metabfit$BUGSoutput$mean$gppts), # O2, mmol/m3/ts
-                         erts = c(NA, metabfit$BUGSoutput$mean$erts), # O2, mmol/m3/ts
-                         gets = c(NA, metabfit$BUGSoutput$mean$gets), # O2, mmol/m3/ts
-                         dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO_mod)) # O2 mmol/m3/ts
-  
+    result <- data.frame(
+      Date = dat.sub$Date,
+      grp = dat.sub$grp,
+      DO_obs = dat.sub$DO_obs,
+      DO_mod = metabfit$BUGSoutput$mean$DO_mod,
+      DateTimeStamp = dat.sub$DateTimeStamp,
+      ats = c(NA, metabfit$BUGSoutput$mean$ats), # (mmol/m3/ts)/(W/m2)
+      bts = c(NA, metabfit$BUGSoutput$mean$bts), # ts/m
+      gppts = c(NA, metabfit$BUGSoutput$mean$gppts), # O2, mmol/m3/ts
+      erts = c(NA, metabfit$BUGSoutput$mean$erts), # O2, mmol/m3/ts
+      gets = c(NA, metabfit$BUGSoutput$mean$gets), # O2, mmol/m3/ts
+      dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO_mod)) # O2 mmol/m3/ts
     )
   
     return(result)
   
   }
-  
+
   # correct instantaneous obs to daily, g to mmol
   out <- do.call('rbind', output) %>%
     na.omit() %>%

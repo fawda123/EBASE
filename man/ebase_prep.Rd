@@ -4,12 +4,14 @@
 \alias{ebase_prep}
 \title{Prepare data for ebase}
 \usage{
-ebase_prep(dat, H)
+ebase_prep(dat, H, ndays = 1)
 }
 \arguments{
 \item{dat}{input data frame}
 
 \item{H}{numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}}
+
+\item{ndays}{numeric for number of days in \code{dat} for optimizing the metabolic equation, see details}
 }
 \value{
 A data frame with additional columns required for \code{\link{ebase}}
@@ -19,6 +21,8 @@ Prepare data for ebase
 }
 \details{
 Checks if all columns are present by matching those in \code{\link{exdat}}, converts dissolved oxygen from mg/L to mmol/m3, calculates the Schmidt number (unitless) from water temp (C) and salinity (psu), and calculates dissolved oxygen equilibrium concentration (mmol/m3) from salinity and temperature
+
+The \code{ndays} argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., \code{ndays= 1} such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for \emph{a}, \emph{r}, and \emph{b} are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every \code{ndays} specified by the argument.  The \code{ndays} argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to \code{ndays}.  The final block may not include the complete number of days specified by \code{ndays} if the number of unique dates in the input data includes a remainder when divided by \code{ndays}, e.g., if seven days are in the input data and \code{ndays = 5}, there will be two groups where the first has five days and the second has two days. The output data from \code{\link{ebase}} includes a column that specifies the grouping that was used based on \code{ndays}.
 }
 \examples{
 dat <- ebase_prep(exdat, H = 1.85)
