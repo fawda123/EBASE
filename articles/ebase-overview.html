@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EBASE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -131,13 +131,13 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
-<span class="co">#&gt;         Date   DO_obs   DO_mod       DateTimeStamp       dDO          a</span>
-<span class="co">#&gt; 2 2012-06-01 161.7030 161.9898 2012-06-01 00:15:00 -6.392482 0.00766078</span>
-<span class="co">#&gt; 3 2012-06-01 161.3734 161.9472 2012-06-01 00:30:00 -4.082373 0.00766078</span>
-<span class="co">#&gt; 4 2012-06-01 161.0672 161.8878 2012-06-01 00:45:00 -5.703880 0.00766078</span>
-<span class="co">#&gt; 5 2012-06-01 160.7834 161.8209 2012-06-01 01:00:00 -6.423503 0.00766078</span>
-<span class="co">#&gt; 6 2012-06-01 160.5211 161.7332 2012-06-01 01:15:00 -8.420908 0.00766078</span>
-<span class="co">#&gt; 7 2012-06-01 160.2787 161.6509 2012-06-01 01:30:00 -7.903096 0.00766078</span>
+<span class="co">#&gt;         Date grp   DO_obs   DO_mod       DateTimeStamp       dDO          a</span>
+<span class="co">#&gt; 2 2012-06-01   1 161.7030 161.9898 2012-06-01 00:15:00 -6.392482 0.00766078</span>
+<span class="co">#&gt; 3 2012-06-01   1 161.3734 161.9472 2012-06-01 00:30:00 -4.082373 0.00766078</span>
+<span class="co">#&gt; 4 2012-06-01   1 161.0672 161.8878 2012-06-01 00:45:00 -5.703880 0.00766078</span>
+<span class="co">#&gt; 5 2012-06-01   1 160.7834 161.8209 2012-06-01 01:00:00 -6.423503 0.00766078</span>
+<span class="co">#&gt; 6 2012-06-01   1 160.5211 161.7332 2012-06-01 01:15:00 -8.420908 0.00766078</span>
+<span class="co">#&gt; 7 2012-06-01   1 160.2787 161.6509 2012-06-01 01:30:00 -7.903096 0.00766078</span>
 <span class="co">#&gt;           b Pg_vol   Rt_vol        D</span>
 <span class="co">#&gt; 2 0.2259031      0 13.74739 7.354905</span>
 <span class="co">#&gt; 3 0.2259031      0 13.74739 9.665015</span>
