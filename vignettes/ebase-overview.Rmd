@@ -102,4 +102,50 @@ res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
 stopCluster(cl)
 ```
 
+## Changing the default arguments 
+
+The `ndays` argument in `ebase()` defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., `ndays = 1` such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for `a`, `r`, and `b` are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every `ndays` specified by the argument.  The `ndays` argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to `ndays`.  The final block may not include the complete number of days specified by `ndays` if the number of unique dates in the input data includes a remainder when divided by `ndays`, e.g., if seven days are in the input data and `ndays = 5`, there will be two groups where the first has five days and the second has two days. The output data from `ebase` includes a column that specifies the grouping that was used based on `ndays`.
+
+Here, the number of days used to optimize the equation is set to all days in the input data. 
+
+```{r}
+cl <- makeCluster(2)
+registerDoParallel(cl)
+
+res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2, ndays = 4)
+
+stopCluster(cl)
+```
+
+And the resulting plot: 
+
+```{r, fig.height = 3, fig.width = 9}
+ebase_plot(res, instantaneous = TRUE)
+```
+
+Missing values in the input data can also be interpolated prior to estimating metabolism.  This is the default behavior and it is the responsibility of the user to verify that these interpolated values are not wildly inaccurate.  Missing values are linearly interpolated between non-missing values at the time step specified by the value in `interval`.  This works well for small gaps, but can easily create inaccurate values at gaps larger than a few hours. 
+
+As an example, the `dat` object above is subset to 90% of its observations.
+
+```{r}
+set.seed(222)
+dat2 <- dat %>% 
+  slice_sample(prop = 0.9) %>% 
+  arrange(DateTimeStamp)
+head(dat2)
+```
+
+The `ebase_prep()` function is used internally to `ebase` to prepare the data for the metabolism calculations.  This function interpolates the missing data and returns a column `isinterp` that specifies `TRUE` or `FALSE` if a value is interpolated.  
+
+```{r, message = F}
+dat2interp <- ebase_prep(dat2, H = 1.85, interval = 900, interp = T)
+head(dat2interp)
+```
+
+The interpolated values can be visually inspected using the `interp_plot()` function.  
+
+```{r, fig.height = 3, fig.width = 9, message = F}
+interp_plot(dat2, H = 1.85, interval = 900, param = 'DO_sat')
+```
+
 # References

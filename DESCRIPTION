@@ -49,7 +49,8 @@ Imports:
   lubridate,
   R2jags (>= 0.6.1),
   rjags (>= 4.10),
-  tidyr
+  tidyr, 
+  zoo
 Suggests:
   testthat (>= 3.0.0),
   doParallel,

@@ -4,7 +4,10 @@
 #' 
 #' @param dat input data frame
 #' @param H numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}
+#' @param interval timestep interval in seconds
 #' @param ndays numeric for number of days in \code{dat} for optimizing the metabolic equation, see details
+#' @param interp logical indicating if linear interpolation is used to fill all data gaps, only applies if timestep specified by \code{interval} is not uniform
+#' @param maxgap numeric vector indicating maximum gap size to interpolate where size is number of records at the value specified by \code{interval}, e.g., if \code{interval = 900} and \code{maxgap = 4}, gaps up to and including one hour will be linearly interpolated
 #' 
 #' @importFrom fwoxy fun_schmidt_oxygen fun_eqb_oxygen
 #' 
@@ -19,9 +22,9 @@
 #' @export
 #' 
 #' @examples 
-#' dat <- ebase_prep(exdat, H = 1.85)
+#' dat <- ebase_prep(exdat, H = 1.85, interval = 900)
 #' head(dat)
-ebase_prep <- function(dat, H, ndays = 1){
+ebase_prep <- function(dat, H, interval, ndays = 1, interp = TRUE, maxgap = 1e6){
   
   ##
   # sanity checks
@@ -36,14 +39,42 @@ ebase_prep <- function(dat, H, ndays = 1){
     stop(msg)
   }
   
-  # # check if more than one time step
-  # chk <- unique(diff(dat$DateTimeStamp))
-  # if(length(chk) > 1){
-  #   msg <- paste(chk, collapse = ', ') %>% 
-  #     paste('More than one time step observed:', .)
-  #   
-  #   stop(msg)
-  # }  
+  # check if more than one time step
+  chk <- diff(dat$DateTimeStamp) %>% 
+    as.numeric(units = 'secs') %>% 
+    unique
+  if(length(chk) > 1){
+    msg <- paste(chk, collapse = ', ') %>%
+      paste('More than one time step observed:', .)
+
+    message(msg)
+  }
+  
+  dat$isinterp <- FALSE
+  # interpolate missing values
+  if(interp & length(chk) > 1){
+
+    message("Interpolating missing values to interval")
+    
+    intervalmin <- paste(interval / 60, "min")
+
+    dat <- data.frame(
+        DateTimeStamp = seq(min(dat$DateTimeStamp), max(dat$DateTimeStamp), by = intervalmin)
+      ) %>% 
+      dplyr::left_join(., dat, by = 'DateTimeStamp') %>% 
+      dplyr::mutate(isinterp = rowSums(is.na(.)) > 0) %>% 
+      dplyr::mutate_if(is.numeric, function(x){
+        
+        interp <- try(zoo::na.approx(x, maxgap = maxgap, 
+                                     na.rm = FALSE), silent = TRUE)
+        
+        if('try-error' %in% class(interp)) interp  <- x
+        
+        return(interp)
+        
+      })
+
+  }
   
   # convert DO to mmol/m3
   # add schmidt number as unitless
@@ -56,7 +87,7 @@ ebase_prep <- function(dat, H, ndays = 1){
       H = H, 
       Date = as.Date(DateTimeStamp, tz = attr(DateTimeStamp, 'tzone'))
     ) %>% 
-    dplyr::select(Date, DateTimeStamp, DO_obs, DO_sat, H, dplyr::everything())
+    dplyr::select(Date, DateTimeStamp, isinterp, DO_obs, DO_sat, H, dplyr::everything())
 
   # add groups defined by ndays to out
   # its an even cut by ndays with remainder assigned
@@ -66,7 +97,7 @@ ebase_prep <- function(dat, H, ndays = 1){
       grp = grp - min(grp) + 1
     )
 
-  if(length(unique(out$grp)) >= ndays) {
+  if(ndays >= length(unique(out$grp))) {
     out$grp <- 1
   } else {
     brks <- seq(min(out$grp), max(out$grp), by = ndays)

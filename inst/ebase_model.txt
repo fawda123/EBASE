@@ -12,7 +12,7 @@
     # rmean <- 20 / nstepd
     # rsd <- 1.341 * rmean
     # rtau <- 1 / (rsd * rsd)
-    bmean <- 0.251 / 400
+    bmean <- 0.251 / (100 * 3600 / interval)
     # bsd <- 1.341 * bmean
     # btau <- 1 / (bsd * bsd)
     
