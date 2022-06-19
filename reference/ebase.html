@@ -59,6 +59,8 @@
   <span class="va">H</span>,
   <span class="va">interval</span>,
   ndays <span class="op">=</span> <span class="fl">1</span>,
+  interp <span class="op">=</span> <span class="cn">TRUE</span>,
+  maxgap <span class="op">=</span> <span class="fl">1e+06</span>,
   inits <span class="op">=</span> <span class="cn">NULL</span>,
   n.iter <span class="op">=</span> <span class="fl">10000</span>,
   update.chains <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -86,6 +88,14 @@
 
 <dt>ndays</dt>
 <dd><p>numeric for number of days in <code>dat</code> for optimizing the metabolic equation, see details</p></dd>
+
+
+<dt>interp</dt>
+<dd><p>logical indicating if linear interpolation is used to fill all data gaps, only applies if timestep specified by <code>interval</code> is not uniform</p></dd>
+
+
+<dt>maxgap</dt>
+<dd><p>numeric vector indicating maximum gap size to interpolate where size is number of records at the value specified by <code>interval</code>, e.g., if <code>interval = 900</code> and <code>maxgap = 4</code>, gaps up to and including one hour will be linearly interpolated</p></dd>
 
 
 <dt>inits</dt>
@@ -133,6 +143,7 @@
 <p>$$ \frac{\delta{C_d}}{\delta{t}} = [\,aPAR]\, - [\,r]\, - \frac{1}{H}\left[-bU_{10}^2\left(\frac{s_c}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )\right]$$</p>
 <p>Gross production is provided by <em>aPAR</em>, respiration is provided by <em>r</em>, and gas exchange is provided by the remainder.  The likelihood of the parameters <em>a</em>, <em>r</em>, and <em>b</em> given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The estimated concentration is also returned for comparison to observed as one measure of model performance.</p>
 <p>The <code>ndays</code> argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., <code>ndays= 1</code> such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for <em>a</em>, <em>r</em>, and <em>b</em> are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every <code>ndays</code> specified by the argument.  The <code>ndays</code> argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to <code>ndays</code>.  The final block may not include the complete number of days specified by <code>ndays</code> if the number of unique dates in the input data includes a remainder when divided by <code>ndays</code>, e.g., if seven days are in the input data and <code>ndays = 5</code>, there will be two groups where the first has five days and the second has two days. The output data from <code>ebase</code> includes a column that specifies the grouping that was used based on <code>ndays</code>.</p>
+<p>Missing values in the input data can also be interpolated prior to estimating metabolism.  This is the default behavior and it is the responsibility of the user to verify that these interpolated values are not wildly inaccurate.  Missing values are linearly interpolated between non-missing values at the time step specified by the value in <code>interval</code>.  This works well for small gaps, but can easily create inaccurate values at gaps larger than a few hours. The <code><a href="interp_plot.html">interp_plot</a></code> function can be used to visually assess the interpolated values.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
