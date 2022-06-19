@@ -132,19 +132,19 @@
 <code class="sourceCode R"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
 <span class="co">#&gt;         Date grp   DO_obs   DO_mod       DateTimeStamp       dDO          a</span>
-<span class="co">#&gt; 2 2012-06-01   1 161.7030 161.9898 2012-06-01 00:15:00 -6.392482 0.00766078</span>
-<span class="co">#&gt; 3 2012-06-01   1 161.3734 161.9472 2012-06-01 00:30:00 -4.082373 0.00766078</span>
-<span class="co">#&gt; 4 2012-06-01   1 161.0672 161.8878 2012-06-01 00:45:00 -5.703880 0.00766078</span>
-<span class="co">#&gt; 5 2012-06-01   1 160.7834 161.8209 2012-06-01 01:00:00 -6.423503 0.00766078</span>
-<span class="co">#&gt; 6 2012-06-01   1 160.5211 161.7332 2012-06-01 01:15:00 -8.420908 0.00766078</span>
-<span class="co">#&gt; 7 2012-06-01   1 160.2787 161.6509 2012-06-01 01:30:00 -7.903096 0.00766078</span>
+<span class="co">#&gt; 2 2012-06-01   1 161.7030 161.8550 2012-06-01 00:15:00 -19.33436 0.01615536</span>
+<span class="co">#&gt; 3 2012-06-01   1 161.3734 161.6754 2012-06-01 00:30:00 -17.23838 0.01615536</span>
+<span class="co">#&gt; 4 2012-06-01   1 161.0672 161.4809 2012-06-01 00:45:00 -18.67543 0.01615536</span>
+<span class="co">#&gt; 5 2012-06-01   1 160.7834 161.2798 2012-06-01 01:00:00 -19.30580 0.01615536</span>
+<span class="co">#&gt; 6 2012-06-01   1 160.5211 161.0600 2012-06-01 01:15:00 -21.09893 0.01615536</span>
+<span class="co">#&gt; 7 2012-06-01   1 160.2787 160.8453 2012-06-01 01:30:00 -20.61341 0.01615536</span>
 <span class="co">#&gt;           b Pg_vol   Rt_vol        D</span>
-<span class="co">#&gt; 2 0.2259031      0 13.74739 7.354905</span>
-<span class="co">#&gt; 3 0.2259031      0 13.74739 9.665015</span>
-<span class="co">#&gt; 4 0.2259031      0 13.74739 8.043508</span>
-<span class="co">#&gt; 5 0.2259031      0 13.74739 7.323884</span>
-<span class="co">#&gt; 6 0.2259031      0 13.74739 5.326479</span>
-<span class="co">#&gt; 7 0.2259031      0 13.74739 5.844291</span></code></pre></div>
+<span class="co">#&gt; 2 0.2025508      0 25.92897 6.594603</span>
+<span class="co">#&gt; 3 0.2025508      0 25.92897 8.690588</span>
+<span class="co">#&gt; 4 0.2025508      0 25.92897 7.253539</span>
+<span class="co">#&gt; 5 0.2025508      0 25.92897 6.623165</span>
+<span class="co">#&gt; 6 0.2025508      0 25.92897 4.830031</span>
+<span class="co">#&gt; 7 0.2025508      0 25.92897 5.315558</span></code></pre></div>
 <p>The results are returned as a data frame with instantaneous metabolic estimates for volumetric gross production (O2 mmol/m3/d, <code>Pg_vol</code> or <span class="math inline">\(aPAR\)</span> from above), respiration (O2 mmol/m3/d, <code>Rt_vol</code> or <span class="math inline">\(r\)</span> from above), and gas exchange (O2 mmol/m3/d, <code>D</code> or the remainder of the equation from above). Additional parameters estimated by the model that are returned include <code>a</code> and <code>b</code> as shown in the above equation. The <code>a</code> parameter is a constant that represents the primary production per quantum of light with units of (mmol/m3/d)(W/m2) and is used to estimate gross production <span class="citation">(Grace et al. 2015)</span>. The <code>b</code> parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in <span class="citation">Wanninkhof (2014)</span>).</p>
 <p>A plot of the results can be made with <code><a href="../reference/ebase_plot.html">ebase_plot()</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
