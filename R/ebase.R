@@ -85,8 +85,8 @@ ebase <- function(dat, H, interval, ndays = 1, inits = NULL, n.iter = 10000, upd
   # prep data
   dat <- ebase_prep(dat, H, ndays = ndays)
   
-  # the number of time steps for each iteration of the loop
-  nstepd <- (86400 * ndays) / interval
+  # the number of time steps for each iteration of the loop in days
+  nstepd <- 86400 / interval
 
   # groups in data
   grps <- unique(dat$grp)
@@ -102,7 +102,7 @@ ebase <- function(dat, H, interval, ndays = 1, inits = NULL, n.iter = 10000, upd
   # iterate through each date to estimate metabolism ------------------------
 
   # process
-  output <- foreach(i = grps, .packages = c('here', 'R2jags', 'rjags'), .export = c('nstepd', 'metab_update', 'mod_in')
+  output <- foreach(i = grps, .packages = c('here', 'R2jags', 'rjags'), .export = c('nstepd', 'metab_update', 'interval')
                                                                          ) %dopar% {
   
     if(progress){
@@ -129,7 +129,7 @@ ebase <- function(dat, H, interval, ndays = 1, inits = NULL, n.iter = 10000, upd
     iters <- sample(kern,1)
   
     # Set
-    dat.list <- list("num.measurements", "nstepd", "DO_obs", "PAR", "DO_sat", "sc", "H", "U10")
+    dat.list <- list("num.measurements", "nstepd", "interval", "DO_obs", "PAR", "DO_sat", "sc", "H", "U10")
   
     # Define monitoring variables (returned by jags)
     params <- c("ats", "bts", "gppts", "erts", "gets", "DO_mod")

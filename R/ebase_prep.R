@@ -57,7 +57,7 @@ ebase_prep <- function(dat, H, ndays = 1){
       Date = as.Date(DateTimeStamp, tz = attr(DateTimeStamp, 'tzone'))
     ) %>% 
     dplyr::select(Date, DateTimeStamp, DO_obs, DO_sat, H, dplyr::everything())
-  
+
   # add groups defined by ndays to out
   # its an even cut by ndays with remainder assigned
   out <- out %>% 
@@ -65,13 +65,17 @@ ebase_prep <- function(dat, H, ndays = 1){
       grp = as.numeric(Date),
       grp = grp - min(grp) + 1
     )
-  
-  brks <- seq(min(out$grp), max(out$grp), by = ndays)
-  out$grp <- as.numeric(cut(out$grp, breaks = brks, right = FALSE))
-  maxgrp <- unique(out$grp) %>% max(na.rm = T)
-  maxgrp <- 1 + maxgrp
-  out$grp <- ifelse(is.na(out$grp), maxgrp, out$grp)
 
+  if(length(unique(out$grp)) >= ndays) {
+    out$grp <- 1
+  } else {
+    brks <- seq(min(out$grp), max(out$grp), by = ndays)
+    out$grp <- as.numeric(cut(out$grp, breaks = brks, right = FALSE))
+    maxgrp <- unique(out$grp) %>% max(na.rm = T)
+    maxgrp <- 1 + maxgrp
+    out$grp <- ifelse(is.na(out$grp), maxgrp, out$grp)
+  }
+  
   return(out)
   
 }

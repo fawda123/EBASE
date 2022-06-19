@@ -11,3 +11,14 @@ test_that("Checking ebase_prep incorrect input", {
   expect_error(ebase_prep(exdat[,-5], H = 1.85))
                
 })
+
+test_that("Checking ebase_prep all groups", {
+  
+  result <- ebase_prep(exdat, H = 1.85, ndays = 2) %>% 
+    pull(grp) %>% 
+    unique %>% 
+    length
+  
+  expect_equal(result, 1)
+  
+})
