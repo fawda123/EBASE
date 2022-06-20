@@ -102,6 +102,12 @@ res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
 stopCluster(cl)
 ```
 
+The model fit can be assessed by comparing the observed and modelled values for dissolved oxygen with the `fit_plot()` function.  Estimated values are shown as line and observed values are shown as points.
+
+```{r, fig.height = 3, fig.width = 9}
+fit_plot(res)
+```
+
 ## Changing the default arguments 
 
 ### Equation optimization length 
