@@ -65,10 +65,7 @@ ebase_prep <- function(dat, H, interval, ndays = 1, interp = TRUE, maxgap = 1e6)
       dplyr::mutate(isinterp = rowSums(is.na(.)) > 0) %>% 
       dplyr::mutate_if(is.numeric, function(x){
         
-        interp <- try(zoo::na.approx(x, maxgap = maxgap, 
-                                     na.rm = FALSE), silent = TRUE)
-        
-        if('try-error' %in% class(interp)) interp  <- x
+        interp <- zoo::na.approx(x, maxgap = maxgap, na.rm = FALSE)
         
         return(interp)
         
