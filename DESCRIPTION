@@ -52,10 +52,11 @@ Imports:
   tidyr, 
   zoo
 Suggests:
-  testthat (>= 3.0.0),
-  doParallel,
-  knitr,
-  rmarkdown
+    testthat (>= 3.0.0),
+    doParallel,
+    knitr,
+    rmarkdown,
+    covr
 Remotes:
   jmarriola/fwoxy
 License: CC0

@@ -4,7 +4,7 @@
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/fawda123/EBASE/workflows/R-CMD-check/badge.svg)](https://github.com/fawda123/EBASE/actions)
 [![pkgdown](https://github.com/fawda123/EBASE/workflows/pkgdown/badge.svg)](https://github.com/fawda123/EBASE/actions)
-[![codecov](https://codecov.io/gh/fawda123/EBASE/branch/main/graph/badge.svg?token=45Y7PDEHXA)](https://codecov.io/gh/fawda123/EBASE)
+[![Codecov test coverage](https://codecov.io/gh/fawda123/EBASE/branch/main/graph/badge.svg)](https://app.codecov.io/gh/fawda123/EBASE?branch=main)
 <!-- badges: end -->
 
 This an R package for Estuarine BAyesian Single-station Estimation method for ecosystem metabolism.  
