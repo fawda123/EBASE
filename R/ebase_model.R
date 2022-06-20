@@ -10,18 +10,11 @@ ebase_model <- function(){
   
   # set priors
   amean <- 0.2 / nstepd
-  # asd <- 0.01 * amean
-  # atau <- 1 / (asd * asd)
-  # rmean <- 20 / nstepd
-  # rsd <- 1.341 * rmean
-  # rtau <- 1 / (rsd * rsd)
   bmean <- 0.251 / (100 * 3600 / interval)
-  # bsd <- 1.341 * bmean
-  # btau <- 1 / (bsd * bsd)
-  
-  a ~ dunif(0 * amean, 2 * amean)
-  r ~ dnorm(0, 0.01)#T(0,)
-  b ~ dunif(0.8 * bmean, 1.2 * bmean) # note that Wanninkhof reports uncertainty of this parameter at +/- 20%
+
+  a ~ dunif(arng[1] * amean, 2 * arng[2])
+  r ~ dnorm(0, 1 / rvar)#T(0,)
+  b ~ dunif(brng[1] * bmean, brng[2] * bmean) # note that Wanninkhof reports uncertainty of this parameter at +/- 20%
   
   tau ~ dgamma(1,0.001)
   

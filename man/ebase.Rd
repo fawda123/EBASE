@@ -9,6 +9,9 @@ ebase(
   H,
   interval,
   ndays = 1,
+  arng = c(0, 2),
+  rvar = 100,
+  brng = c(0.8, 1.2),
   interp = TRUE,
   maxgap = 1e+06,
   inits = NULL,
@@ -29,6 +32,12 @@ ebase(
 \item{interval}{timestep interval in seconds}
 
 \item{ndays}{numeric for number of days in \code{dat} for optimizing the metabolic equation, see details}
+
+\item{arng}{numeric for proportional range of the prior distribution for the \emph{a} parameter, see details}
+
+\item{rvar}{numeric for the variance estimate of the prior distribution for the \emph{r} parameter, see details}
+
+\item{brng}{numeric for the proportional range of the prior distribution for the \emph{b} parameter, see details}
 
 \item{interp}{logical indicating if linear interpolation is used to fill all data gaps, only applies if timestep specified by \code{interval} is not uniform}
 
@@ -65,6 +74,8 @@ The metabolic estimates are based on a mass balance equation in Grace et al. 201
 
 Gross production is provided by \emph{aPAR}, respiration is provided by \emph{r}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{r}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The estimated concentration is also returned for comparison to observed as one measure of model performance.
 
+The prior distributions for the \emph{a}, \emph{r}, and \emph{b} parameters are defined in the \code{\link{ebase_model}} as uninformed uniform, normal, and uniform distributions, respectively.  The prior distribution for \emph{a} as default varies uniformly across the range from zero to 200\\% of an estimated mean of 0.2 (mmol/m3/d)(W/m2).  This range can be changed using the \code{arng} parameter, default being 0 to 2 for zero to 200\\%.  The prior distribution for the \emph{r} parameter follows a normal distribution with mean zero and variance equal to 100.  This variance estimate can be changed with the \code{rvar} parameter.  The prior distribution for \emph{b} as default varies uniformly across the range from 80 to 120\\% of an estimated mean of 0.251 (cm/hr)/(m2/s2).  This range can be changed using the \code{brng} parameter, default being 0.8 to 1.2 for 80 to 120\\%.  Note that Wanninkhof (2014) states that the uncertainty of the \emph{b} parameter typically does not vary more than 20\%, although this range is generally unknown in estuarine systems.
+
 The \code{ndays} argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., \code{ndays= 1} such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for \emph{a}, \emph{r}, and \emph{b} are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every \code{ndays} specified by the argument.  The \code{ndays} argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to \code{ndays}.  The final block may not include the complete number of days specified by \code{ndays} if the number of unique dates in the input data includes a remainder when divided by \code{ndays}, e.g., if seven days are in the input data and \code{ndays = 5}, there will be two groups where the first has five days and the second has two days. The output data from \code{ebase} includes a column that specifies the grouping that was used based on \code{ndays}.
 
 Missing values in the input data can also be interpolated prior to estimating metabolism.  This is the default behavior and it is the responsibility of the user to verify that these interpolated values are not wildly inaccurate.  Missing values are linearly interpolated between non-missing values at the time step specified by the value in \code{interval}.  This works well for small gaps, but can easily create inaccurate values at gaps larger than a few hours. The \code{\link{interp_plot}} function can be used to visually assess the interpolated values.
@@ -93,11 +104,11 @@ stopCluster(cl)
 ##
 # run ebase with different initial starting values for the three parameters, parallel
 
-inits <- function(nstepd = 86400 / 900){
+inits <- function(interval = 900){
   list(
-    a = 0.2 / nstepd,
-    r = 20 / nstepd,
-    b = 0.251 / 400
+    a = 0.2 / (86400 / interval),
+    r = 20 / (86400 / interval),
+    b = 0.251 / (100 * 3600 / interval)
   )
 }
 
