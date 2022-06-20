@@ -77,6 +77,7 @@ head(res)
 
 The results are returned as a data frame with instantaneous metabolic estimates for volumetric gross production (O2 mmol/m3/d, `Pg_vol` or $aPAR$ from above), respiration (O2 mmol/m3/d, `Rt_vol` or $r$ from above), and gas exchange (O2 mmol/m3/d, `D` or the remainder of the equation from above).  Additional parameters estimated by the model that are returned include `a` and `b` as shown in the above equation.  The `a` parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)(W/m2) and is used to estimate gross production [@Grace15].  The `b` parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in @Wanninkhof14).
 
+Model fit can be assessed using the `converge` and `rsq` columns.  The values in these columns apply to each group in the `grp` column as specified with the `ndays` argument. The `converge` column indicates `"Check convergence"` or `"Fine"` if the JAGS estimate converged at that iteration (repeated across rows for the group).  The `n.chains` argument can be increased if convergence is not achieved. Similarly, the `rsq` column shows the r-squared values of the linear fit between the modeled and observed dissolved oxygen (repeated across rows for the group).  These values can also be viewed with `fit_plot()`, shown below.
 A plot of the results can be made with `ebase_plot()`.
 
 ```{r, fig.height = 3, fig.width = 9}
@@ -114,7 +115,7 @@ A scatterplot showing modeled versus observed dissolved oxygen can also be retur
 fit_plot(res, scatter = TRUE)
 ```
 
-The comparison can also be separated by group with `bygroup = TRUE` based on the value for the `ndays` argument passed to `ebase()`.  
+The comparison can also be separated by group with `bygroup = TRUE` based on the value for the `ndays` argument passed to `ebase()`.  The r-squared value of the fit between modeled and observed dissolved oxygen is also shown in the facet label for the group.
 
 ```{r, fig.height = 4, fig.width = 5}
 fit_plot(res, bygroup = TRUE)

@@ -61,6 +61,8 @@ ebase(
 }
 \value{
 A data frame with metabolic estimates for volumetric gross production (\code{Pg_vol}, O2 mmol/m3/d), respiration (\code{Rt_vol},  O2 mmol/m3/d), and gas exchange (\code{D}, O2 mmol/m3/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).  Observed dissolved oxygen (\code{DO_obs}, mmol/m3), modeled dissolved oxygen (\code{DO_mod}, mmol/m3), and delta dissolved oxygen of the modeled results (\code{dDO}, mmol/m3/d) are also returned.  Note that delta dissolved oxygen is a daily rate.
+
+Model fit can also be assessed using the \code{converge} and \code{rsq} columns.  The values in these columns apply to each group in the \code{grp} column as specified with the \code{ndays} argument. The \code{converge} column indicates \code{"Check convergence"} or \code{"Fine"} if the JAGS estimate converged at that iteration (repeated across rows for the group).  The \code{n.chains} argument can be increased if convergence is not achieved. Similarly, the \code{rsq} column shows the r-squared values of the linear fit between the modeled and observed dissolved oxygen (repeated across rows for the group).  These values can also be viewed with \code{\link{fit_plot}}.
 }
 \description{
 Estuarine Bayesian Single-station Estimation method for ecosystem metabolism

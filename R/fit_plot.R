@@ -8,7 +8,7 @@
 #' @return A \code{\link[ggplot2]{ggplot}} object
 #' @export
 #'
-#' @details Dissolved oxygen (mmol/m3) is plotted as observed from the input data (points) and modeled (lines) based on inputs to \code{\link{ebase}} if \code{scatter = FALSE}.  A scatter plot of modeled versus estimated dissolved oxygen is returned if \code{scatter = TRUE}, including a linear fit if \code{showfit = TRUE}.  The plot is faceted by group based on the \code{ndays} argument to \code{\link{ebase}} if \code{bygroup = TRUE}.
+#' @details Dissolved oxygen (mmol/m3) is plotted as observed from the input data (points) and modeled (lines) based on inputs to \code{\link{ebase}} if \code{scatter = FALSE}.  A scatter plot of modeled versus estimated dissolved oxygen is returned if \code{scatter = TRUE}, including a linear fit if \code{showfit = TRUE}.  The plot is faceted by group based on the \code{ndays} argument to \code{\link{ebase}} if \code{bygroup = TRUE}.  The r-squared value of the fit between modeled and observed dissolved oxygen is also shown in the facet label for the group if \code{bygroup = TRUE}.
 #' 
 #' @examples 
 #' 
@@ -47,8 +47,10 @@ fit_plot <- function(res, bygroup = FALSE, scatter = FALSE, showfit = TRUE){
     
   toplo <- res %>% 
     dplyr::mutate(
-      grp = paste('Group', grp)
-    )
+      grp = paste('Group', grp),
+      rsq = paste0('R.Sq. ', round(100 * rsq, 0), '%')
+    ) %>% 
+    tidyr::unite(grp, c('grp', 'rsq'), sep = ' ,')
   
   if(!scatter)
     p <- ggplot2::ggplot(toplo, ggplot2::aes(x = DateTimeStamp, y = DO_obs)) + 
@@ -85,7 +87,7 @@ fit_plot <- function(res, bygroup = FALSE, scatter = FALSE, showfit = TRUE){
   
   if(bygroup)
     p <- p + 
-      facet_wrap(~grp, scales = 'free')
+      ggplot2::facet_wrap(~grp, scales = 'free')
   
   return(p)
   

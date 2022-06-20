@@ -22,7 +22,7 @@ A \code{\link[ggplot2]{ggplot}} object
 Plot observed and modeled dissolved oxygen
 }
 \details{
-Dissolved oxygen (mmol/m3) is plotted as observed from the input data (points) and modeled (lines) based on inputs to \code{\link{ebase}} if \code{scatter = FALSE}.  A scatter plot of modeled versus estimated dissolved oxygen is returned if \code{scatter = TRUE}, including a linear fit if \code{showfit = TRUE}.  The plot is faceted by group based on the \code{ndays} argument to \code{\link{ebase}} if \code{bygroup = TRUE}.
+Dissolved oxygen (mmol/m3) is plotted as observed from the input data (points) and modeled (lines) based on inputs to \code{\link{ebase}} if \code{scatter = FALSE}.  A scatter plot of modeled versus estimated dissolved oxygen is returned if \code{scatter = TRUE}, including a linear fit if \code{showfit = TRUE}.  The plot is faceted by group based on the \code{ndays} argument to \code{\link{ebase}} if \code{bygroup = TRUE}.  The r-squared value of the fit between modeled and observed dissolved oxygen is also shown in the facet label for the group if \code{bygroup = TRUE}.
 }
 \examples{
 

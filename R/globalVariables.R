@@ -4,5 +4,5 @@ globalVariables(c('%>%', '.', 'DO_obs', 'DO_sat', 'Date', 'DateTimeStamp', 'Sal'
                   'pow', 'r', 'sc', 'nstepd', 'zz', 'D', 'Pg_vol', 'Rt_vol', 'matches', 'name',
                   'value', 'xval', 'grp', 'i', 'interval', 'isinterp', 'yval'))
 
-#' @importFrom stats na.omit runif
+#' @importFrom stats lm na.omit runif
 NULL
