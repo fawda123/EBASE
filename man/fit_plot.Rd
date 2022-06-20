@@ -4,10 +4,16 @@
 \alias{fit_plot}
 \title{Plot observed and modeled dissolved oxygen}
 \usage{
-fit_plot(res)
+fit_plot(res, bygroup = FALSE, scatter = FALSE, showfit = TRUE)
 }
 \arguments{
 \item{res}{output data frame from \code{\link{ebase}}}
+
+\item{bygroup}{logical indicating if the plot is faceted by group}
+
+\item{scatter}{logical indicating if a scatter plot of modeled versus estimated dissolved oxygen is returned}
+
+\item{showfit}{logical indicating if a linear fit is shown in the plot, applies only if \code{scatter = TRUE}}
 }
 \value{
 A \code{\link[ggplot2]{ggplot}} object
@@ -16,7 +22,7 @@ A \code{\link[ggplot2]{ggplot}} object
 Plot observed and modeled dissolved oxygen
 }
 \details{
-Dissolved oxygen (mmol/m3) is plotted as observed from the input data (points) and modelled (lines) based on inputs to \code{\link{ebase}}
+Dissolved oxygen (mmol/m3) is plotted as observed from the input data (points) and modeled (lines) based on inputs to \code{\link{ebase}} if \code{scatter = FALSE}.  A scatter plot of modeled versus estimated dissolved oxygen is returned if \code{scatter = TRUE}, including a linear fit if \code{showfit = TRUE}.  The plot is faceted by group based on the \code{ndays} argument to \code{\link{ebase}} if \code{bygroup = TRUE}.
 }
 \examples{
 
@@ -41,4 +47,14 @@ stopCluster(cl)
 
 # plot observed and modeled DO
 fit_plot(res)
+
+# plot observed and modeled DO by group
+fit_plot(res, bygroup = TRUE)
+
+# as scatter plot
+fit_plot(res, scatter = TRUE)
+
+# as scatter plot by group
+fit_plot(res, scatter = TRUE, bygroup = TRUE)
+
 }
