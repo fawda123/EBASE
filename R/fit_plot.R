@@ -53,7 +53,7 @@ fit_plot <- function(res, bygroup = FALSE, scatter = FALSE, showfit = TRUE){
     tidyr::unite(grp, c('grp', 'rsq'), sep = ' ,')
   
   if(!scatter)
-    p <- ggplot2::ggplot(toplo, ggplot2::aes(x = DateTimeStamp, y = DO_obs)) + 
+    p <- ggplot2::ggplot(toplo, ggplot2::aes(x = DateTimeStamp, y = DO_obs, group = grp)) + 
       ggplot2::geom_point(ggplot2::aes(color = 'Observed')) + 
       ggplot2::geom_line(ggplot2::aes(y = DO_mod, color = 'Estimated')) + 
       ggplot2::theme_minimal() + 
@@ -71,7 +71,7 @@ fit_plot <- function(res, bygroup = FALSE, scatter = FALSE, showfit = TRUE){
   
   if(scatter){
     
-    p <- ggplot2::ggplot(toplo, ggplot2::aes(x = DO_obs, y = DO_mod)) + 
+    p <- ggplot2::ggplot(toplo, ggplot2::aes(x = DO_obs, y = DO_mod, group = grp)) + 
       ggplot2::geom_point() + 
       ggplot2::theme_minimal() +
       ggplot2::labs(
