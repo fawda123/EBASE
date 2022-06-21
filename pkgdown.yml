@@ -3,7 +3,7 @@ pkgdown: 2.0.4
 pkgdown_sha: ~
 articles:
   ebase-overview: ebase-overview.html
-last_built: 2022-06-21T12:02Z
+last_built: 2022-06-21T17:23Z
 urls:
   reference: https://fawda123.github.io/EBASE/reference
   article: https://fawda123.github.io/EBASE/articles
