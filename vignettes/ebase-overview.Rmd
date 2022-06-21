@@ -118,7 +118,7 @@ fit_plot(res, bygroup = TRUE)
 
 A scatterplot showing modeled versus observed dissolved oxygen can also be returned by setting `scatter = TRUE`.
 
-```{r, fig.height = 4, fig.width = 4}
+```{r, fig.height = 4, fig.width = 5}
 fit_plot(res, bygroup = TRUE, scatter = TRUE)
 ```
 
@@ -143,6 +143,12 @@ And the resulting plot:
 
 ```{r, fig.height = 3, fig.width = 9}
 ebase_plot(res, instantaneous = TRUE)
+```
+
+And the fit of observed and modeled dissolved oxygen (note the unbroken line for all days estimated together): 
+
+```{r, fig.height = 3, fig.width = 9}
+fit_plot(res)
 ```
 
 ### Missing values
