@@ -112,13 +112,13 @@ fit_plot(res)
 
 The comparison can also be separated by group with `bygroup = TRUE` based on the value for the `ndays` argument passed to `ebase()`.  The r-squared value of the fit between modeled and observed dissolved oxygen is also shown in the facet label for the group.
 
-```{r, fig.height = 4, fig.width = 5}
+```{r, fig.height = 5, fig.width = 7}
 fit_plot(res, bygroup = TRUE)
 ```
 
 A scatterplot showing modeled versus observed dissolved oxygen can also be returned by setting `scatter = TRUE`.
 
-```{r, fig.height = 4, fig.width = 5}
+```{r, fig.height = 5, fig.width = 7}
 fit_plot(res, bygroup = TRUE, scatter = TRUE)
 ```
 
@@ -180,7 +180,7 @@ interp_plot(dat2, H = 1.85, interval = 900, param = 'DO_sat')
 
 ### Changing priors
 
-The prior distributions for the $a$, $r$, and $b$ parameters are defined in the `ebase_model()` as uninformed uniform, normal, and uniform distributions, respectively.  The prior distribution for $a$ as default varies uniformly across the range from zero to 200\% of an estimated mean of 0.2 (mmol/m3/d)(W/m2).  This range can be changed using the `arng` parameter, default being 0 to 2 for zero to 200\%.  The prior distribution for the $r$ parameter follows a normal distribution with mean zero and variance equal to 100.  This variance estimate can be changed with the `rvar` parameter.  The prior distribution for $b$ as default varies uniformly across the range from 80 to 120\% of an estimated mean of 0.251 (cm/hr)/(m2/s2).  This range can be changed using the `brng` parameter, default being 0.8 to 1.2 for 80 to 120\%.  Note that @ states that the uncertainty of the $b$ parameter typically does not vary more than 20%, although this range is generally unknown in estuarine systems.
+The prior distributions for the $a$, $r$, and $b$ parameters are defined in the `ebase_model()` as uninformed uniform, normal, and uniform distributions, respectively.  The prior distribution for $a$ as default varies uniformly across the range from zero to 200\% of an estimated mean of 0.2 (mmol/m3/d)(W/m2).  This range can be changed using the `arng` parameter, default being 0 to 2 for zero to 200\%.  The prior distribution for the $r$ parameter follows a normal distribution with mean zero and variance equal to 100.  This variance estimate can be changed with the `rvar` parameter.  The prior distribution for $b$ as default varies uniformly across the range from 80 to 120\% of an estimated mean of 0.251 (cm/hr)/(m2/s2).  This range can be changed using the `brng` parameter, default being 0.8 to 1.2 for 80 to 120\%.  Note that @Wanninkhof14 states that the uncertainty of the $b$ parameter typically does not vary more than 20%, although this range is generally unknown in estuarine systems.
 
 Here, the prior range for the $b$ parameter is expanded to 70\% and 130\%.
 

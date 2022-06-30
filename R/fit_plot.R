@@ -50,7 +50,7 @@ fit_plot <- function(res, bygroup = FALSE, scatter = FALSE, showfit = TRUE){
       grp = paste('Group', grp),
       rsq = paste0('R.Sq. ', round(100 * rsq, 0), '%')
     ) %>% 
-    tidyr::unite(grp, c('grp', 'rsq'), sep = ' ,')
+    tidyr::unite(grp, c('grp', 'rsq'), sep = ', ')
   
   if(!scatter)
     p <- ggplot2::ggplot(toplo, ggplot2::aes(x = DateTimeStamp, y = DO_obs, group = grp)) + 
