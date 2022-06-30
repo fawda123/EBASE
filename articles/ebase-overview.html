@@ -81,30 +81,30 @@
 </h3>
 <p>This vignette provides an overview of the theory and use of the the Estuarine BAyesian Single-station Estimation (EBASE) R package for ecosystem metabolism. Use the following to install the package from R-Universe. The <a href="https://mcmc-jags.sourceforge.io/" class="external-link">JAGS</a> software must also be installed to use this package. Follow the instructions in the link to download and install the JAGS version appropriate for your operating system.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Enable the r-universe repo</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
-    fawda123 <span class="op">=</span> <span class="st">'https://fawda123.r-universe.dev'</span>,
-    CRAN <span class="op">=</span> <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Install</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'EBASE'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Enable the r-universe repo</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    fawda123 <span class="op">=</span> <span class="st">'https://fawda123.r-universe.dev'</span>,</span>
+<span>    CRAN <span class="op">=</span> <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Install</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'EBASE'</span><span class="op">)</span></span></code></pre></div>
 <p>Load the package after installation to use the functions.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://fawda123.github.io/EBASE">EBASE</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://fawda123.github.io/EBASE">EBASE</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h3>
 <p>An example file called <code><a href="../reference/exdat.html">exdat()</a></code> is included with the package that demonstrates the required time series format to use the functions. It includes nearly a year of continuously monitored water quality and meteorological data at the Apalachicola National Estuarine Research Reserve. The required data include a date and time vector (<code>DateTimeStamp</code>), dissolved oxygen (mg/L, <code>DO_obs</code>) , water temperature (C, <code>Temp</code>), salinity (psu, <code>Sal</code>), PAR (W/m2/s, <code>PAR</code>), and wind speed (m/s, <code>WSpd</code>). The time step should be consistent throughout the dataset and is indicated as an argument to the <code><a href="../reference/ebase.html">ebase()</a></code> function (see below). The <code><a href="../reference/exdat.html">exdat()</a></code> dataset can be viewed at any time after the package is loaded and is used in the examples in the help files:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">exdat</span><span class="op">)</span>
-<span class="co">#&gt;         DateTimeStamp   DO_obs Temp  Sal PAR WSpd</span>
-<span class="co">#&gt; 1 2012-02-23 00:00:00 8.217998 16.4 23.0   0  3.6</span>
-<span class="co">#&gt; 2 2012-02-23 00:15:00 8.210692 16.4 22.8   0  3.5</span>
-<span class="co">#&gt; 3 2012-02-23 00:30:00 8.203855 16.4 22.7   0  3.6</span>
-<span class="co">#&gt; 4 2012-02-23 00:45:00 8.197538 16.4 22.9   0  4.2</span>
-<span class="co">#&gt; 5 2012-02-23 01:00:00 8.191786 16.4 22.7   0  3.6</span>
-<span class="co">#&gt; 6 2012-02-23 01:15:00 8.186632 16.4 23.4   0  4.1</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">exdat</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         DateTimeStamp   DO_obs Temp  Sal PAR WSpd</span></span>
+<span><span class="co">#&gt; 1 2012-02-23 00:00:00 8.217998 16.4 23.0   0  3.6</span></span>
+<span><span class="co">#&gt; 2 2012-02-23 00:15:00 8.210692 16.4 22.8   0  3.5</span></span>
+<span><span class="co">#&gt; 3 2012-02-23 00:30:00 8.203855 16.4 22.7   0  3.6</span></span>
+<span><span class="co">#&gt; 4 2012-02-23 00:45:00 8.197538 16.4 22.9   0  4.2</span></span>
+<span><span class="co">#&gt; 5 2012-02-23 01:00:00 8.191786 16.4 22.7   0  3.6</span></span>
+<span><span class="co">#&gt; 6 2012-02-23 01:15:00 8.186632 16.4 23.4   0  4.1</span></span></code></pre></div>
 <p>The core function to estimate metabolism is <code><a href="../reference/ebase.html">ebase()</a></code>. The metabolic estimates are based on a mass balance equation in <span class="citation">Grace et al. (2015)</span> with the gas exchange estimate from <span class="citation">Wanninkhof (2014)</span>. It is similar to that provided by the BASEmetab R package at <a href="https://github.com/dgiling/BASEmetab" class="external-link uri">https://github.com/dgiling/BASEmetab</a>, with modifications to estimate different parameters optimized by the JAGS model:</p>
 <p><span class="math display">\[
 \frac{\delta{C_d}}{\delta{t}} = [\,aPAR]\, - [\,r]\, - \frac{1}{H}\left[-bU_{10}^2\left(\frac{s_c}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )\right]
@@ -112,71 +112,71 @@
 <p>The metabolic estimates are defined by the change in dissolved oxygen over the time step <span class="math inline">\(\frac{\delta{C_d}}{\delta{t}}\)</span>, where gross production is provided by <span class="math inline">\(aPAR\)</span>, respiration is provided by <span class="math inline">\(r\)</span>, and gas exchange is provided by the remainder. Required inputs for the equation are dissolved oxygen concentration as <span class="math inline">\(C_d\)</span>, solar radiation as <span class="math inline">\(PAR\)</span>, water column depth as <span class="math inline">\(H\)</span> (meters), and wind speed as <span class="math inline">\(U\)</span>. Other inputs for the schmidt number <span class="math inline">\(s_c\)</span> and dissolved oxygen at saturation <span class="math inline">\(C_{Sat}\)</span> are calculated from the observed data by the package. The remaining three parameters <span class="math inline">\(a\)</span>, <span class="math inline">\(r\)</span>, and <span class="math inline">\(b\)</span> are estimated by likelihood given the observed data with the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration. The estimated concentration is also returned, which can be compared to observed as one measure of model performance.</p>
 <p>The following shows how to use the <code><a href="../reference/ebase.html">ebase()</a></code> function with a subset of four days from the <code><a href="../reference/exdat.html">exdat()</a></code> example dataset. Running the model on the entire year will take a few minutes, so a subset is used:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span>
-
-<span class="co"># subset four days in June</span>
-<span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">exdat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html" class="external-link">month</a></span><span class="op">(</span><span class="va">exdat</span><span class="op">$</span><span class="va">DateTimeStamp</span><span class="op">)</span> <span class="op">==</span> <span class="fl">6</span> <span class="op">&amp;</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/day.html" class="external-link">day</a></span><span class="op">(</span><span class="va">exdat</span><span class="op">$</span><span class="va">DateTimeStamp</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>
-<span class="co">#&gt;         DateTimeStamp   DO_obs Temp  Sal PAR WSpd</span>
-<span class="co">#&gt; 1 2012-06-01 00:00:00 5.185803 29.5 23.0   0  2.0</span>
-<span class="co">#&gt; 2 2012-06-01 00:15:00 5.174494 29.5 23.3   0  2.3</span>
-<span class="co">#&gt; 3 2012-06-01 00:30:00 5.163948 29.5 23.4   0  2.1</span>
-<span class="co">#&gt; 4 2012-06-01 00:45:00 5.154150 29.5 23.3   0  2.0</span>
-<span class="co">#&gt; 5 2012-06-01 01:00:00 5.145070 29.5 23.1   0  1.7</span>
-<span class="co">#&gt; 6 2012-06-01 01:15:00 5.136675 29.5 24.0   0  1.8</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># subset four days in June</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">exdat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html" class="external-link">month</a></span><span class="op">(</span><span class="va">exdat</span><span class="op">$</span><span class="va">DateTimeStamp</span><span class="op">)</span> <span class="op">==</span> <span class="fl">6</span> <span class="op">&amp;</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/day.html" class="external-link">day</a></span><span class="op">(</span><span class="va">exdat</span><span class="op">$</span><span class="va">DateTimeStamp</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         DateTimeStamp   DO_obs Temp  Sal PAR WSpd</span></span>
+<span><span class="co">#&gt; 1 2012-06-01 00:00:00 5.185803 29.5 23.0   0  2.0</span></span>
+<span><span class="co">#&gt; 2 2012-06-01 00:15:00 5.174494 29.5 23.3   0  2.3</span></span>
+<span><span class="co">#&gt; 3 2012-06-01 00:30:00 5.163948 29.5 23.4   0  2.1</span></span>
+<span><span class="co">#&gt; 4 2012-06-01 00:45:00 5.154150 29.5 23.3   0  2.0</span></span>
+<span><span class="co">#&gt; 5 2012-06-01 01:00:00 5.145070 29.5 23.1   0  1.7</span></span>
+<span><span class="co">#&gt; 6 2012-06-01 01:15:00 5.136675 29.5 24.0   0  1.8</span></span></code></pre></div>
 <p>Then, the <code><a href="../reference/ebase.html">ebase()</a></code> function is used to estimate the metabolic rates with the appropriate function arguments. The timestep <code>interval</code> is 900 seconds (15 minutes), the water column depth <code>H</code> is 1.85 meters, a log file of the model iterations for each day is created by setting <code>progress = TRUE</code>, and only two Markov chains are used with <code>n.chains = 2</code>. In practice, a larger number for <code>n.chains</code> should be used to verify model convergence.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
-<span class="co">#&gt;         Date grp   DO_obs   DO_mod       DateTimeStamp       dDO converge</span>
-<span class="co">#&gt; 2 2012-06-01   1 161.7030 161.9906 2012-06-01 00:15:00 -6.302880     Fine</span>
-<span class="co">#&gt; 3 2012-06-01   1 161.3734 161.9489 2012-06-01 00:30:00 -4.003142     Fine</span>
-<span class="co">#&gt; 4 2012-06-01   1 161.0672 161.8904 2012-06-01 00:45:00 -5.617622     Fine</span>
-<span class="co">#&gt; 5 2012-06-01   1 160.7834 161.8245 2012-06-01 01:00:00 -6.334193     Fine</span>
-<span class="co">#&gt; 6 2012-06-01   1 160.5211 161.7378 2012-06-01 01:15:00 -8.322795     Fine</span>
-<span class="co">#&gt; 7 2012-06-01   1 160.2787 161.6564 2012-06-01 01:30:00 -7.807449     Fine</span>
-<span class="co">#&gt;         rsq           a         b Pg_vol  Rt_vol        D</span>
-<span class="co">#&gt; 2 0.5311373 0.007641504 0.2249083      0 13.6254 7.322524</span>
-<span class="co">#&gt; 3 0.5311373 0.007641504 0.2249083      0 13.6254 9.622262</span>
-<span class="co">#&gt; 4 0.5311373 0.007641504 0.2249083      0 13.6254 8.007783</span>
-<span class="co">#&gt; 5 0.5311373 0.007641504 0.2249083      0 13.6254 7.291211</span>
-<span class="co">#&gt; 6 0.5311373 0.007641504 0.2249083      0 13.6254 5.302609</span>
-<span class="co">#&gt; 7 0.5311373 0.007641504 0.2249083      0 13.6254 5.817955</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         Date grp   DO_obs   DO_mod       DateTimeStamp       dDO converge</span></span>
+<span><span class="co">#&gt; 2 2012-06-01   1 161.7030 161.9906 2012-06-01 00:15:00 -6.302880     Fine</span></span>
+<span><span class="co">#&gt; 3 2012-06-01   1 161.3734 161.9489 2012-06-01 00:30:00 -4.003142     Fine</span></span>
+<span><span class="co">#&gt; 4 2012-06-01   1 161.0672 161.8904 2012-06-01 00:45:00 -5.617622     Fine</span></span>
+<span><span class="co">#&gt; 5 2012-06-01   1 160.7834 161.8245 2012-06-01 01:00:00 -6.334193     Fine</span></span>
+<span><span class="co">#&gt; 6 2012-06-01   1 160.5211 161.7378 2012-06-01 01:15:00 -8.322795     Fine</span></span>
+<span><span class="co">#&gt; 7 2012-06-01   1 160.2787 161.6564 2012-06-01 01:30:00 -7.807449     Fine</span></span>
+<span><span class="co">#&gt;         rsq           a         b Pg_vol  Rt_vol        D</span></span>
+<span><span class="co">#&gt; 2 0.5311373 0.007641504 0.2249083      0 13.6254 7.322524</span></span>
+<span><span class="co">#&gt; 3 0.5311373 0.007641504 0.2249083      0 13.6254 9.622262</span></span>
+<span><span class="co">#&gt; 4 0.5311373 0.007641504 0.2249083      0 13.6254 8.007783</span></span>
+<span><span class="co">#&gt; 5 0.5311373 0.007641504 0.2249083      0 13.6254 7.291211</span></span>
+<span><span class="co">#&gt; 6 0.5311373 0.007641504 0.2249083      0 13.6254 5.302609</span></span>
+<span><span class="co">#&gt; 7 0.5311373 0.007641504 0.2249083      0 13.6254 5.817955</span></span></code></pre></div>
 <p>The results are returned as a data frame with instantaneous metabolic estimates for volumetric gross production (O2 mmol/m3/d, <code>Pg_vol</code> or <span class="math inline">\(aPAR\)</span> from above), respiration (O2 mmol/m3/d, <code>Rt_vol</code> or <span class="math inline">\(r\)</span> from above), and gas exchange (O2 mmol/m3/d, <code>D</code> or the remainder of the equation from above). Additional parameters estimated by the model that are returned include <code>a</code> and <code>b</code> as shown in the above equation. The <code>a</code> parameter is a constant that represents the primary production per quantum of light with units of (mmol/m3/d)(W/m2) and is used to estimate gross production <span class="citation">(Grace et al. 2015)</span>. The <code>b</code> parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in <span class="citation">Wanninkhof (2014)</span>).</p>
 <p>A plot of the results can be made with <code><a href="../reference/ebase_plot.html">ebase_plot()</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/ebase_plot.html">ebase_plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ebase_plot.html">ebase_plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ebase-overview_files/figure-html/unnamed-chunk-5-1.png" width="864" style="display: block; margin: auto;"></p>
 <p>The daily averages can also be plotted by using <code>instantaneous = FALSE</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/ebase_plot.html">ebase_plot</a></span><span class="op">(</span><span class="va">res</span>, instantaneous <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ebase_plot.html">ebase_plot</a></span><span class="op">(</span><span class="va">res</span>, instantaneous <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ebase-overview_files/figure-html/unnamed-chunk-6-1.png" width="864" style="display: block; margin: auto;"></p>
 <p>Execution time of the model can also be reduced by using multiple processors. This is done using <a href="https://cran.r-project.org/web/packages/doParallel/index.html" class="external-link">doParrallel</a> package and registering a parallel backend as below.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># setup parallel backend</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RevolutionAnalytics/doparallel" class="external-link">doParallel</a></span><span class="op">)</span>
-<span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span>
-
-<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># setup parallel backend</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RevolutionAnalytics/doparallel" class="external-link">doParallel</a></span><span class="op">)</span></span>
+<span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span></code></pre></div>
 <p>Model fit can be assessed using the <code>converge</code> and <code>rsq</code> columns from the returned results. The values in these columns apply to each group in the <code>grp</code> column as specified with the <code>ndays</code> argument. The <code>converge</code> column indicates <code>"Check convergence"</code> or <code>"Fine"</code> if the JAGS estimate converged at that iteration (repeated across rows for the group). The <code>n.chains</code> argument can be increased if convergence is not achieved. Similarly, the <code>rsq</code> column shows the r-squared values of the linear fit between the modeled and observed dissolved oxygen (repeated across rows for the group).</p>
 <p>The model fit can also be assessed by comparing the observed and modeled values for dissolved oxygen with the <code><a href="../reference/fit_plot.html">fit_plot()</a></code> function. Estimated values are shown as line and observed values are shown as points.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/fit_plot.html">fit_plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/fit_plot.html">fit_plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ebase-overview_files/figure-html/unnamed-chunk-8-1.png" width="864" style="display: block; margin: auto;"></p>
 <p>The comparison can also be separated by group with <code>bygroup = TRUE</code> based on the value for the <code>ndays</code> argument passed to <code><a href="../reference/ebase.html">ebase()</a></code>. The r-squared value of the fit between modeled and observed dissolved oxygen is also shown in the facet label for the group.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/fit_plot.html">fit_plot</a></span><span class="op">(</span><span class="va">res</span>, bygroup <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p><img src="ebase-overview_files/figure-html/unnamed-chunk-9-1.png" width="480" style="display: block; margin: auto;"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/fit_plot.html">fit_plot</a></span><span class="op">(</span><span class="va">res</span>, bygroup <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ebase-overview_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>A scatterplot showing modeled versus observed dissolved oxygen can also be returned by setting <code>scatter = TRUE</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/fit_plot.html">fit_plot</a></span><span class="op">(</span><span class="va">res</span>, bygroup <span class="op">=</span> <span class="cn">TRUE</span>, scatter <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p><img src="ebase-overview_files/figure-html/unnamed-chunk-10-1.png" width="480" style="display: block; margin: auto;"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/fit_plot.html">fit_plot</a></span><span class="op">(</span><span class="va">res</span>, bygroup <span class="op">=</span> <span class="cn">TRUE</span>, scatter <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ebase-overview_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="changing-the-default-arguments">Changing the default arguments<a class="anchor" aria-label="anchor" href="#changing-the-default-arguments"></a>
@@ -187,19 +187,19 @@
 <p>The <code>ndays</code> argument in <code><a href="../reference/ebase.html">ebase()</a></code> defines the number of days that are used for optimizing the above mass balance equation. By default, this is done each day, i.e., <code>ndays = 1</code> such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last. Individual parameter estimates for <code>a</code>, <code>r</code>, and <code>b</code> are then returned for each day. However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every <code>ndays</code> specified by the argument. The <code>ndays</code> argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to <code>ndays</code>. The final block may not include the complete number of days specified by <code>ndays</code> if the number of unique dates in the input data includes a remainder when divided by <code>ndays</code>, e.g., if seven days are in the input data and <code>ndays = 5</code>, there will be two groups where the first has five days and the second has two days. The output data from <code>ebase</code> includes a column that specifies the grouping that was used based on <code>ndays</code>.</p>
 <p>Here, the number of days used to optimize the equation is set to all days in the input data.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span>
-
-<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span>, ndays <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span>, ndays <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span></code></pre></div>
 <p>And the resulting plot:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/ebase_plot.html">ebase_plot</a></span><span class="op">(</span><span class="va">res</span>, instantaneous <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ebase_plot.html">ebase_plot</a></span><span class="op">(</span><span class="va">res</span>, instantaneous <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ebase-overview_files/figure-html/unnamed-chunk-12-1.png" width="864" style="display: block; margin: auto;"></p>
 <p>And the fit of observed and modeled dissolved oxygen (note the unbroken line for all days estimated together):</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/fit_plot.html">fit_plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/fit_plot.html">fit_plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ebase-overview_files/figure-html/unnamed-chunk-13-1.png" width="864" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
@@ -208,55 +208,55 @@
 <p>Missing values in the input data can also be interpolated prior to estimating metabolism. This is the default behavior and it is the responsibility of the user to verify that these interpolated values are not wildly inaccurate. Missing values are linearly interpolated between non-missing values at the time step specified by the value in <code>interval</code>. This works well for small gaps, but can easily create inaccurate values at gaps larger than a few hours.</p>
 <p>As an example, the <code>dat</code> object above is subset to 90% of its observations.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">222</span><span class="op">)</span>
-<span class="va">dat2</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_sample</a></span><span class="op">(</span>prop <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">DateTimeStamp</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat2</span><span class="op">)</span>
-<span class="co">#&gt;         DateTimeStamp   DO_obs Temp  Sal PAR WSpd</span>
-<span class="co">#&gt; 1 2012-06-01 00:00:00 5.185803 29.5 23.0   0  2.0</span>
-<span class="co">#&gt; 2 2012-06-01 00:30:00 5.163948 29.5 23.4   0  2.1</span>
-<span class="co">#&gt; 3 2012-06-01 01:00:00 5.145070 29.5 23.1   0  1.7</span>
-<span class="co">#&gt; 4 2012-06-01 01:30:00 5.128917 29.6 24.9   0  1.8</span>
-<span class="co">#&gt; 5 2012-06-01 01:45:00 5.121741 29.6 24.6   0  1.8</span>
-<span class="co">#&gt; 6 2012-06-01 02:00:00 5.115085 29.6 24.8   0  2.0</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">222</span><span class="op">)</span></span>
+<span><span class="va">dat2</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_sample</a></span><span class="op">(</span>prop <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">DateTimeStamp</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat2</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         DateTimeStamp   DO_obs Temp  Sal PAR WSpd</span></span>
+<span><span class="co">#&gt; 1 2012-06-01 00:00:00 5.185803 29.5 23.0   0  2.0</span></span>
+<span><span class="co">#&gt; 2 2012-06-01 00:30:00 5.163948 29.5 23.4   0  2.1</span></span>
+<span><span class="co">#&gt; 3 2012-06-01 01:00:00 5.145070 29.5 23.1   0  1.7</span></span>
+<span><span class="co">#&gt; 4 2012-06-01 01:30:00 5.128917 29.6 24.9   0  1.8</span></span>
+<span><span class="co">#&gt; 5 2012-06-01 01:45:00 5.121741 29.6 24.6   0  1.8</span></span>
+<span><span class="co">#&gt; 6 2012-06-01 02:00:00 5.115085 29.6 24.8   0  2.0</span></span></code></pre></div>
 <p>The <code><a href="../reference/ebase_prep.html">ebase_prep()</a></code> function is used internally to <code>ebase</code> to prepare the data for the metabolism calculations. This function interpolates the missing data and returns a column <code>isinterp</code> that specifies <code>TRUE</code> or <code>FALSE</code> if a value is interpolated.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dat2interp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase_prep.html">ebase_prep</a></span><span class="op">(</span><span class="va">dat2</span>, H <span class="op">=</span> <span class="fl">1.85</span>, interval <span class="op">=</span> <span class="fl">900</span>, interp <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat2interp</span><span class="op">)</span>
-<span class="co">#&gt;         Date       DateTimeStamp isinterp   DO_obs   DO_sat    H  Temp   Sal</span>
-<span class="co">#&gt; 1 2012-06-01 2012-06-01 00:00:00    FALSE 162.0564 209.6311 1.85 29.50 23.00</span>
-<span class="co">#&gt; 2 2012-06-01 2012-06-01 00:15:00     TRUE 161.7149 209.3998 1.85 29.50 23.20</span>
-<span class="co">#&gt; 3 2012-06-01 2012-06-01 00:30:00    FALSE 161.3734 209.1687 1.85 29.50 23.40</span>
-<span class="co">#&gt; 4 2012-06-01 2012-06-01 00:45:00     TRUE 161.0784 209.3420 1.85 29.50 23.25</span>
-<span class="co">#&gt; 5 2012-06-01 2012-06-01 01:00:00    FALSE 160.7834 209.5154 1.85 29.50 23.10</span>
-<span class="co">#&gt; 6 2012-06-01 2012-06-01 01:15:00     TRUE 160.5311 208.3056 1.85 29.55 24.00</span>
-<span class="co">#&gt;   PAR WSpd       sc grp</span>
-<span class="co">#&gt; 1   0 2.00 344.9793   1</span>
-<span class="co">#&gt; 2   0 2.05 345.1966   1</span>
-<span class="co">#&gt; 3   0 2.10 345.4140   1</span>
-<span class="co">#&gt; 4   0 1.90 345.2510   1</span>
-<span class="co">#&gt; 5   0 1.70 345.0879   1</span>
-<span class="co">#&gt; 6   0 1.75 345.2247   1</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">dat2interp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase_prep.html">ebase_prep</a></span><span class="op">(</span><span class="va">dat2</span>, H <span class="op">=</span> <span class="fl">1.85</span>, interval <span class="op">=</span> <span class="fl">900</span>, interp <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat2interp</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         Date       DateTimeStamp isinterp   DO_obs   DO_sat    H  Temp   Sal</span></span>
+<span><span class="co">#&gt; 1 2012-06-01 2012-06-01 00:00:00    FALSE 162.0564 209.6311 1.85 29.50 23.00</span></span>
+<span><span class="co">#&gt; 2 2012-06-01 2012-06-01 00:15:00     TRUE 161.7149 209.3998 1.85 29.50 23.20</span></span>
+<span><span class="co">#&gt; 3 2012-06-01 2012-06-01 00:30:00    FALSE 161.3734 209.1687 1.85 29.50 23.40</span></span>
+<span><span class="co">#&gt; 4 2012-06-01 2012-06-01 00:45:00     TRUE 161.0784 209.3420 1.85 29.50 23.25</span></span>
+<span><span class="co">#&gt; 5 2012-06-01 2012-06-01 01:00:00    FALSE 160.7834 209.5154 1.85 29.50 23.10</span></span>
+<span><span class="co">#&gt; 6 2012-06-01 2012-06-01 01:15:00     TRUE 160.5311 208.3056 1.85 29.55 24.00</span></span>
+<span><span class="co">#&gt;   PAR WSpd       sc grp</span></span>
+<span><span class="co">#&gt; 1   0 2.00 344.9793   1</span></span>
+<span><span class="co">#&gt; 2   0 2.05 345.1966   1</span></span>
+<span><span class="co">#&gt; 3   0 2.10 345.4140   1</span></span>
+<span><span class="co">#&gt; 4   0 1.90 345.2510   1</span></span>
+<span><span class="co">#&gt; 5   0 1.70 345.0879   1</span></span>
+<span><span class="co">#&gt; 6   0 1.75 345.2247   1</span></span></code></pre></div>
 <p>The interpolated values can be visually inspected using the <code><a href="../reference/interp_plot.html">interp_plot()</a></code> function.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/interp_plot.html">interp_plot</a></span><span class="op">(</span><span class="va">dat2</span>, H <span class="op">=</span> <span class="fl">1.85</span>, interval <span class="op">=</span> <span class="fl">900</span>, param <span class="op">=</span> <span class="st">'DO_sat'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/interp_plot.html">interp_plot</a></span><span class="op">(</span><span class="va">dat2</span>, H <span class="op">=</span> <span class="fl">1.85</span>, interval <span class="op">=</span> <span class="fl">900</span>, param <span class="op">=</span> <span class="st">'DO_sat'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ebase-overview_files/figure-html/unnamed-chunk-16-1.png" width="864" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="changing-priors">Changing priors<a class="anchor" aria-label="anchor" href="#changing-priors"></a>
 </h4>
-<p>The prior distributions for the <span class="math inline">\(a\)</span>, <span class="math inline">\(r\)</span>, and <span class="math inline">\(b\)</span> parameters are defined in the <code><a href="../reference/ebase_model.html">ebase_model()</a></code> as uninformed uniform, normal, and uniform distributions, respectively. The prior distribution for <span class="math inline">\(a\)</span> as default varies uniformly across the range from zero to 200% of an estimated mean of 0.2 (mmol/m3/d)(W/m2). This range can be changed using the <code>arng</code> parameter, default being 0 to 2 for zero to 200%. The prior distribution for the <span class="math inline">\(r\)</span> parameter follows a normal distribution with mean zero and variance equal to 100. This variance estimate can be changed with the <code>rvar</code> parameter. The prior distribution for <span class="math inline">\(b\)</span> as default varies uniformly across the range from 80 to 120% of an estimated mean of 0.251 (cm/hr)/(m2/s2). This range can be changed using the <code>brng</code> parameter, default being 0.8 to 1.2 for 80 to 120%. Note that @ states that the uncertainty of the <span class="math inline">\(b\)</span> parameter typically does not vary more than 20%, although this range is generally unknown in estuarine systems.</p>
+<p>The prior distributions for the <span class="math inline">\(a\)</span>, <span class="math inline">\(r\)</span>, and <span class="math inline">\(b\)</span> parameters are defined in the <code><a href="../reference/ebase_model.html">ebase_model()</a></code> as uninformed uniform, normal, and uniform distributions, respectively. The prior distribution for <span class="math inline">\(a\)</span> as default varies uniformly across the range from zero to 200% of an estimated mean of 0.2 (mmol/m3/d)(W/m2). This range can be changed using the <code>arng</code> parameter, default being 0 to 2 for zero to 200%. The prior distribution for the <span class="math inline">\(r\)</span> parameter follows a normal distribution with mean zero and variance equal to 100. This variance estimate can be changed with the <code>rvar</code> parameter. The prior distribution for <span class="math inline">\(b\)</span> as default varies uniformly across the range from 80 to 120% of an estimated mean of 0.251 (cm/hr)/(m2/s2). This range can be changed using the <code>brng</code> parameter, default being 0.8 to 1.2 for 80 to 120%. Note that <span class="citation">Wanninkhof (2014)</span> states that the uncertainty of the <span class="math inline">\(b\)</span> parameter typically does not vary more than 20%, although this range is generally unknown in estuarine systems.</p>
 <p>Here, the prior range for the <span class="math inline">\(b\)</span> parameter is expanded to 70% and 130%.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span>
-
-<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span>, brng <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">1.3</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/ebase_plot.html">ebase_plot</a></span><span class="op">(</span><span class="va">res</span>, instantaneous <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span>, brng <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">1.3</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/ebase_plot.html">ebase_plot</a></span><span class="op">(</span><span class="va">res</span>, instantaneous <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ebase-overview_files/figure-html/unnamed-chunk-17-1.png" width="864" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -285,7 +285,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer>
