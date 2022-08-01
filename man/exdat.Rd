@@ -5,7 +5,7 @@
 \alias{exdat}
 \title{Sample data from Appalachicola NERRS}
 \format{
-A \code{data.frame} object with 27645 rows and 6 columns
+A \code{data.frame} object with 27648 rows and 6 columns
 \describe{
 \item{DateTimeStamp}{date and time, Pacific/Jamaica time zone, 15 minute time step}
 \item{DO_obs}{dissolved oxygen, mg/L}
@@ -21,16 +21,13 @@ exdat
 \description{
 Sample data from Appalachicola NERRS
 }
-\details{
-The DO time series has been detided using weighted regression in WtRegDO: \url{https://github.com/fawda123/WtRegDO}
-}
 \examples{
 
 \dontrun{
 library(dplyr)
 library(tidyr)
 
-exdat <- read.csv('data-raw/APNERR2012dtd.csv') \%>\% 
+exdat <- read.csv('data-raw/APNERR2012.csv') \%>\% 
   rename(
     PAR = I,
     Sal = salinity,
@@ -39,7 +36,7 @@ exdat <- read.csv('data-raw/APNERR2012dtd.csv') \%>\%
   ) \%>\% 
   unite('DateTimeStamp', Date, Time, sep = ' ') \%>\% 
   mutate(
-    DateTimeStamp = lubridate::ymd_hms(DateTimeStamp, tz = 'America/Jamaica')
+    DateTimeStamp = lubridate::mdy_hm(DateTimeStamp, tz = 'America/Jamaica')
   ) \%>\% 
   select(DateTimeStamp, DO_obs, Temp, Sal, PAR, WSpd) 
 
