@@ -15,7 +15,7 @@
 #' 
 #' The \code{ndays} argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., \code{ndays= 1} such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for \emph{a}, \emph{r}, and \emph{b} are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every \code{ndays} specified by the argument.  The \code{ndays} argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to \code{ndays}.  The final block may not include the complete number of days specified by \code{ndays} if the number of unique dates in the input data includes a remainder when divided by \code{ndays}, e.g., if seven days are in the input data and \code{ndays = 5}, there will be two groups where the first has five days and the second has two days. The output data from \code{\link{ebase}} includes a column that specifies the grouping that was used based on \code{ndays}.
 #' 
-#' @return A data frame with additional columns required for \code{\link{ebase}}
+#' @return A data frame with additional columns required for \code{\link{ebase}}.  If multiple time steps are identified, the number of rows in data frame is expanded based on the time step define by \code{interval}.  Numeric values in the expanded rows will be interpolated if \code{interp = TRUE}, otherwise they will remain as \code{NA} values.
 #' 
 #' @importFrom dplyr %>%
 #' 
@@ -38,6 +38,14 @@ ebase_prep <- function(dat, H, interval, ndays = 1, interp = TRUE, maxgap = 1e6)
     
     stop(msg)
   }
+
+  # check if H is equal in length to dat if not equal to 1
+  lenh <- length(H)
+  chk <- !(lenh == 1 | lenh == nrow(dat))
+  if(chk){
+    msg <- paste0('Supplied value for H has length ', lenh, ', should be 1 or ', nrow(dat))
+    stop(msg)
+  }
   
   # check if more than one time step
   chk <- diff(dat$DateTimeStamp) %>% 
@@ -49,19 +57,24 @@ ebase_prep <- function(dat, H, interval, ndays = 1, interp = TRUE, maxgap = 1e6)
 
     message(msg)
   }
+
+  # add H and expand time series based on interval
+  dat$H <- H
   
-  dat$isinterp <- FALSE
+  intervalmin <- paste(interval / 60, "min")
+  
+  dat <- data.frame(
+      DateTimeStamp = seq(min(dat$DateTimeStamp), max(dat$DateTimeStamp), by = intervalmin)
+    ) %>% 
+    dplyr::left_join(., dat, by = 'DateTimeStamp') %>% 
+    dplyr::mutate(isinterp = FALSE)
+
   # interpolate missing values
   if(interp & length(chk) > 1){
 
     message("Interpolating missing values to interval")
-    
-    intervalmin <- paste(interval / 60, "min")
 
-    dat <- data.frame(
-        DateTimeStamp = seq(min(dat$DateTimeStamp), max(dat$DateTimeStamp), by = intervalmin)
-      ) %>% 
-      dplyr::left_join(., dat, by = 'DateTimeStamp') %>% 
+    dat <- dat %>% 
       dplyr::mutate(isinterp = rowSums(is.na(.)) > 0) %>% 
       dplyr::mutate_if(is.numeric, function(x){
         
@@ -81,7 +94,6 @@ ebase_prep <- function(dat, H, interval, ndays = 1, interp = TRUE, maxgap = 1e6)
       DO_obs = DO_obs / 32 * 1000,
       sc = fun_schmidt_oxygen(Temp, Sal), 
       DO_sat = fun_eqb_oxygen(Temp, Sal), 
-      H = H, 
       Date = as.Date(DateTimeStamp, tz = attr(DateTimeStamp, 'tzone'))
     ) %>% 
     dplyr::select(Date, DateTimeStamp, isinterp, DO_obs, DO_sat, H, dplyr::everything())

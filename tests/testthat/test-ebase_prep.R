@@ -12,6 +12,12 @@ test_that("Checking ebase_prep incorrect input", {
                
 })
 
+test_that("Checking ebase_prep incorrect H input", {
+  
+  expect_error(ebase_prep(exdat, interval = 900, H = c(1, 1.85)))
+  
+})
+
 test_that("Checking ebase_prep all groups", {
   
   result <- ebase_prep(dat, H = 1.85, interval = 900, ndays = 2) %>% 

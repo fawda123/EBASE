@@ -20,7 +20,7 @@ ebase_prep(dat, H, interval, ndays = 1, interp = TRUE, maxgap = 1e+06)
 \item{maxgap}{numeric vector indicating maximum gap size to interpolate where size is number of records at the value specified by \code{interval}, e.g., if \code{interval = 900} and \code{maxgap = 4}, gaps up to and including one hour will be linearly interpolated}
 }
 \value{
-A data frame with additional columns required for \code{\link{ebase}}
+A data frame with additional columns required for \code{\link{ebase}}.  If multiple time steps are identified, the number of rows in data frame is expanded based on the time step define by \code{interval}.  Numeric values in the expanded rows will be interpolated if \code{interp = TRUE}, otherwise they will remain as \code{NA} values.
 }
 \description{
 Prepare data for ebase
