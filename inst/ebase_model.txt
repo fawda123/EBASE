@@ -10,7 +10,7 @@
     bmean <- 0.251 / (100 * 3600 / interval)
 
     a ~ dunif(arng[1] * amean, 2 * arng[2])
-    r ~ dnorm(0, 1 / rvar)#T(0,)
+    r ~ dnorm(0, 1 / rvar)T(0,)
     b ~ dunif(brng[1] * bmean, brng[2] * bmean) # note that Wanninkhof reports uncertainty of this parameter at +/- 20%
   
     tau ~ dgamma(1,0.001)
