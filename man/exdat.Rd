@@ -27,7 +27,7 @@ Sample data from Appalachicola NERRS
 library(dplyr)
 library(tidyr)
 
-exdat <- read.csv('data-raw/APNERR2012.csv') \%>\% 
+exdat <- read.csv('inst/APNERR2012.csv') \%>\% 
   rename(
     PAR = I,
     Sal = salinity,
