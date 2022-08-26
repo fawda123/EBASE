@@ -101,10 +101,16 @@ ebase <- function(dat, H, interval, ndays = 1, arng = c(0, 2), rvar = 100, brng 
   # groups in data
   grps <- unique(dat$grp)
   
-  # use model function or model file
-  if(!is.null(model_file))
-    mod_in <- system.file('inst/ebase_model.txt', package = 'EBASE')
-    
+  # model file
+  if(is.null(model_file))
+    mod_in <- system.file('ebase_model.txt', package = 'EBASE')
+  if(!is.null(model_file)){
+    chk <- file.exists(model_file)
+    if(!chk)
+      stop('model_file does not exist, did you make a typo?')
+    mod_in <- model_file
+  } 
+  
   # setup log file
   strt <- Sys.time()
   

@@ -183,7 +183,7 @@ interp_plot(dat2, H = 1.85, interval = 900, param = 'DO_sat')
 The prior distributions for the $a$, $r$, and $b$ parameters are defined in the model file included with the package as uninformed uniform, normal, and uniform distributions, respectively.  The path to the model file can be found using the following:
 
 ```{r, eval = F}
-system.file('inst/ebase_model.txt', package = 'EBASE')
+system.file('ebase_model.txt', package = 'EBASE')
 ```
 
 The prior distribution for $a$ as default varies uniformly across the range from zero to 200\% of an estimated mean of 0.2 (mmol/m3/d)(W/m2).  This range can be changed using the `arng` parameter, default being 0 to 2 for zero to 200\%.  The prior distribution for the $r$ parameter follows a normal distribution with mean zero and variance equal to 100, but truncated to not go below zero.  This variance estimate can be changed with the `rvar` parameter.  The prior distribution for $b$ as default varies uniformly across the range from 80 to 120\% of an estimated mean of 0.251 (cm/hr)/(m2/s2).  This range can be changed using the `brng` parameter, default being 0.8 to 1.2 for 80 to 120\%.  Note that @Wanninkhof14 states that the uncertainty of the $b$ parameter typically does not vary more than 20%, although this range is generally unknown in estuarine systems.
