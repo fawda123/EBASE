@@ -168,9 +168,7 @@ ebase <- function(dat, H, interval, ndays = 1, arng = c(0, 2), rvar = 100, brng 
     Rhat.test <- ifelse(any(srf > 1.1, na.rm = TRUE) == TRUE, "Check convergence", "Fine")
   
     # credible intervals for a, b, er
-    maxrow <- nstepd - 1
     cred <- data.frame(metabfit$BUGSoutput$summary)
-    cred <- cred[grepl('ats|bts|erts', row.names(cred)), ]
     cred$var <- row.names(cred)
     cred$var <- gsub('\\[|\\]|\\d+', '', cred$var)
     
@@ -180,6 +178,8 @@ ebase <- function(dat, H, interval, ndays = 1, arng = c(0, 2), rvar = 100, brng 
       grp = dat.sub$grp,
       DO_obs = dat.sub$DO_obs,
       DO_mod = metabfit$BUGSoutput$mean$DO_mod,
+      DO_modlo = cred[cred$var == 'DO_mod', 'X2.5.'],
+      DO_modhi = cred[cred$var == 'DO_mod', 'X97.5.'],
       DateTimeStamp = dat.sub$DateTimeStamp,
       ats = c(NA, metabfit$BUGSoutput$mean$ats), # (mmol/m3/ts)/(W/m2)
       atslo = c(NA, cred[cred$var == 'ats', 'X2.5.']),
@@ -188,10 +188,14 @@ ebase <- function(dat, H, interval, ndays = 1, arng = c(0, 2), rvar = 100, brng 
       btslo = c(NA, cred[cred$var == 'bts', 'X2.5.']),
       btshi = c(NA, cred[cred$var == 'bts', 'X97.5.']),
       gppts = c(NA, metabfit$BUGSoutput$mean$gppts), # O2, mmol/m3/ts
+      gpptslo = c(NA, cred[cred$var == 'gppts', 'X2.5.']),
+      gpptshi = c(NA, cred[cred$var == 'gppts', 'X97.5.']),
       erts = c(NA, metabfit$BUGSoutput$mean$erts), # O2, mmol/m3/ts
       ertslo = c(NA, cred[cred$var == 'erts', 'X2.5.']),
       ertshi = c(NA, cred[cred$var == 'erts', 'X97.5.']),
       gets = c(NA, metabfit$BUGSoutput$mean$gets), # O2, mmol/m3/ts
+      getslo = c(NA, cred[cred$var == 'gets', 'X2.5.']),
+      getshi = c(NA, cred[cred$var == 'gets', 'X97.5.']),
       dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO_mod)), # O2 mmol/m3/ts
       converge = Rhat.test
     )
@@ -218,13 +222,17 @@ ebase <- function(dat, H, interval, ndays = 1, arng = c(0, 2), rvar = 100, brng 
       blo = btslo * 100 * 3600 / interval, 
       bhi = btshi * 100 * 3600 / interval,
       Pg_vol = gppts * nstepd, # O2 mmol/m3/ts to O2 mmol/m3/d
+      Pg_vollo = gpptslo * nstepd,
+      Pg_volhi = gpptshi * nstepd,
       Rt_vol = erts * nstepd, # O2 mmol/m3/ts to O2 mmol/m3/d
       Rt_vollo = ertslo * nstepd, 
       Rt_volhi = ertshi * nstepd,
       D = gets * nstepd, #  # O2 mmol/m3/ts to O2 mmol/m3/d
+      Dlo = getslo * nstepd, 
+      Dhi = getshi * nstepd,
       dDO = dDO * nstepd #  # O2 mmol/m3/ts to O2 mmol/m3/d
     ) %>%
-    dplyr::select(-ats, -atslo, -atshi, -bts, -btslo, -btshi, -gppts, -erts, -ertslo, -ertshi, -gets)
+    dplyr::select(-ats, -atslo, -atshi, -bts, -btslo, -btshi, -gppts, -gpptslo, -gpptshi, -erts, -ertslo, -ertshi, -gets, -getslo, -getshi)
   
   return(out)
 
