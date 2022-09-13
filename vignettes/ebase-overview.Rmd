@@ -130,6 +130,11 @@ The credible intervals can be plotted with the `credible_plot()` function.
 credible_plot(res)
 ```
 
+The credible intervals can also be retrieved as a data frame using `credible_prep()`.  This function is provided as a convenience to parse the results from `ebase()`. 
+
+```{r}
+credible_prep(res)
+```
 
 ## Changing the default arguments 
 

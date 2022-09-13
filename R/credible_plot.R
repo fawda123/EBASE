@@ -33,41 +33,8 @@
 #' credible_plot(res)
 credible_plot <- function(res, params = c('a', 'b', 'Rt_vol')){
   
-  chk <- params %in% c('a', 'b', 'Rt_vol') 
-  if(any(!chk))
-    stop('param must be a, b, and/or Rt_vol') 
-    
-  paramslo <- paste0(params, 'lo') 
-  paramshi <- paste0(params, 'hi')
-
-  toplo <- res %>% 
-    dplyr::select(any_of(c('Date', 'grp', params, paramslo, paramshi))) %>% 
-    unique() %>% 
-    tidyr::pivot_longer(-c('Date', 'grp'), names_to = 'var', values_to = 'val') %>% 
-    dplyr::group_by(grp) %>% 
-    dplyr::mutate(
-      val = dplyr::case_when(
-        Date != min(Date) ~ NA_real_, 
-        T ~ val
-      )
-    ) %>% 
-    mutate(
-      var = case_when(
-        !grepl('lo|hi', var) ~ paste0(var, 'mean'),
-        T ~ var
-      ), 
-      est = gsub(paste(paste0('^', params), collapse = '|'), '', var),
-      var = gsub('lo$|hi$|mean$', '', var), 
-      var = factor(var, 
-                   levels = c('a', 'b', 'Rt_vol'), 
-                   labels = c('a~(mmol~m^{-3}~d^{-1})(W~m^{-2})', 
-                              'b~(cm~hr^{-1})(m^{2}~s^{-2})',
-                              'Rt[vol]~(mmol~m^{-3}~d^{-1})'
-                   )
-      )
-    ) %>% 
-    tidyr::pivot_wider(names_from = 'est', values_from = 'val')
-  
+  toplo <- credible_prep(res, param = params, labels = TRUE)
+ 
   p <- ggplot2::ggplot(toplo, ggplot2::aes(x = Date, y = mean, group = grp)) + 
     ggplot2::geom_point() + 
     ggplot2::geom_errorbar(ggplot2::aes(ymin = lo, ymax = hi), width = 0.1)  +
