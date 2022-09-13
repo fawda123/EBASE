@@ -43,6 +43,8 @@
 #' 
 #' @return A data frame with metabolic estimates for volumetric gross production (\code{Pg_vol}, O2 mmol/m3/d), respiration (\code{Rt_vol},  O2 mmol/m3/d), and gas exchange (\code{D}, O2 mmol/m3/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).  Observed dissolved oxygen (\code{DO_obs}, mmol/m3), modeled dissolved oxygen (\code{DO_mod}, mmol/m3), and delta dissolved oxygen of the modeled results (\code{dDO}, mmol/m3/d) are also returned.  Note that delta dissolved oxygen is a daily rate.
 #' 
+#' 95% credible intervals for \code{a}, \code{b}, and \code{Rt_vol} are also returned in the corresponding columns \code{alo}, \code{ahi}, \code{blo}, \code{bhi}, \code{Rt_vollo}, and \code{Rt_volhi}, for the 2.5th and 97.5th percentile estimates for each parameter, respectively.  These values indicate the interval within which there is a 95% probability that the true parameter is in this range. Note that all values for these parameters are repeated across rows, although only one estimate for each is returned based on the number of days defined by \code{ndays}. 
+#' 
 #' Model fit can also be assessed using the \code{converge} and \code{rsq} columns.  The values in these columns apply to each group in the \code{grp} column as specified with the \code{ndays} argument. The \code{converge} column indicates \code{"Check convergence"} or \code{"Fine"} if the JAGS estimate converged at that iteration (repeated across rows for the group).  The \code{n.chains} argument can be increased if convergence is not achieved. Similarly, the \code{rsq} column shows the r-squared values of the linear fit between the modeled and observed dissolved oxygen (repeated across rows for the group).  These values can also be viewed with \code{\link{fit_plot}}.
 #' 
 #' @references 
@@ -165,6 +167,13 @@ ebase <- function(dat, H, interval, ndays = 1, arng = c(0, 2), rvar = 100, brng 
     srf <- metabfit$BUGSoutput$summary[,8]
     Rhat.test <- ifelse(any(srf > 1.1, na.rm = TRUE) == TRUE, "Check convergence", "Fine")
   
+    # credible intervals for a, b, er
+    maxrow <- nstepd - 1
+    cred <- data.frame(metabfit$BUGSoutput$summary)
+    cred <- cred[grepl('ats|bts|erts', row.names(cred)), ]
+    cred$var <- row.names(cred)
+    cred$var <- gsub('\\[|\\]|\\d+', '', cred$var)
+    
     # insert results to table and write table
     result <- data.frame(
       Date = dat.sub$Date,
@@ -173,9 +182,15 @@ ebase <- function(dat, H, interval, ndays = 1, arng = c(0, 2), rvar = 100, brng 
       DO_mod = metabfit$BUGSoutput$mean$DO_mod,
       DateTimeStamp = dat.sub$DateTimeStamp,
       ats = c(NA, metabfit$BUGSoutput$mean$ats), # (mmol/m3/ts)/(W/m2)
+      atslo = c(NA, cred[cred$var == 'ats', 'X2.5.']),
+      atshi = c(NA, cred[cred$var == 'ats', 'X97.5.']),
       bts = c(NA, metabfit$BUGSoutput$mean$bts), # ts/m
+      btslo = c(NA, cred[cred$var == 'bts', 'X2.5.']),
+      btshi = c(NA, cred[cred$var == 'bts', 'X97.5.']),
       gppts = c(NA, metabfit$BUGSoutput$mean$gppts), # O2, mmol/m3/ts
       erts = c(NA, metabfit$BUGSoutput$mean$erts), # O2, mmol/m3/ts
+      ertslo = c(NA, cred[cred$var == 'erts', 'X2.5.']),
+      ertshi = c(NA, cred[cred$var == 'erts', 'X97.5.']),
       gets = c(NA, metabfit$BUGSoutput$mean$gets), # O2, mmol/m3/ts
       dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO_mod)), # O2 mmol/m3/ts
       converge = Rhat.test
@@ -197,13 +212,19 @@ ebase <- function(dat, H, interval, ndays = 1, arng = c(0, 2), rvar = 100, brng 
     dplyr::mutate(
       Date = lubridate::ymd(Date), 
       a = ats * nstepd, # (mmol/m3/ts)/(W/m2) to (mmol/m3/d)/(W/m2)
+      alo = atslo * nstepd, 
+      ahi = atshi * nstepd, 
       b = bts * 100 * 3600 / interval, # (m/d)/(m2/s2) to (cm/hr)/(m2/s2)
+      blo = btslo * 100 * 3600 / interval, 
+      bhi = btshi * 100 * 3600 / interval,
       Pg_vol = gppts * nstepd, # O2 mmol/m3/ts to O2 mmol/m3/d
       Rt_vol = erts * nstepd, # O2 mmol/m3/ts to O2 mmol/m3/d
+      Rt_vollo = ertslo * nstepd, 
+      Rt_volhi = ertshi * nstepd,
       D = gets * nstepd, #  # O2 mmol/m3/ts to O2 mmol/m3/d
       dDO = dDO * nstepd #  # O2 mmol/m3/ts to O2 mmol/m3/d
     ) %>%
-    dplyr::select(-ats, -bts, -gppts, -erts, -gets)
+    dplyr::select(-ats, -atslo, -atshi, -bts, -btslo, -btshi, -gppts, -erts, -ertslo, -ertshi, -gets)
   
   return(out)
 

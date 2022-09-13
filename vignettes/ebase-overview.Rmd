@@ -122,6 +122,15 @@ A scatterplot showing modeled versus observed dissolved oxygen can also be retur
 fit_plot(res, bygroup = TRUE, scatter = TRUE)
 ```
 
+95% credible intervals for `a`, `b`, and `Rt_vol` are also returned with the output from `ebase()` in the corresponding columns `alo`, `ahi`, `blo`, `bhi`, `Rt_vollo`, and `Rt_volhi`, for the 2.5th and 97.5th percentile estimates for each parameter, respectively.  These values indicate the interval within which there is a 95% probability that the true parameter is in this range. Note that all values for these parameters are repeated across rows, although only one estimate for each is returned based on the number of days defined by `ndays`. 
+
+The credible intervals can be plotted with the `credible_plot()` function.
+
+```{r, fig.height = 6, fig.width = 7}
+credible_plot(res)
+```
+
+
 ## Changing the default arguments 
 
 ### Equation optimization length 
