@@ -218,7 +218,7 @@ ebase <- function(dat, H, interval, ndays = 1, arng = c(0, 2), rvar = 100, brng 
       a = ats * nstepd, # (mmol/m3/ts)/(W/m2) to (mmol/m3/d)/(W/m2)
       alo = atslo * nstepd, 
       ahi = atshi * nstepd, 
-      b = bts * 100 * 3600 / interval, # (m/d)/(m2/s2) to (cm/hr)/(m2/s2)
+      b = bts * 100 * 3600 / interval, # (m/ts)/(m2/s2) to (cm/hr)/(m2/s2)
       blo = btslo * 100 * 3600 / interval, 
       bhi = btshi * 100 * 3600 / interval,
       Pg_vol = gppts * nstepd, # O2 mmol/m3/ts to O2 mmol/m3/d

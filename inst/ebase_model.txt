@@ -6,12 +6,22 @@
     # PRIORS
   
     # set priors
-    amean <- 0.2 / nstepd
-    bmean <- 0.251 / (100 * 3600 / interval)
 
-    a ~ dunif(arng[1] * amean, 2 * arng[2])
-    r ~ dnorm(0, 1 / rvar)T(0,)
-    b ~ dunif(brng[1] * bmean, brng[2] * bmean) # note that Wanninkhof reports uncertainty of this parameter at +/- 20%
+    amean <- 0.2 / nstepd
+    # asd <- 1.341 * amean
+    # atau <- 1 / (asd * asd)
+    rmean <- 20 / nstepd
+    # rsd <- 1.341 * rmean
+    # rtau <- 1 / (rsd * rsd)
+    bmean <- 0.251 / (100 * 3600 / interval)
+    # bsd <- 1.341 * bmean
+    # btau <- 1 / (bsd * bsd)
+    
+    # a ~ dunif(arng[1] * amean, 2 * arng[2])
+    a ~ dnorm(amean, 1e4)T(0,)
+    r ~ dnorm(rmean, 1 / rvar)T(0,)
+    b ~ dnorm(bmean, 1e8)T(0,)
+    # b ~ dunif(brng[1] * bmean, brng[2] * bmean)
   
     tau ~ dgamma(1,0.001)
     
