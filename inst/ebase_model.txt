@@ -7,21 +7,16 @@
   
     # set priors
 
-    amean <- 0.2 / nstepd
-    # asd <- 1.341 * amean
-    # atau <- 1 / (asd * asd)
-    rmean <- 20 / nstepd
-    # rsd <- 1.341 * rmean
-    # rtau <- 1 / (rsd * rsd)
-    bmean <- 0.251 / (100 * 3600 / interval)
-    # bsd <- 1.341 * bmean
-    # btau <- 1 / (bsd * bsd)
+    amean <- aprior[1] / nstepd
+    atau <- 1 / ((aprior[2] / nstepd) ^ 2)
+    rmean <- rprior[1] / nstepd
+    rtau <- 1 / (rprior[2]^2)
+    bmean <- bprior[1] / (100 * 3600 / interval)
+    btau <- 1 / ((bprior[2] / (100 * 3600 / interval)) ^ 2)
     
-    # a ~ dunif(arng[1] * amean, 2 * arng[2])
-    a ~ dnorm(amean, 1e4)T(0,)
-    r ~ dnorm(rmean, 1 / rvar)T(0,)
-    b ~ dnorm(bmean, 1e8)T(0,)
-    # b ~ dunif(brng[1] * bmean, brng[2] * bmean)
+    a ~ dnorm(amean, atau)T(0,)
+    r ~ dnorm(rmean, rtau)T(0,)
+    b ~ dnorm(bmean, btau)T(0,)
   
     tau ~ dgamma(1,0.001)
     

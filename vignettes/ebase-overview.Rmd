@@ -194,21 +194,21 @@ interp_plot(dat2, H = 1.85, interval = 900, param = 'DO_sat')
 
 ### Changing priors
 
-The prior distributions for the $a$, $r$, and $b$ parameters are defined in the model file included with the package as uninformed uniform, normal, and uniform distributions, respectively.  The path to the model file can be found using the following:
+The prior distributions for the $a$, $r$, and $b$ parameters are defined in the model file included with the package as normal distributions with mean and standard deviations provided by the `aprior`, `rprior`, and `bprior` arguments in `ebase()`.  The location of the model file can be viewed as follows.
 
 ```{r, eval = F}
 system.file('ebase_model.txt', package = 'EBASE')
 ```
 
-The prior distribution for $a$ as default varies uniformly across the range from zero to 200\% of an estimated mean of 0.2 (mmol/m3/d)(W/m2).  This range can be changed using the `arng` parameter, default being 0 to 2 for zero to 200\%.  The prior distribution for the $r$ parameter follows a normal distribution with mean zero and variance equal to 100, but truncated to not go below zero.  This variance estimate can be changed with the `rvar` parameter.  The prior distribution for $b$ as default varies uniformly across the range from 80 to 120\% of an estimated mean of 0.251 (cm/hr)/(m2/s2).  This range can be changed using the `brng` parameter, default being 0.8 to 1.2 for 80 to 120\%.  Note that @Wanninkhof14 states that the uncertainty of the $b$ parameter typically does not vary more than 20%, although this range is generally unknown in estuarine systems.
+The default values for the priors were chosen based on the ability of EBASE to reproduce known parameters from a forward metabolism model.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above.  Units for each parameter are (mmol/m3/d)(W/m2) for $a$, mmol/m3/d for $r$, and (cm/hr)/(m2/s2) for $b$. 
 
-Here, the prior range for the $b$ parameter is expanded to 70\% and 130\%.
+Here, the prior distribution for the $b$ parameter is changed to have a mean of 0.4 and standard deviation of 1.
 
 ```{r, fig.height = 3, fig.width = 9}
 cl <- makeCluster(2)
 registerDoParallel(cl)
 
-res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2, brng = c(0.7, 1.3))
+res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2, bprior = c(0.4, 1))
 
 stopCluster(cl)
 
