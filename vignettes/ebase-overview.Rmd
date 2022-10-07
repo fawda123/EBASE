@@ -208,7 +208,7 @@ interp_plot(dat2, H = 1.85, interval = 900, param = 'DO_sat')
 
 ### Changing priors
 
-If the default values are changed for \code{\link{ebase}}, the `prior_plot()` function can be used to assess how changing characteristics of the prior distributions could influence the resulting parameter estimates and their posterior distributions (e.g., as shown with \code{\link{credible_plot}}.
+If the default values prior distributions are changed for `ebase()`, the `prior_plot()` function can be used to assess how changing characteristics of the prior distributions could influence the resulting parameter estimates and their posterior distributions (e.g., as shown with `credible_plot()`).
 
 Here, the prior distribution for the $b$ parameter is changed to have a mean of 0.4 and standard deviation of 1.
 
