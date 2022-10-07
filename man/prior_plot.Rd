@@ -5,9 +5,9 @@
 \title{Plot prior distributions for a, Rt_vol, and b}
 \usage{
 prior_plot(
-  aprior = c(0.2, 0.96),
-  rprior = c(20, 10),
-  bprior = c(0.251, 0.04),
+  aprior = c(0.2, 0.1),
+  rprior = c(20, 5),
+  bprior = c(0.251, 0.01),
   n = 1000
 )
 }

@@ -10,7 +10,7 @@
     amean <- aprior[1] / nstepd
     atau <- 1 / ((aprior[2] / nstepd) ^ 2)
     rmean <- rprior[1] / nstepd
-    rtau <- 1 / (rprior[2]^2)
+    rtau <- 1 / ((rprior[2] / nstepd) ^ 2)
     bmean <- bprior[1] / (100 * 3600 / interval)
     btau <- 1 / ((bprior[2] / (100 * 3600 / interval)) ^ 2)
     

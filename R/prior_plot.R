@@ -20,7 +20,7 @@
 #' 
 #' # changing the mean and standard deviation for the b parameter
 #' prior_plot(bprior = c(0.4, 1))
-prior_plot <- function(aprior = c(0.2, 0.96), rprior = c(20, 10), bprior = c(0.251, 0.04), n = 1000){
+prior_plot <- function(aprior = c(0.2, 0.1), rprior = c(20, 5), bprior = c(0.251, 0.01), n = 1000){
   
   labs <- c('a~(mmol~m^{-3}~d^{-1})(W~m^{-2})', 
             'Rt[vol]~(mmol~m^{-3}~d^{-1})',
