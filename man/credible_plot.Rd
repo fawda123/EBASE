@@ -2,23 +2,23 @@
 % Please edit documentation in R/credible_plot.R
 \name{credible_plot}
 \alias{credible_plot}
-\title{Plot credible intervals for a, b, and Rt_vol}
+\title{Plot credible intervals for a, Rt_vol, and b}
 \usage{
-credible_plot(res, params = c("a", "b", "Rt_vol"))
+credible_plot(res, params = c("a", "Rt_vol", "b"))
 }
 \arguments{
 \item{res}{output data frame from \code{\link{ebase}}}
 
-\item{params}{character vector indicating which parameters to plot, one to any of \code{a}, \code{b}, or \code{Rt_vol} (default all)}
+\item{params}{character vector indicating which parameters to plot, one to any of \code{a}, \code{Rt_vol}, or \code{b},  (default all)}
 }
 \value{
 A \code{\link[ggplot2]{ggplot}} object
 }
 \description{
-Plot credible intervals for a, b, and Rt_vol
+Plot credible intervals for a, Rt_vol, and b
 }
 \details{
-This function plots 95\% credible intervals (2.5th to 97.5th percentiles) for \code{a}, \code{b}, and/or \code{Rt_vol} using the output from \code{\link{ebase}}. Results in the plot are grouped by the \code{ndays} argument that was used in \code{\link{ebase}}.
+This function plots 95\% credible intervals (2.5th to 97.5th percentiles, approximate posterior distributions) for \code{a}, \code{Rt_vol} and/or \code{b} using the output from \code{\link{ebase}}. Results in the plot are grouped by the \code{ndays} argument that was used in \code{\link{ebase}}.
 }
 \examples{
 

@@ -1,7 +1,7 @@
 Package: EBASE
 Title: Estuarine Bayesian Single-Station Estimation Method for Ecosystem Metabolism
-Version: 0.0.0.9003
-Date: 2022-09-13
+Version: 0.0.0.9004
+Date: 2022-10-07
 Authors@R: c(
     person(given = "Marcus",
       family = "Beck",
@@ -50,13 +50,14 @@ Imports:
   R2jags (>= 0.6.1),
   rjags (>= 4.10),
   tidyr, 
+  truncnorm,
   zoo
 Suggests:
-    testthat (>= 3.0.0),
-    doParallel,
-    knitr,
-    rmarkdown,
-    covr
+  testthat (>= 3.0.0),
+  doParallel,
+  knitr,
+  rmarkdown,
+  covr
 Remotes:
   jmarriola/fwoxy
 License: CC0

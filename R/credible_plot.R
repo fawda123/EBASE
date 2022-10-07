@@ -1,12 +1,12 @@
-#' Plot credible intervals for a, b, and Rt_vol
+#' Plot credible intervals for a, Rt_vol, and b
 #' 
 #' @param res output data frame from \code{\link{ebase}}
-#' @param params character vector indicating which parameters to plot, one to any of \code{a}, \code{b}, or \code{Rt_vol} (default all)
+#' @param params character vector indicating which parameters to plot, one to any of \code{a}, \code{Rt_vol}, or \code{b},  (default all)
 #'
 #' @return A \code{\link[ggplot2]{ggplot}} object
 #' @export
 #'
-#' @details This function plots 95% credible intervals (2.5th to 97.5th percentiles) for \code{a}, \code{b}, and/or \code{Rt_vol} using the output from \code{\link{ebase}}. Results in the plot are grouped by the \code{ndays} argument that was used in \code{\link{ebase}}.
+#' @details This function plots 95% credible intervals (2.5th to 97.5th percentiles, approximate posterior distributions) for \code{a}, \code{Rt_vol} and/or \code{b} using the output from \code{\link{ebase}}. Results in the plot are grouped by the \code{ndays} argument that was used in \code{\link{ebase}}.
 #' 
 #' @examples 
 #' 
@@ -31,9 +31,9 @@
 #' 
 #' # plot credible intervals
 #' credible_plot(res)
-credible_plot <- function(res, params = c('a', 'b', 'Rt_vol')){
+credible_plot <- function(res, params = c('a', 'Rt_vol', 'b')){
   
-  toplo <- credible_prep(res, param = params, labels = TRUE)
+  toplo <- credible_prep(res, params = params, labels = TRUE)
  
   p <- ggplot2::ggplot(toplo, ggplot2::aes(x = Date, y = mean, group = grp)) + 
     ggplot2::geom_point() + 
