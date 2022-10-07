@@ -11,7 +11,6 @@
 #' @param bprior numeric vector of length two indicating the mean and standard deviation for the prior distribution of the \emph{b} parameter, see details
 #' @param interp logical indicating if linear interpolation is used to fill all data gaps, only applies if timestep specified by \code{interval} is not uniform
 #' @param maxgap numeric vector indicating maximum gap size to interpolate where size is number of records at the value specified by \code{interval}, e.g., if \code{interval = 900} and \code{maxgap = 4}, gaps up to and including one hour will be linearly interpolated
-#' @param inits \code{NULL} or a function that returns a named list of starting values for the parameters to be estimated in the jags model, see examples
 #' @param n.iter number of MCMC iterations, passed to \code{\link[R2jags]{jags}}
 #' @param update.chains logical to run \code{\link{metab_update}} if chains do not converge
 #' @param n.burnin number of MCMC chains to delete, passed to \code{\link[R2jags]{jags}}
@@ -35,7 +34,7 @@
 #' 
 #' Gross production is provided by \emph{aPAR}, respiration is provided by \emph{r}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{r}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The estimated concentration is also returned for comparison to observed as one measure of model performance.   
 #' 
-#' The prior distributions for the \emph{a}, \emph{r}, and \emph{b} parameters are defined in the model file included with the package as normal distributions with mean and standard deviations provided by the \code{aprior}, \code{rprior}, and \code{bprior} arguments. The default values were chosen based on the ability of EBASE to reproduce known parameters from a forward metabolism model.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above.  Units for each parameter are (mmol/m3/d)(W/m2) for \code{a}, mmol/m3/d for \code{r}, and (cm/hr)/(m2/s2) for \code{b}. 
+#' The prior distributions for the \emph{a}, \emph{r}, and \emph{b} parameters are defined in the model file included with the package as normal distributions with mean and standard deviations provided by the \code{aprior}, \code{rprior}, and \code{bprior} arguments. The default values were chosen based on the ability of EBASE to reproduce known parameters from a forward metabolism model.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above.  Units for each parameter are (mmol/m3/d)(W/m2) for \emph{a}, mmol/m3/d for \emph{r}, and (cm/hr)/(m2/s2) for \emph{b}. 
 #' 
 #' The \code{ndays} argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., \code{ndays= 1} such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for \emph{a}, \emph{r}, and \emph{b} are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every \code{ndays} specified by the argument.  The \code{ndays} argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to \code{ndays}.  The final block may not include the complete number of days specified by \code{ndays} if the number of unique dates in the input data includes a remainder when divided by \code{ndays}, e.g., if seven days are in the input data and \code{ndays = 5}, there will be two groups where the first has five days and the second has two days. The output data from \code{ebase} includes a column that specifies the grouping that was used based on \code{ndays}.
 #' 
@@ -74,25 +73,19 @@
 #' 
 #' stopCluster(cl)
 #'
+#'\dontrun{
 #' ##
-#' # run ebase with different initial starting values for the three parameters, parallel
-#' 
-#' inits <- function(interval = 900){
-#'   list(
-#'     a = 0.2 / (86400 / interval),
-#'     r = 20 / (86400 / interval),
-#'     b = 0.251 / (100 * 3600 / interval)
-#'   )
-#' }
+#' # run ebase with different prior distributions
 #' 
 #' # setup parallel backend
 #' cl <- makeCluster(2)
 #' registerDoParallel(cl)
 #'   
-#' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, inits = inits, n.chains = 2)
+#' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2, bprior = c(0.4, 1))
 #'
 #' stopCluster(cl)
-ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.96), rprior = c(20, 10), bprior = c(0.251, 0.04), interp = TRUE, maxgap = 1e6, inits = NULL, n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = FALSE, model_file = NULL){
+#' }
+ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.96), rprior = c(20, 10), bprior = c(0.251, 0.04), interp = TRUE, maxgap = 1e6, n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = FALSE, model_file = NULL){
   
   # prep data
   dat <- ebase_prep(dat, H = H, interval = interval, ndays = ndays, interp = interp, maxgap = maxgap)
@@ -153,7 +146,7 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.96), rprior = c
   
     ## Call jags ##
     metabfit <- do.call(jags.parallel,
-                        list(data = dat.list, inits = inits, parameters.to.save = params, 
+                        list(data = dat.list, parameters.to.save = params, 
                              model.file = mod_in,
                              n.chains = n.chains, n.iter = n.iter, n.burnin = n.burnin,
                              n.thin = n.thin, n.cluster = n.chains, DIC = TRUE,
