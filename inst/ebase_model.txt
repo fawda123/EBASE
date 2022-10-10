@@ -9,14 +9,16 @@
 
     amean <- aprior[1] / nstepd
     atau <- 1 / ((aprior[2] / nstepd) ^ 2)
+    amax <- 1 / nstepd
     rmean <- rprior[1] / nstepd
     rtau <- 1 / ((rprior[2] / nstepd) ^ 2)
     bmean <- bprior[1] / (100 * 3600 / interval)
     btau <- 1 / ((bprior[2] / (100 * 3600 / interval)) ^ 2)
+    bmax <- 1.5 * bprior[1] / (100 * 3600 / interval)
     
-    a ~ dnorm(amean, atau)T(0,)
+    a ~ dnorm(amean, atau)T(0,amax)
     r ~ dnorm(rmean, rtau)T(0,)
-    b ~ dnorm(bmean, btau)T(0,)
+    b ~ dnorm(bmean, btau)T(0,bmax)
   
     tau ~ dgamma(1,0.001)
     

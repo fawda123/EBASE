@@ -26,15 +26,22 @@ prior_plot <- function(aprior = c(0.2, 0.1), rprior = c(20, 5), bprior = c(0.251
             'Rt[vol]~(mmol~m^{-3}~d^{-1})',
             'b~(cm~hr^{-1})/(m^{2}~s^{-2})'
   )
-  
+
   aprior <- data.frame(var = 'aprior', mean = aprior[1], sd = aprior[2])
   rprior <- data.frame(var = 'rprior', mean = rprior[1], sd = rprior[2])
   bprior <- data.frame(var = 'bprior', mean = bprior[1], sd = bprior[2])
   
   toplo <- rbind(aprior, rprior, bprior) %>% 
+    dplyr::mutate(
+      maxv = dplyr::case_when(
+        var == 'aprior' ~ 1, 
+        var == 'rprior' ~ Inf, 
+        var == 'bprior' ~ 1.5 * 0.251
+      )
+    ) %>% 
     dplyr::group_by(var) %>% 
     dplyr::mutate(
-      val = list(truncnorm::rtruncnorm(n, a = 0, mean = mean, sd = sd)), 
+      val = list(truncnorm::rtruncnorm(n, a = 0, b = maxv, mean = mean, sd = sd)), 
       var = factor(var, 
                      levels = c('aprior', 'rprior', 'bprior'), 
                      labels = labs
