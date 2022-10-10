@@ -11,7 +11,7 @@ ebase(
   ndays = 1,
   aprior = c(0.2, 0.1),
   rprior = c(20, 5),
-  bprior = c(0.251, 0.01),
+  bprior = c(0.251, 0.005),
   interp = TRUE,
   maxgap = 1e+06,
   n.iter = 10000,

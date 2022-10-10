@@ -7,7 +7,7 @@
 prior_plot(
   aprior = c(0.2, 0.1),
   rprior = c(20, 5),
-  bprior = c(0.251, 0.01),
+  bprior = c(0.251, 0.005),
   n = 1000
 )
 }
