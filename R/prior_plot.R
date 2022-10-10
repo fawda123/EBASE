@@ -34,7 +34,7 @@ prior_plot <- function(aprior = c(0.2, 0.1), rprior = c(20, 5), bprior = c(0.251
   toplo <- rbind(aprior, rprior, bprior) %>% 
     dplyr::mutate(
       maxv = dplyr::case_when(
-        var == 'aprior' ~ 1, 
+        var == 'aprior' ~ Inf, 
         var == 'rprior' ~ Inf, 
         var == 'bprior' ~ 1.5 * 0.251
       )
