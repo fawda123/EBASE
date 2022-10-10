@@ -75,7 +75,7 @@ res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
 head(res)
 ```
 
-The results are returned as a data frame with instantaneous metabolic estimates for volumetric gross production (O2 mmol/m3/d, `Pg_vol` or $aPAR$ from above), respiration (O2 mmol/m3/d, `Rt_vol` or $r$ from above), and gas exchange (O2 mmol/m3/d, `D` or the remainder of the equation from above).  Additional parameters estimated by the model that are returned include `a` and `b` as shown in the above equation.  The `a` parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)(W/m2) and is used to estimate gross production [@Grace15].  The `b` parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in @Wanninkhof14).
+The results are returned as a data frame with instantaneous metabolic estimates for volumetric gross production (O2 mmol/m3/d, `Pg_vol` or $aPAR$ from above), respiration (O2 mmol/m3/d, `Rt_vol` or $r$ from above), and gas exchange (O2 mmol/m3/d, `D` or the remainder of the equation from above).  Additional parameters estimated by the model that are returned include `a` and `b` as shown in the above equation.  The `a` parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)/(W/m2) and is used to estimate gross production [@Grace15].  The `b` parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in @Wanninkhof14).
 
 A plot of the results can be made with `ebase_plot()`.
 
@@ -128,7 +128,7 @@ The prior distributions for the $a$, $r$, and $b$ parameters are defined in the 
 system.file('ebase_model.txt', package = 'EBASE')
 ```
 
-The default values for the priors were chosen based on the ability of EBASE to reproduce known parameters from a forward metabolism model.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above.  Units for each parameter are (mmol/m3/d)(W/m2) for $a$, mmol/m3/d for $r$, and (cm/hr)/(m2/s2) for $b$. 
+The default values for the priors were chosen based on the ability of EBASE to reproduce known parameters from a forward metabolism model.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above.  Units for each parameter are (mmol/m3/d)/(W/m2) for $a$, mmol/m3/d for $r$, and (cm/hr)/(m2/s2) for $b$. 
 
 The prior distributions can be viewed with the `prior_plot()` function.  No changes are needed to the default arguments for this function if the default arguments are used for `ebase()`. 
 

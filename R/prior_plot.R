@@ -22,9 +22,9 @@
 #' prior_plot(bprior = c(0.4, 1))
 prior_plot <- function(aprior = c(0.2, 0.1), rprior = c(20, 5), bprior = c(0.251, 0.01), n = 1000){
   
-  labs <- c('a~(mmol~m^{-3}~d^{-1})(W~m^{-2})', 
+  labs <- c('a~(mmol~m^{-3}~d^{-1})/(W~m^{-2})', 
             'Rt[vol]~(mmol~m^{-3}~d^{-1})',
-            'b~(cm~hr^{-1})(m^{2}~s^{-2})'
+            'b~(cm~hr^{-1})/(m^{2}~s^{-2})'
   )
   
   aprior <- data.frame(var = 'aprior', mean = aprior[1], sd = aprior[2])

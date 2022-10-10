@@ -43,9 +43,9 @@ credible_prep <- function(res, params = c('a', 'Rt_vol', 'b'), labels = FALSE){
   
   labs <- c('a', 'Rt_vol', 'b')
   if(labels)
-    labs <- c('a~(mmol~m^{-3}~d^{-1})(W~m^{-2})', 
+    labs <- c('a~(mmol~m^{-3}~d^{-1})/(W~m^{-2})', 
               'Rt[vol]~(mmol~m^{-3}~d^{-1})',
-              'b~(cm~hr^{-1})(m^{2}~s^{-2})'
+              'b~(cm~hr^{-1})/(m^{2}~s^{-2})'
     )
   
   out <- res %>% 
