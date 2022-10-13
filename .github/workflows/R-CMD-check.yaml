@@ -52,7 +52,6 @@ jobs:
         run: |
           curl.exe -o JAGS-4.2.0.exe --url https://deac-fra.dl.sourceforge.net/project/mcmc-jags/JAGS/4.x/Windows/JAGS-4.2.0-Rtools33.exe
           JAGS-4.2.0.exe /S
-          del JAGS-4.2.0.exe
         shell: cmd
 
       - name: Install JAGS (macOS-latest)
