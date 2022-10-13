@@ -128,7 +128,7 @@ The prior distributions for the $a$, $r$, and $b$ parameters are defined in the 
 system.file('ebase_model.txt', package = 'EBASE')
 ```
 
-The default values for the priors were chosen based on the ability of EBASE to reproduce known parameters from a forward metabolism model.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above.  The upper limit for $b$ is also set as 1.5 * 0.251, or 50% more than the default mean (Wanninkhof 2014 states that $b$ should not vary by more than +/- 20%). Units for each parameter are (mmol/m3/d)/(W/m2) for $a$, mmol/m3/d for $r$, and (cm/hr)/(m2/s2) for $b$. 
+The default values for the priors were chosen based on the ability of EBASE to reproduce known parameters from a forward metabolism model.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above.  The upper limit for $b$ is also set as twice the default value of the mean in the `bprior` argument. Units for each parameter are (mmol/m3/d)/(W/m2) for $a$, mmol/m3/d for $r$, and (cm/hr)/(m2/s2) for $b$. 
 
 The prior distributions can be viewed with the `prior_plot()` function.  No changes are needed to the default arguments for this function if the default arguments are used for `ebase()`. 
 

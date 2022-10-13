@@ -13,11 +13,11 @@
     rtau <- 1 / ((rprior[2] / nstepd) ^ 2)
     bmean <- bprior[1] / (100 * 3600 / interval)
     btau <- 1 / ((bprior[2] / (100 * 3600 / interval)) ^ 2)
-    bmax <- 1.5 * bprior[1] / (100 * 3600 / interval)
+    bupp <- bmax / (100 * 3600 / interval)
     
     a ~ dnorm(amean, atau)T(0,)
     r ~ dnorm(rmean, rtau)T(0,)
-    b ~ dnorm(bmean, btau)T(0,bmax)
+    b ~ dnorm(bmean, btau)T(0,bupp)
   
     tau ~ dgamma(1,0.001)
     

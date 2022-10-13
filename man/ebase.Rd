@@ -11,7 +11,8 @@ ebase(
   ndays = 1,
   aprior = c(0.2, 0.1),
   rprior = c(20, 5),
-  bprior = c(0.251, 0.005),
+  bprior = c(0.251, 0.01),
+  bmax = 0.504,
   interp = TRUE,
   maxgap = 1e+06,
   n.iter = 10000,
@@ -37,6 +38,8 @@ ebase(
 \item{rprior}{numeric vector of length two indicating the mean and standard deviation for the prior distribution of the \emph{r} parameter, see details}
 
 \item{bprior}{numeric vector of length two indicating the mean and standard deviation for the prior distribution of the \emph{b} parameter, see details}
+
+\item{bmax}{numeric value for the upper limit on the prior distribution for \code{bprior}, set as twice the default value of the mean}
 
 \item{interp}{logical indicating if linear interpolation is used to fill all data gaps, only applies if timestep specified by \code{interval} is not uniform}
 
@@ -75,7 +78,7 @@ The metabolic estimates are based on a mass balance equation in Grace et al. 201
 
 Gross production is provided by \emph{aPAR}, respiration is provided by \emph{r}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{r}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The estimated concentration is also returned for comparison to observed as one measure of model performance.
 
-The prior distributions for the \emph{a}, \emph{r}, and \emph{b} parameters are defined in the model file included with the package as normal distributions with mean and standard deviations provided by the \code{aprior}, \code{rprior}, and \code{bprior} arguments. The default values were chosen based on the ability of EBASE to reproduce known parameters from a forward metabolism model.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above. The upper limit for \emph{b} is also set as 1.5 * 0.251, or 50\% more than the default mean (Wanninkhof 2014 states that \emph{b} should not vary by more than +/- 20\%). Units for each parameter are (mmol/m3/d)/(W/m2) for \emph{a}, mmol/m3/d for \emph{r}, and (cm/hr)/(m2/s2) for \emph{b}.
+The prior distributions for the \emph{a}, \emph{r}, and \emph{b} parameters are defined in the model file included with the package as normal distributions with mean and standard deviations provided by the \code{aprior}, \code{rprior}, and \code{bprior} arguments. The default values were chosen based on the ability of EBASE to reproduce known parameters from a forward metabolism model.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above. The upper limit for \emph{b} is set as twice the default value of the mean in the \code{bprior} argument. Units for each parameter are (mmol/m3/d)/(W/m2) for \emph{a}, mmol/m3/d for \emph{r}, and (cm/hr)/(m2/s2) for \emph{b}.
 
 The \code{ndays} argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., \code{ndays= 1} such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for \emph{a}, \emph{r}, and \emph{b} are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every \code{ndays} specified by the argument.  The \code{ndays} argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to \code{ndays}.  The final block may not include the complete number of days specified by \code{ndays} if the number of unique dates in the input data includes a remainder when divided by \code{ndays}, e.g., if seven days are in the input data and \code{ndays = 5}, there will be two groups where the first has five days and the second has two days. The output data from \code{ebase} includes a column that specifies the grouping that was used based on \code{ndays}.
 
