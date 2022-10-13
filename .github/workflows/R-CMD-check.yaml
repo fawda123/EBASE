@@ -27,8 +27,7 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
-      JAGS_HOME: 'JAGS-4.2.0.exe'
-      JAGS_ROOT: 'JAGS-4.2.0.exe'
+      JAGS_HOME: '~'
 
     steps:
       - uses: actions/checkout@v2
