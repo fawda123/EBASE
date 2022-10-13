@@ -49,9 +49,8 @@ jobs:
       - name: Install JAGS (windows-latest)
         if: runner.os == 'Windows'
         run: |
-          curl.exe -o wjags.exe --url https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Windows/JAGS-4.3.0.exe
-          wjags.exe /S
-          del wjags.exe
+          curl.exe -o C:\wjags.exe --url https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Windows/JAGS-4.3.0.exe
+          C:\wjags.exe /S
         shell: cmd
 
       - name: Install JAGS (macOS-latest)
