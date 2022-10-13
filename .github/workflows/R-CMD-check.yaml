@@ -27,7 +27,7 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
-      JAGS_HOME: '~'
+      JAGS_HOME: '.'
 
     steps:
       - uses: actions/checkout@v2
