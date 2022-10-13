@@ -27,8 +27,7 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
-      JAGS_HOME: 'JAGS-4.3.0.exe'
-      JAGS_ROOT: 'JAGS-4.3.0.exe'
+      JAGS_HOME: 'wjags.exe'
 
     steps:
       - uses: actions/checkout@v2
@@ -50,9 +49,9 @@ jobs:
       - name: Install JAGS (windows-latest)
         if: runner.os == 'Windows'
         run: |
-          curl.exe -o JAGS-4.3.0.exe --url https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Windows/JAGS-4.3.0.exe
-          JAGS-4.3.0.exe /S
-          del JAGS-4.3.0.exe
+          curl.exe -o wjags.exe --url https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Windows/JAGS-4.3.0.exe
+          wjags.exe /S
+          del wjags.exe
         shell: cmd
 
       - name: Install JAGS (macOS-latest)
