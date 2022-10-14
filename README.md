@@ -8,7 +8,7 @@
 [![Codecov test coverage](https://codecov.io/gh/fawda123/EBASE/branch/main/graph/badge.svg)](https://app.codecov.io/gh/fawda123/EBASE?branch=main)
 <!-- badges: end -->
 
-This an R package for Estuarine BAyesian Single-station Estimation method for ecosystem metabolism.  
+R package for Estuarine BAyesian Single-station Estimation (EBASE) method for ecosystem metabolism.
 
 ### Installation
 
