@@ -40,3 +40,15 @@ test_that("Checking ebase_prep interpolation", {
     )))
   
 })
+
+test_that("Checking ebase_prep error for different time step and no interp", {
+  
+  set.seed(222)
+  dat2 <- dat %>% 
+    slice_sample(prop = 0.9) %>% 
+    arrange(DateTimeStamp)
+  expect_error(
+    ebase_prep(dat2, H = 1.85, interval = 900, ndays = 1, interp = F) %>% nrow()
+    )
+})
+

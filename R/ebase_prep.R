@@ -15,6 +15,7 @@
 #' 
 #' The \code{ndays} argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., \code{ndays= 1} such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for \emph{a}, \emph{r}, and \emph{b} are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every \code{ndays} specified by the argument.  The \code{ndays} argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to \code{ndays}.  The final block may not include the complete number of days specified by \code{ndays} if the number of unique dates in the input data includes a remainder when divided by \code{ndays}, e.g., if seven days are in the input data and \code{ndays = 5}, there will be two groups where the first has five days and the second has two days. The output data from \code{\link{ebase}} includes a column that specifies the grouping that was used based on \code{ndays}.
 #' 
+#' Records at the start or end of the input time series that do not include a full day are removed for conformance with the core model equation.  A warning is returned to the console if these records are found. 
 #' @return A data frame with additional columns required for \code{\link{ebase}}.  If multiple time steps are identified, the number of rows in data frame is expanded based on the time step define by \code{interval}.  Numeric values in the expanded rows will be interpolated if \code{interp = TRUE}, otherwise they will remain as \code{NA} values.
 #' 
 #' @importFrom dplyr %>%
@@ -47,15 +48,20 @@ ebase_prep <- function(dat, H, interval, ndays = 1, interp = TRUE, maxgap = 1e6)
     stop(msg)
   }
   
-  # check if more than one time step
+  # check if more than one time step, message if interp, error if not interp
   chk <- diff(dat$DateTimeStamp) %>% 
     as.numeric(units = 'secs') %>% 
     unique
   if(length(chk) > 1){
     msg <- paste(chk, collapse = ', ') %>%
-      paste('More than one time step observed:', .)
-
-    message(msg)
+      paste('More than one time step observed:', .) 
+    if(interp)
+      message(msg)
+    if(!interp){
+      msg <- msg %>% 
+        paste('Set interp = TRUE to fix the time step', sep = '\n')
+      stop(msg)
+    }
   }
 
   # add H and expand time series based on interval
