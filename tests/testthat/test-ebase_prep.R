@@ -52,3 +52,26 @@ test_that("Checking ebase_prep error for different time step and no interp", {
     )
 })
 
+test_that("Checking strip of dandling start or end dates", {
+  
+  
+  toadd <-tibble(
+      dts = range(dat$DateTimeStamp)
+    ) %>%
+    mutate(
+      DateTimeStamp = case_when(
+        dts == min(dts) ~ list(seq.POSIXt(from = min(dts) - (60 * 60), to = min(dts), by = 900)), 
+        dts == max(dts) ~ list(seq.POSIXt(from = max(dts), to = max(dts) + (60 * 60), by = 900))
+      )
+    ) %>% 
+    unnest('DateTimeStamp') %>% 
+    select(-dts)
+
+  dat2 <- toadd[1:4,] %>% 
+    full_join(dat, by = 'DateTimeStamp') %>% 
+    arrange(DateTimeStamp)
+  
+  expect_warning(ebase_prep(dat2, H = 1.85, interval = 900, interp = F))
+  
+})
+

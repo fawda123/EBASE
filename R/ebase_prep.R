@@ -60,7 +60,7 @@ ebase_prep <- function(dat, H, interval, ndays = 1, interp = TRUE, maxgap = 1e6)
     if(!interp){
       msg <- msg %>% 
         paste('Set interp = TRUE to fix the time step', sep = '\n')
-      stop(msg)
+      stop(msg, call. = FALSE)
     }
   }
 
@@ -95,7 +95,7 @@ ebase_prep <- function(dat, H, interval, ndays = 1, interp = TRUE, maxgap = 1e6)
   # convert DO to mmol/m3
   # add schmidt number as unitless
   # add DO sat as mmol/m3
-  out <- dat %>% 
+  dat <- dat %>% 
     dplyr::mutate(
       DO_obs = DO_obs / 32 * 1000,
       sc = fun_schmidt_oxygen(Temp, Sal), 
@@ -104,9 +104,31 @@ ebase_prep <- function(dat, H, interval, ndays = 1, interp = TRUE, maxgap = 1e6)
     ) %>% 
     dplyr::select(Date, DateTimeStamp, isinterp, DO_obs, DO_sat, H, dplyr::everything())
 
+  # check if dangling start or stop observations
+  # interpolation must be done first
+  dat <- dat %>% 
+    dplyr::group_by(Date) %>% 
+    dplyr::mutate(
+      uniobs = length(Date)
+    ) %>% 
+    dplyr::ungroup()
+  chk <- c(dat$uniobs[1], dat$uniobs[nrow(dat)]) != 86400 / interval
+  if(any(chk)){
+    msg <- 'Incomplete daily observations removed at start or end of dat'
+    warning(msg, call. = FALSE)
+    if(chk[1])
+      dat <- dat %>% 
+        filter(!Date %in% min(Date))
+    if(chk[2])
+      dat <- dat %>% 
+        filter(Date != max(Date))
+  }
+  out <- out %>% 
+    dplyr::select(-uniobs)
+  
   # add groups defined by ndays to out
   # its an even cut by ndays with remainder assigned
-  out <- out %>% 
+  out <- dat %>% 
     dplyr::mutate(
       grp = as.numeric(Date),
       grp = grp - min(grp) + 1
