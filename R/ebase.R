@@ -10,6 +10,7 @@
 #' @param rprior numeric vector of length two indicating the mean and standard deviation for the prior distribution of the \emph{r} parameter, see details
 #' @param bprior numeric vector of length two indicating the mean and standard deviation for the prior distribution of the \emph{b} parameter, see details
 #' @param bmax numeric value for the upper limit on the prior distribution for \code{bprior}, set as twice the default value of the mean
+#' @param maxinterp numeric value for minimum number of continuous observations that must not be interpolated within a group defined by \code{ndays} to remove from output, see details
 #' @param n.iter number of MCMC iterations, passed to \code{\link[R2jags]{jags}}
 #' @param update.chains logical to run \code{\link{metab_update}} if chains do not converge
 #' @param n.burnin number of MCMC chains to delete, passed to \code{\link[R2jags]{jags}}
@@ -39,6 +40,8 @@
 #' The \code{ndays} argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., \code{ndays= 1} such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for \emph{a}, \emph{r}, and \emph{b} are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every \code{ndays} specified by the argument.  The \code{ndays} argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to \code{ndays}.  The final block may not include the complete number of days specified by \code{ndays} if the number of unique dates in the input data includes a remainder when divided by \code{ndays}, e.g., if seven days are in the input data and \code{ndays = 5}, there will be two groups where the first has five days and the second has two days. The output data from \code{ebase} includes a column that specifies the grouping that was used based on \code{ndays}.
 #' 
 #' Missing values in the input data are also interpolated prior to estimating metabolism.  It is the responsibility of the user to verify that these interpolated values are not wildly inaccurate.  Missing values are linearly interpolated between non-missing values at the time step specified by the value in \code{interval}.  This works well for small gaps, but can easily create inaccurate values at gaps larger than a few hours. The \code{\link{interp_plot}} function can be used to visually assess the interpolated values. Records at the start or end of the input time series that do not include a full day are also removed.  A warning is returned to the console if gaps are found or dangling records are found. 
+#' 
+#' The \code{maxinterp} argument specifies a minimum number of observations that must not be interpolated within groups defined by \code{ndays} that are removed from the output.  Groups with continuous rows of interpolated values with length longer than this argument are removed.  The default value is half a day, i.e., 43200 seconds divided by the value in \code{interval}.
 #' 
 #' @return A data frame with metabolic estimates for volumetric gross production (\code{Pg_vol}, O2 mmol/m3/d), respiration (\code{Rt_vol},  O2 mmol/m3/d), and gas exchange (\code{D}, O2 mmol/m3/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)/(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).  Observed dissolved oxygen (\code{DO_obs}, mmol/m3), modeled dissolved oxygen (\code{DO_mod}, mmol/m3), and delta dissolved oxygen of the modeled results (\code{dDO}, mmol/m3/d) are also returned.  Note that delta dissolved oxygen is a daily rate.
 #' 
@@ -85,7 +88,7 @@
 #'
 #' stopCluster(cl)
 #' }
-ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.1), rprior = c(20, 5), bprior = c(0.251, 0.01), bmax = 0.504, n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = FALSE, model_file = NULL){
+ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.1), rprior = c(20, 5), bprior = c(0.251, 0.01), bmax = 0.504, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = FALSE, model_file = NULL){
   
   # prep data
   dat <- ebase_prep(dat, H = H, interval = interval, ndays = ndays)
@@ -226,6 +229,36 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.1), rprior = c(
       dDO = dDO * nstepd #  # O2 mmol/m3/ts to O2 mmol/m3/d
     ) %>%
     dplyr::select(-ats, -atslo, -atshi, -bts, -btslo, -btshi, -gppts, -gpptslo, -gpptshi, -erts, -ertslo, -ertshi, -gets, -getslo, -getshi)
+  
+  # remove groups with more interpolated values defined by maxinterp
+  idfun <- function(x){
+    
+    idv <- rle(x)
+    out <- rep(seq_along(idv$lengths), idv$lengths)
+    return(out)
+    
+  }
+
+  out <- dat %>% 
+    dplyr::select(DateTimeStamp, isinterp) %>% 
+    dplyr::left_join(out, ., by = 'DateTimeStamp') %>% 
+    dplyr::group_by(grp) %>% 
+    dplyr::mutate(
+      ids = idfun(isinterp)
+    ) %>% 
+    dplyr::group_by(grp, ids) %>% 
+    dplyr::mutate(
+      cnt = dplyr::n(),
+      cnt = ifelse(ids == 1, cnt + 1, cnt)
+    ) %>% 
+    dplyr::group_by(grp) %>% 
+    dplyr::mutate(
+      cnt = ifelse(isinterp, cnt, 0),
+      maxv = max(cnt)
+    ) %>% 
+    dplyr::filter(maxv < maxinterp) %>% 
+    dplyr::ungroup() %>% 
+    dplyr::select(-isinterp, -ids, -cnt, -maxv)
   
   return(out)
 

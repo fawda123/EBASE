@@ -208,6 +208,8 @@ The interpolated values can be visually inspected using the `interp_plot()` func
 interp_plot(dat2, H = 1.85, interval = 900, param = 'DO_sat')
 ```
 
+The `ebase()` function includes the `maxinterp` argument to remove continuous rows with length greater than the value defined by `maxinterp`.  This value is set to 12 hours by default and applies to the groupings defined by `ndays`, i.e., any group with a continuous set of interpolated values where the time is greater than 12 hours will be removed.  The numeric value passed to `maxinterp` is the number of time steps for the input data, e.g., 48 would be 12 hours if the time step is 900 seconds.  
+
 ### Changing priors
 
 If the default values prior distributions are changed for `ebase()`, the `prior_plot()` function can be used to assess how changing characteristics of the prior distributions could influence the resulting parameter estimates and their posterior distributions (e.g., as shown with `credible_plot()`).
