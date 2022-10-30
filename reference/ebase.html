@@ -63,6 +63,7 @@
 <span>  rprior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">5</span><span class="op">)</span>,</span>
 <span>  bprior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.251</span>, <span class="fl">0.01</span><span class="op">)</span>,</span>
 <span>  bmax <span class="op">=</span> <span class="fl">0.504</span>,</span>
+<span>  maxinterp <span class="op">=</span> <span class="fl">43200</span><span class="op">/</span><span class="va">interval</span>,</span>
 <span>  n.iter <span class="op">=</span> <span class="fl">10000</span>,</span>
 <span>  update.chains <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  n.burnin <span class="op">=</span> <span class="va">n.iter</span> <span class="op">*</span> <span class="fl">0.5</span>,</span>
@@ -105,6 +106,10 @@
 
 <dt>bmax</dt>
 <dd><p>numeric value for the upper limit on the prior distribution for <code>bprior</code>, set as twice the default value of the mean</p></dd>
+
+
+<dt>maxinterp</dt>
+<dd><p>numeric value for minimum number of continuous observations that must not be interpolated within a group defined by <code>ndays</code> to remove from output, see details</p></dd>
 
 
 <dt>n.iter</dt>
@@ -156,6 +161,7 @@
 <p>The prior distributions for the <em>a</em>, <em>r</em>, and <em>b</em> parameters are defined in the model file included with the package as normal distributions with mean and standard deviations provided by the <code>aprior</code>, <code>rprior</code>, and <code>bprior</code> arguments. The default values were chosen based on the ability of EBASE to reproduce known parameters from a forward metabolism model.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above. The upper limit for <em>b</em> is set as twice the default value of the mean in the <code>bprior</code> argument. Units for each parameter are (mmol/m3/d)/(W/m2) for <em>a</em>, mmol/m3/d for <em>r</em>, and (cm/hr)/(m2/s2) for <em>b</em>.</p>
 <p>The <code>ndays</code> argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., <code>ndays= 1</code> such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for <em>a</em>, <em>r</em>, and <em>b</em> are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every <code>ndays</code> specified by the argument.  The <code>ndays</code> argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to <code>ndays</code>.  The final block may not include the complete number of days specified by <code>ndays</code> if the number of unique dates in the input data includes a remainder when divided by <code>ndays</code>, e.g., if seven days are in the input data and <code>ndays = 5</code>, there will be two groups where the first has five days and the second has two days. The output data from <code>ebase</code> includes a column that specifies the grouping that was used based on <code>ndays</code>.</p>
 <p>Missing values in the input data are also interpolated prior to estimating metabolism.  It is the responsibility of the user to verify that these interpolated values are not wildly inaccurate.  Missing values are linearly interpolated between non-missing values at the time step specified by the value in <code>interval</code>.  This works well for small gaps, but can easily create inaccurate values at gaps larger than a few hours. The <code><a href="interp_plot.html">interp_plot</a></code> function can be used to visually assess the interpolated values. Records at the start or end of the input time series that do not include a full day are also removed.  A warning is returned to the console if gaps are found or dangling records are found.</p>
+<p>The <code>maxinterp</code> argument specifies a minimum number of observations that must not be interpolated within groups defined by <code>ndays</code> that are removed from the output.  Groups with continuous rows of interpolated values with length longer than this argument are removed.  The default value is half a day, i.e., 43200 seconds divided by the value in <code>interval</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
