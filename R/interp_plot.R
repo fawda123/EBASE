@@ -25,14 +25,14 @@
 #'   arrange(DateTimeStamp)
 #'
 #' interp_plot(dat, H = 1.85, interval = 900, param = 'DO_sat')
-interp_plot <- function(dat, param = c('DO_obs', 'DO_sat', 'H', 'Temp', 'Sal', 'PAR', 'WSpd', 'sc'), H, interval, ndays = 1, interp = TRUE, maxgap = 1e6){
+interp_plot <- function(dat, param = c('DO_obs', 'DO_sat', 'H', 'Temp', 'Sal', 'PAR', 'WSpd', 'sc'), H, interval, ndays = 1){
   
   param <- match.arg(param)
   
   labs <- c('DO (mmol/m3/)', 'DO sat (mmol/m3)', 'Water column height (m)', 'Water temperature (C)', 'Salinity (psu)', 'PAR (W/m2/s)', 'Wind speed (m/2)', 'Schmidt number')
   names(labs) <- c('DO_obs', 'DO_sat', 'H', 'Temp', 'Sal','PAR', 'WSpd', 'sc')
 
-  dat <- ebase_prep(dat, H = H, interval = interval, ndays = ndays, interp = interp, maxgap = maxgap)
+  dat <- ebase_prep(dat, H = H, interval = interval, ndays = ndays)
 
   toplo <- dat %>% 
     dplyr::rename(yval = !!param)

@@ -9,9 +9,7 @@ interp_plot(
   param = c("DO_obs", "DO_sat", "H", "Temp", "Sal", "PAR", "WSpd", "sc"),
   H,
   interval,
-  ndays = 1,
-  interp = TRUE,
-  maxgap = 1e+06
+  ndays = 1
 )
 }
 \arguments{
@@ -24,10 +22,6 @@ interp_plot(
 \item{interval}{timestep interval in seconds}
 
 \item{ndays}{numeric for number of days in \code{dat} for optimizing the metabolic equation, see details}
-
-\item{interp}{logical indicating if linear interpolation is used to fill all data gaps, only applies if timestep specified by \code{interval} is not uniform}
-
-\item{maxgap}{numeric vector indicating maximum gap size to interpolate where size is number of records at the value specified by \code{interval}, e.g., if \code{interval = 900} and \code{maxgap = 4}, gaps up to and including one hour will be linearly interpolated}
 }
 \value{
 A \code{\link[ggplot2]{ggplot}} object

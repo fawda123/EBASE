@@ -183,7 +183,7 @@ fit_plot(res)
 
 ### Missing values
 
-Missing values in the intput data for the specified time step in the `interval` argument to `ebase()` must be interpolated prior to estimating metabolism.  It is the responsibility of the user to verify that these interpolated values are not wildly inaccurate.  Missing values are linearly interpolated between non-missing values at the time step specified by the value in `interval`.  This works well for small gaps, but can easily create inaccurate values at gaps larger than a few hours. 
+Missing values in the input data for the specified time step in the `interval` argument to `ebase()` must be interpolated prior to estimating metabolism.  It is the responsibility of the user to verify that these interpolated values are not wildly inaccurate.  Missing values are linearly interpolated between non-missing values at the time step specified by the value in `interval`.  This works well for small gaps, but can easily create inaccurate values at gaps larger than a few hours. 
 
 As an example, the `dat` object above is subset to 90% of its observations.
 
@@ -198,7 +198,7 @@ head(dat2)
 The `ebase_prep()` function is used internally to `ebase` to prepare the data for the metabolism calculations.  This function interpolates the missing data and returns a column `isinterp` that specifies `TRUE` or `FALSE` if a value is interpolated.  
 
 ```{r, message = F}
-dat2interp <- ebase_prep(dat2, H = 1.85, interval = 900, interp = T)
+dat2interp <- ebase_prep(dat2, H = 1.85, interval = 900)
 head(dat2interp)
 ```
 

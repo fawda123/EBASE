@@ -6,8 +6,6 @@
 #' @param H numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}
 #' @param interval timestep interval in seconds
 #' @param ndays numeric for number of days in \code{dat} for optimizing the metabolic equation, see details
-#' @param interp logical indicating if linear interpolation is used to fill all data gaps, only applies if timestep specified by \code{interval} is not uniform
-#' @param maxgap numeric vector indicating maximum gap size to interpolate where size is number of records at the value specified by \code{interval}, e.g., if \code{interval = 900} and \code{maxgap = 4}, gaps up to and including one hour will be linearly interpolated
 #' 
 #' @importFrom fwoxy fun_schmidt_oxygen fun_eqb_oxygen
 #' 
@@ -15,7 +13,8 @@
 #' 
 #' The \code{ndays} argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., \code{ndays= 1} such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for \emph{a}, \emph{r}, and \emph{b} are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every \code{ndays} specified by the argument.  The \code{ndays} argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to \code{ndays}.  The final block may not include the complete number of days specified by \code{ndays} if the number of unique dates in the input data includes a remainder when divided by \code{ndays}, e.g., if seven days are in the input data and \code{ndays = 5}, there will be two groups where the first has five days and the second has two days. The output data from \code{\link{ebase}} includes a column that specifies the grouping that was used based on \code{ndays}.
 #' 
-#' Records at the start or end of the input time series that do not include a full day are removed for conformance with the core model equation.  A warning is returned to the console if these records are found. 
+#' Missing values are interpolated at the interval specified by the \code{interval} argument for conformance with the core model equation. Records at the start or end of the input time series that do not include a full day are also removed.  A warning is returned to the console if gaps are found or dangling records are found. 
+#' 
 #' @return A data frame with additional columns required for \code{\link{ebase}}.  If multiple time steps are identified, the number of rows in data frame is expanded based on the time step define by \code{interval}.  Numeric values in the expanded rows will be interpolated if \code{interp = TRUE}, otherwise they will remain as \code{NA} values.
 #' 
 #' @importFrom dplyr %>%
@@ -25,7 +24,7 @@
 #' @examples 
 #' dat <- ebase_prep(exdat, H = 1.85, interval = 900)
 #' head(dat)
-ebase_prep <- function(dat, H, interval, ndays = 1, interp = TRUE, maxgap = 1e6){
+ebase_prep <- function(dat, H, interval, ndays = 1){
   
   ##
   # sanity checks
@@ -48,27 +47,46 @@ ebase_prep <- function(dat, H, interval, ndays = 1, interp = TRUE, maxgap = 1e6)
     stop(msg)
   }
   
-  # check if more than one time step, message if interp, error if not interp
+  # sort dat by DateTimeStamp, add H
+  dat <- dat %>% 
+    dplyr::arrange(DateTimeStamp) %>% 
+    dplyr::mutate(
+      H = H
+    )
+  
+  # check if dangling start or stop observations
+  # interpolation must be done first
+  dat <- dat %>% 
+    dplyr::mutate(
+      Date = as.Date(DateTimeStamp, tz = attr(DateTimeStamp, 'tzone'))
+    ) %>% 
+    dplyr::group_by(Date) %>% 
+    dplyr::mutate(
+      uniobs = length(Date)
+    ) %>% 
+    dplyr::ungroup()
+  chk <- c(dat$uniobs[1], dat$uniobs[nrow(dat)]) != 86400 / interval
+  if(any(chk)){
+    msg <- 'Incomplete daily observations removed at start or end of dat'
+    warning(msg, call. = FALSE)
+    if(chk[1])
+      dat <- dat %>% 
+        dplyr::filter(!Date %in% min(Date))
+    if(chk[2])
+      dat <- dat %>% 
+        dplyr::filter(Date != max(Date))
+  }
+  dat <- dat %>% 
+    dplyr::select(-uniobs, -Date)
+
+  # check if more than one time step or missing obs
+  dat <- na.omit(dat)
   chk <- diff(dat$DateTimeStamp) %>% 
     as.numeric(units = 'secs') %>% 
     unique
-  if(length(chk) > 1){
-    msg <- paste(chk, collapse = ', ') %>%
-      paste('More than one time step observed:', .) 
-    if(interp)
-      message(msg)
-    if(!interp){
-      msg <- msg %>% 
-        paste('Set interp = TRUE to fix the time step', sep = '\n')
-      stop(msg, call. = FALSE)
-    }
-  }
-
-  # add H and expand time series based on interval
-  dat$H <- H
   
   intervalmin <- paste(interval / 60, "min")
-  
+
   dat <- data.frame(
       DateTimeStamp = seq(min(dat$DateTimeStamp), max(dat$DateTimeStamp), by = intervalmin)
     ) %>% 
@@ -76,15 +94,16 @@ ebase_prep <- function(dat, H, interval, ndays = 1, interp = TRUE, maxgap = 1e6)
     dplyr::mutate(isinterp = FALSE)
 
   # interpolate missing values
-  if(interp & length(chk) > 1){
+  if(length(chk) > 1){
 
-    message("Interpolating missing values to interval")
+    msg <- 'More than one time step or missing values will be interpolated'
+    warning(msg, call. = FALSE)
 
     dat <- dat %>% 
       dplyr::mutate(isinterp = rowSums(is.na(.)) > 0) %>% 
       dplyr::mutate_if(is.numeric, function(x){
         
-        interp <- zoo::na.approx(x, maxgap = maxgap, na.rm = FALSE)
+        interp <- zoo::na.approx(x, na.rm = FALSE)
         
         return(interp)
         
@@ -103,28 +122,6 @@ ebase_prep <- function(dat, H, interval, ndays = 1, interp = TRUE, maxgap = 1e6)
       Date = as.Date(DateTimeStamp, tz = attr(DateTimeStamp, 'tzone'))
     ) %>% 
     dplyr::select(Date, DateTimeStamp, isinterp, DO_obs, DO_sat, H, dplyr::everything())
-
-  # check if dangling start or stop observations
-  # interpolation must be done first
-  dat <- dat %>% 
-    dplyr::group_by(Date) %>% 
-    dplyr::mutate(
-      uniobs = length(Date)
-    ) %>% 
-    dplyr::ungroup()
-  chk <- c(dat$uniobs[1], dat$uniobs[nrow(dat)]) != 86400 / interval
-  if(any(chk)){
-    msg <- 'Incomplete daily observations removed at start or end of dat'
-    warning(msg, call. = FALSE)
-    if(chk[1])
-      dat <- dat %>% 
-        filter(!Date %in% min(Date))
-    if(chk[2])
-      dat <- dat %>% 
-        filter(Date != max(Date))
-  }
-  dat <- dat %>% 
-    dplyr::select(-uniobs)
   
   # add groups defined by ndays to out
   # its an even cut by ndays with remainder assigned

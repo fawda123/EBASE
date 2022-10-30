@@ -13,8 +13,6 @@ ebase(
   rprior = c(20, 5),
   bprior = c(0.251, 0.01),
   bmax = 0.504,
-  interp = TRUE,
-  maxgap = 1e+06,
   n.iter = 10000,
   update.chains = TRUE,
   n.burnin = n.iter * 0.5,
@@ -40,10 +38,6 @@ ebase(
 \item{bprior}{numeric vector of length two indicating the mean and standard deviation for the prior distribution of the \emph{b} parameter, see details}
 
 \item{bmax}{numeric value for the upper limit on the prior distribution for \code{bprior}, set as twice the default value of the mean}
-
-\item{interp}{logical indicating if linear interpolation is used to fill all data gaps, only applies if timestep specified by \code{interval} is not uniform}
-
-\item{maxgap}{numeric vector indicating maximum gap size to interpolate where size is number of records at the value specified by \code{interval}, e.g., if \code{interval = 900} and \code{maxgap = 4}, gaps up to and including one hour will be linearly interpolated}
 
 \item{n.iter}{number of MCMC iterations, passed to \code{\link[R2jags]{jags}}}
 
@@ -82,7 +76,7 @@ The prior distributions for the \emph{a}, \emph{r}, and \emph{b} parameters are 
 
 The \code{ndays} argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., \code{ndays= 1} such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for \emph{a}, \emph{r}, and \emph{b} are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every \code{ndays} specified by the argument.  The \code{ndays} argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to \code{ndays}.  The final block may not include the complete number of days specified by \code{ndays} if the number of unique dates in the input data includes a remainder when divided by \code{ndays}, e.g., if seven days are in the input data and \code{ndays = 5}, there will be two groups where the first has five days and the second has two days. The output data from \code{ebase} includes a column that specifies the grouping that was used based on \code{ndays}.
 
-Missing values in the input data can also be interpolated prior to estimating metabolism.  This is the default behavior and it is the responsibility of the user to verify that these interpolated values are not wildly inaccurate.  Missing values are linearly interpolated between non-missing values at the time step specified by the value in \code{interval}.  This works well for small gaps, but can easily create inaccurate values at gaps larger than a few hours. The \code{\link{interp_plot}} function can be used to visually assess the interpolated values.
+Missing values in the input data are also interpolated prior to estimating metabolism.  It is the responsibility of the user to verify that these interpolated values are not wildly inaccurate.  Missing values are linearly interpolated between non-missing values at the time step specified by the value in \code{interval}.  This works well for small gaps, but can easily create inaccurate values at gaps larger than a few hours. The \code{\link{interp_plot}} function can be used to visually assess the interpolated values. Records at the start or end of the input time series that do not include a full day are also removed.  A warning is returned to the console if gaps are found or dangling records are found.
 }
 \examples{
 

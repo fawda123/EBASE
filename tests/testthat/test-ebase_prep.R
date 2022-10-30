@@ -20,7 +20,7 @@ test_that("Checking ebase_prep incorrect H input", {
 
 test_that("Checking ebase_prep all groups", {
   
-  result <- ebase_prep(dat, H = 1.85, interval = 900, ndays = 2) %>% 
+  result <- ebase_prep(dat, H = 1.85, interval = 900, ndays = 3) %>% 
     pull(grp) %>% 
     unique %>% 
     length
@@ -35,25 +35,13 @@ test_that("Checking ebase_prep interpolation", {
   dat2 <- dat %>% 
     slice_sample(prop = 0.9) %>% 
     arrange(DateTimeStamp)
-  expect_message(expect_message(expect_equal(
-    ebase_prep(dat2, H = 1.85, interval = 900, ndays = 1, interp = T) %>% nrow(), 192
+  expect_warning(expect_warning(expect_equal(
+    ebase_prep(dat2, H = 1.85, interval = 900, ndays = 1) %>% nrow(), 96
     )))
   
 })
 
-test_that("Checking ebase_prep error for different time step and no interp", {
-  
-  set.seed(222)
-  dat2 <- dat %>% 
-    slice_sample(prop = 0.9) %>% 
-    arrange(DateTimeStamp)
-  expect_error(
-    ebase_prep(dat2, H = 1.85, interval = 900, ndays = 1, interp = F) %>% nrow()
-    )
-})
-
-test_that("Checking strip of dandling start or end dates", {
-  
+test_that("Checking strip of dangling start or end dates", {
   
   toadd <-tibble(
       dts = range(dat$DateTimeStamp)
@@ -67,11 +55,11 @@ test_that("Checking strip of dandling start or end dates", {
     unnest('DateTimeStamp') %>% 
     select(-dts)
 
-  dat2 <- toadd[1:4,] %>% 
+  dat2 <- toadd %>% 
     full_join(dat, by = 'DateTimeStamp') %>% 
     arrange(DateTimeStamp)
   
-  expect_warning(ebase_prep(dat2, H = 1.85, interval = 900, interp = F))
+  expect_warning(expect_equal(ebase_prep(dat2, H = 1.85, interval = 900) %>% nrow(), 288))
   
 })
 
