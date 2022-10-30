@@ -102,20 +102,16 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> More than one time step observed: 900, 778500, 260100</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Interpolating missing values to interval</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         Date       DateTimeStamp isinterp  DO_obs   DO_sat    H Temp  Sal PAR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2012-02-23 2012-02-23 00:00:00    FALSE 275.000 265.8630 1.85 16.4 23.0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2012-02-23 2012-02-23 00:15:00    FALSE 275.000 266.1861 1.85 16.4 22.8   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2012-02-23 2012-02-23 00:30:00    FALSE 275.000 266.3479 1.85 16.4 22.7   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2012-02-23 2012-02-23 00:45:00    FALSE 275.000 266.0245 1.85 16.4 22.9   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2012-02-23 2012-02-23 01:00:00    FALSE 271.875 266.3479 1.85 16.4 22.7   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2012-02-23 2012-02-23 01:15:00    FALSE 265.625 265.2179 1.85 16.4 23.4   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   WSpd       sc grp</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  3.6 660.2062   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  3.5 659.8137   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  3.6 659.6174   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  4.2 660.0099   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  3.6 659.6174   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  4.1 660.9913   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 12</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Date       DateTimeStamp       isinterp DO_obs DO_sat     H  Temp   Sal   PAR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2012-02-23 2012-02-23 <span style="color: #949494;">00:00:00</span> FALSE      275    266.  1.85  16.4  23       0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2012-02-23 2012-02-23 <span style="color: #949494;">00:15:00</span> FALSE      275    266.  1.85  16.4  22.8     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2012-02-23 2012-02-23 <span style="color: #949494;">00:30:00</span> FALSE      275    266.  1.85  16.4  22.7     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2012-02-23 2012-02-23 <span style="color: #949494;">00:45:00</span> FALSE      275    266.  1.85  16.4  22.9     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 2012-02-23 2012-02-23 <span style="color: #949494;">01:00:00</span> FALSE      272.   266.  1.85  16.4  22.7     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2012-02-23 2012-02-23 <span style="color: #949494;">01:15:00</span> FALSE      266.   265.  1.85  16.4  23.4     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 3 more variables: WSpd &lt;dbl&gt;, sc &lt;dbl&gt;, grp &lt;dbl&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
