@@ -54,7 +54,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ebase_prep</span><span class="op">(</span><span class="va">dat</span>, <span class="va">H</span>, <span class="va">interval</span>, ndays <span class="op">=</span> <span class="fl">1</span>, interp <span class="op">=</span> <span class="cn">TRUE</span>, maxgap <span class="op">=</span> <span class="fl">1e+06</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ebase_prep</span><span class="op">(</span><span class="va">dat</span>, <span class="va">H</span>, <span class="va">interval</span>, ndays <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -74,14 +74,6 @@
 <dt>ndays</dt>
 <dd><p>numeric for number of days in <code>dat</code> for optimizing the metabolic equation, see details</p></dd>
 
-
-<dt>interp</dt>
-<dd><p>logical indicating if linear interpolation is used to fill all data gaps, only applies if timestep specified by <code>interval</code> is not uniform</p></dd>
-
-
-<dt>maxgap</dt>
-<dd><p>numeric vector indicating maximum gap size to interpolate where size is number of records at the value specified by <code>interval</code>, e.g., if <code>interval = 900</code> and <code>maxgap = 4</code>, gaps up to and including one hour will be linearly interpolated</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -93,25 +85,28 @@
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Checks if all columns are present by matching those in <code><a href="exdat.html">exdat</a></code>, converts dissolved oxygen from mg/L to mmol/m3, calculates the Schmidt number (unitless) from water temp (C) and salinity (psu), and calculates dissolved oxygen equilibrium concentration (mmol/m3) from salinity and temperature</p>
 <p>The <code>ndays</code> argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., <code>ndays= 1</code> such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for <em>a</em>, <em>r</em>, and <em>b</em> are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every <code>ndays</code> specified by the argument.  The <code>ndays</code> argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to <code>ndays</code>.  The final block may not include the complete number of days specified by <code>ndays</code> if the number of unique dates in the input data includes a remainder when divided by <code>ndays</code>, e.g., if seven days are in the input data and <code>ndays = 5</code>, there will be two groups where the first has five days and the second has two days. The output data from <code><a href="ebase.html">ebase</a></code> includes a column that specifies the grouping that was used based on <code>ndays</code>.</p>
-<p>Records at the start or end of the input time series that do not include a full day are removed for conformance with the core model equation.  A warning is returned to the console if these records are found.</p>
+<p>Missing values are interpolated at the interval specified by the <code>interval</code> argument for conformance with the core model equation. Records at the start or end of the input time series that do not include a full day are also removed.  A warning is returned to the console if gaps are found or dangling records are found.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">ebase_prep</span><span class="op">(</span><span class="va">exdat</span>, H <span class="op">=</span> <span class="fl">1.85</span>, interval <span class="op">=</span> <span class="fl">900</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> More than one time step observed: 900, 778500, 260100</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Interpolating missing values to interval</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>More than one time step or missing values will be interpolated</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 12</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Date       DateTimeStamp       isinterp DO_obs DO_sat     H  Temp   Sal   PAR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2012-02-23 2012-02-23 <span style="color: #949494;">00:00:00</span> FALSE      275    266.  1.85  16.4  23       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2012-02-23 2012-02-23 <span style="color: #949494;">00:15:00</span> FALSE      275    266.  1.85  16.4  22.8     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2012-02-23 2012-02-23 <span style="color: #949494;">00:30:00</span> FALSE      275    266.  1.85  16.4  22.7     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2012-02-23 2012-02-23 <span style="color: #949494;">00:45:00</span> FALSE      275    266.  1.85  16.4  22.9     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 2012-02-23 2012-02-23 <span style="color: #949494;">01:00:00</span> FALSE      272.   266.  1.85  16.4  22.7     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 2012-02-23 2012-02-23 <span style="color: #949494;">01:15:00</span> FALSE      266.   265.  1.85  16.4  23.4     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 3 more variables: WSpd &lt;dbl&gt;, sc &lt;dbl&gt;, grp &lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         Date       DateTimeStamp isinterp  DO_obs   DO_sat    H Temp  Sal PAR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2012-02-23 2012-02-23 00:00:00    FALSE 275.000 265.8630 1.85 16.4 23.0   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2012-02-23 2012-02-23 00:15:00    FALSE 275.000 266.1861 1.85 16.4 22.8   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2012-02-23 2012-02-23 00:30:00    FALSE 275.000 266.3479 1.85 16.4 22.7   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2012-02-23 2012-02-23 00:45:00    FALSE 275.000 266.0245 1.85 16.4 22.9   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2012-02-23 2012-02-23 01:00:00    FALSE 271.875 266.3479 1.85 16.4 22.7   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2012-02-23 2012-02-23 01:15:00    FALSE 265.625 265.2179 1.85 16.4 23.4   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   WSpd       sc grp</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  3.6 660.2062   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  3.5 659.8137   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  3.6 659.6174   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  4.2 660.0099   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  3.6 659.6174   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  4.1 660.9913   1</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

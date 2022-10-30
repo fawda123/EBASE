@@ -59,9 +59,7 @@
 <span>  param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"DO_obs"</span>, <span class="st">"DO_sat"</span>, <span class="st">"H"</span>, <span class="st">"Temp"</span>, <span class="st">"Sal"</span>, <span class="st">"PAR"</span>, <span class="st">"WSpd"</span>, <span class="st">"sc"</span><span class="op">)</span>,</span>
 <span>  <span class="va">H</span>,</span>
 <span>  <span class="va">interval</span>,</span>
-<span>  ndays <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  interp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  maxgap <span class="op">=</span> <span class="fl">1e+06</span></span>
+<span>  ndays <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -85,14 +83,6 @@
 
 <dt>ndays</dt>
 <dd><p>numeric for number of days in <code>dat</code> for optimizing the metabolic equation, see details</p></dd>
-
-
-<dt>interp</dt>
-<dd><p>logical indicating if linear interpolation is used to fill all data gaps, only applies if timestep specified by <code>interval</code> is not uniform</p></dd>
-
-
-<dt>maxgap</dt>
-<dd><p>numeric vector indicating maximum gap size to interpolate where size is number of records at the value specified by <code>interval</code>, e.g., if <code>interval = 900</code> and <code>maxgap = 4</code>, gaps up to and including one hour will be linearly interpolated</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -122,8 +112,8 @@
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">DateTimeStamp</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">interp_plot</span><span class="op">(</span><span class="va">dat</span>, H <span class="op">=</span> <span class="fl">1.85</span>, interval <span class="op">=</span> <span class="fl">900</span>, param <span class="op">=</span> <span class="st">'DO_sat'</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> More than one time step observed: 1800, 900, 2700</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Interpolating missing values to interval</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Incomplete daily observations removed at start or end of dat</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>More than one time step or missing values will be interpolated</span>
 <span class="r-plt img"><img src="interp_plot-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
