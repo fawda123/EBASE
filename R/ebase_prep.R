@@ -123,7 +123,7 @@ ebase_prep <- function(dat, H, interval, ndays = 1, interp = TRUE, maxgap = 1e6)
       dat <- dat %>% 
         filter(Date != max(Date))
   }
-  out <- out %>% 
+  dat <- dat %>% 
     dplyr::select(-uniobs)
   
   # add groups defined by ndays to out
