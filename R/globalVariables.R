@@ -4,7 +4,8 @@ globalVariables(c('%>%', '.', 'DO_obs', 'DO_sat', 'Date', 'DateTimeStamp', 'Sal'
                   'pow', 'r', 'sc', 'nstepd', 'zz', 'D', 'Pg_vol', 'Rt_vol', 'matches', 'name',
                   'value', 'xval', 'grp', 'i', 'interval', 'isinterp', 'yval', 'DO_mod', 'rsq', 
                   'atshi', 'atslo', 'btshi', 'btslo', 'ertshi', 'ertslo', 'getshi', 'getslo',
-                  'gpptshi', 'gpptslo', 'hi', 'lo', 'val', 'var', 'sd', 'uniobs', 'maxv'))
+                  'gpptshi', 'gpptslo', 'hi', 'lo', 'val', 'var', 'sd', 'uniobs', 'maxv',
+                  'cnt', 'ids'))
 
 #' @importFrom stats lm na.omit runif
 NULL
