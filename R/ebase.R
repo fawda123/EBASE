@@ -230,35 +230,7 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.1), rprior = c(
     ) %>%
     dplyr::select(-ats, -atslo, -atshi, -bts, -btslo, -btshi, -gppts, -gpptslo, -gpptshi, -erts, -ertslo, -ertshi, -gets, -getslo, -getshi)
   
-  # remove groups with more interpolated values defined by maxinterp
-  idfun <- function(x){
-    
-    idv <- rle(x)
-    out <- rep(seq_along(idv$lengths), idv$lengths)
-    return(out)
-    
-  }
-
-  out <- dat %>% 
-    dplyr::select(DateTimeStamp, isinterp) %>% 
-    dplyr::left_join(out, ., by = 'DateTimeStamp') %>% 
-    dplyr::group_by(grp) %>% 
-    dplyr::mutate(
-      ids = idfun(isinterp)
-    ) %>% 
-    dplyr::group_by(grp, ids) %>% 
-    dplyr::mutate(
-      cnt = dplyr::n(),
-      cnt = ifelse(ids == 1, cnt + 1, cnt)
-    ) %>% 
-    dplyr::group_by(grp) %>% 
-    dplyr::mutate(
-      cnt = ifelse(isinterp, cnt, 0),
-      maxv = max(cnt)
-    ) %>% 
-    dplyr::filter(maxv < maxinterp) %>% 
-    dplyr::ungroup() %>% 
-    dplyr::select(-isinterp, -ids, -cnt, -maxv)
+  out <- ebase_form(out, dat, interval, maxinterp)
   
   return(out)
 

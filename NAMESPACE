@@ -3,6 +3,7 @@
 export(credible_plot)
 export(credible_prep)
 export(ebase)
+export(ebase_form)
 export(ebase_plot)
 export(ebase_prep)
 export(fit_plot)
