@@ -11,10 +11,12 @@ ebase_form(out, dat, interval, maxinterp = 43200/interval)
 
 \item{dat}{data.frame as returned by \code{\link{ebase_prep}}}
 
-\item{maxinterp}{}
+\item{interval}{timestep interval in seconds}
+
+\item{maxinterp}{numeric value for minimum number of continuous observations that must not be interpolated within a group defined by \code{ndays} to assign as \code{NA} in output}
 }
 \value{
-Formatted output for \code{\link{ebase}} with interpolated rows removed as defined by \code{maxinterp}
+Formatted output for \code{\link{ebase}} with interpolated rows as \code{NA} (except \code{Date} and \code{DateTimeStamp} as defined by \code{maxinterp}
 }
 \description{
 Format ebase output
@@ -45,6 +47,6 @@ stopCluster(cl)
 
 dat <- ebase_prep(dat, H = 1.85, interval = 900, ndays = 1)
 
-ebase_form(out, dat, interval = 900, maxinterp = 43200 / interval) 
+ebase_form(out, dat, interval = 900, maxinterp = 48) 
 }
 }

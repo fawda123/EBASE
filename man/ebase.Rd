@@ -40,7 +40,7 @@ ebase(
 
 \item{bmax}{numeric value for the upper limit on the prior distribution for \code{bprior}, set as twice the default value of the mean}
 
-\item{maxinterp}{numeric value for minimum number of continuous observations that must not be interpolated within a group defined by \code{ndays} to remove from output, see details}
+\item{maxinterp}{numeric value for minimum number of continuous observations that must not be interpolated within a group defined by \code{ndays} to assign as \code{NA} in output, see details}
 
 \item{n.iter}{number of MCMC iterations, passed to \code{\link[R2jags]{jags}}}
 
@@ -81,7 +81,8 @@ The \code{ndays} argument defines the number of days that are used for optimizin
 
 Missing values in the input data are also interpolated prior to estimating metabolism.  It is the responsibility of the user to verify that these interpolated values are not wildly inaccurate.  Missing values are linearly interpolated between non-missing values at the time step specified by the value in \code{interval}.  This works well for small gaps, but can easily create inaccurate values at gaps larger than a few hours. The \code{\link{interp_plot}} function can be used to visually assess the interpolated values. Records at the start or end of the input time series that do not include a full day are also removed.  A warning is returned to the console if gaps are found or dangling records are found.
 
-The \code{maxinterp} argument specifies a minimum number of observations that must not be interpolated within groups defined by \code{ndays} that are removed from the output.  Groups with continuous rows of interpolated values with length longer than this argument are removed.  The default value is half a day, i.e., 43200 seconds divided by the value in \code{interval}.
+The \code{maxinterp} argument specifies a minimum number of observations that must not be interpolated within groups defined by \code{ndays} that are assigned \code{NA} in the output (except \code{Date} and
+\code{DateTimeStamp}).  Groups with continuous rows of interpolated values with length longer than this argument are assigned \code{NA}.  The default value is half a day, i.e., 43200 seconds divided by the value in \code{interval}.
 }
 \examples{
 
