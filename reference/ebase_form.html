@@ -67,15 +67,19 @@
 <dd><p>data.frame as returned by <code><a href="ebase_prep.html">ebase_prep</a></code></p></dd>
 
 
+<dt>interval</dt>
+<dd><p>timestep interval in seconds</p></dd>
+
+
 <dt>maxinterp</dt>
-<dd></dd>
+<dd><p>numeric value for minimum number of continuous observations that must not be interpolated within a group defined by <code>ndays</code> to assign as <code>NA</code> in output</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Formatted output for <code><a href="ebase.html">ebase</a></code> with interpolated rows removed as defined by <code>maxinterp</code></p>
+<p>Formatted output for <code><a href="ebase.html">ebase</a></code> with interpolated rows as <code>NA</code> (except <code>Date</code> and <code>DateTimeStamp</code> as defined by <code>maxinterp</code></p>
 
 
     </div>
@@ -108,7 +112,7 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="ebase_prep.html">ebase_prep</a></span><span class="op">(</span><span class="va">dat</span>, H <span class="op">=</span> <span class="fl">1.85</span>, interval <span class="op">=</span> <span class="fl">900</span>, ndays <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">ebase_form</span><span class="op">(</span><span class="va">out</span>, <span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, maxinterp <span class="op">=</span> <span class="fl">43200</span> <span class="op">/</span> <span class="va">interval</span><span class="op">)</span> </span></span>
+<span class="r-in"><span><span class="fu">ebase_form</span><span class="op">(</span><span class="va">out</span>, <span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, maxinterp <span class="op">=</span> <span class="fl">48</span><span class="op">)</span> </span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
