@@ -46,11 +46,13 @@
 fit_plot <- function(res, bygroup = FALSE, scatter = FALSE, showfit = TRUE){
     
   toplo <- res %>% 
+    dplyr::filter(!is.na(grp)) %>% 
     dplyr::mutate(
       grp = paste('Group', grp),
       rsq = paste0('R.Sq. ', round(100 * rsq, 0), '%')
     ) %>% 
     tidyr::unite(grp, c('grp', 'rsq'), sep = ', ')
+
   
   if(!scatter)
     p <- ggplot2::ggplot(toplo, ggplot2::aes(x = DateTimeStamp, y = DO_obs, group = grp)) + 
