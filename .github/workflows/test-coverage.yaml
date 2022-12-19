@@ -28,7 +28,7 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y jags
       
-      - uses: r-lib/actions/setup-r-dependencies@v1
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: covr
 
