@@ -1,6 +1,6 @@
-#' Sample data from Appalachicola NERRS
+#' Sample data from Apalachicola NERRS
 #'
-#' Sample data from Appalachicola NERRS
+#' Sample data from Apalachicola NERRS
 #'
 #' @format A \code{data.frame} object with 27648 rows and 6 columns
 #' \describe{

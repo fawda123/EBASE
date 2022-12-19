@@ -3,7 +3,7 @@
 \docType{data}
 \name{exdat}
 \alias{exdat}
-\title{Sample data from Appalachicola NERRS}
+\title{Sample data from Apalachicola NERRS}
 \format{
 A \code{data.frame} object with 27648 rows and 6 columns
 \describe{
@@ -19,7 +19,7 @@ A \code{data.frame} object with 27648 rows and 6 columns
 exdat
 }
 \description{
-Sample data from Appalachicola NERRS
+Sample data from Apalachicola NERRS
 }
 \examples{
 
