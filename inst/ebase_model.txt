@@ -27,7 +27,7 @@
     
     # DO modelled
     zz ~ dnorm(0,1000000)
-    DO_mod[1] <- DO_obs[1] + zz # make monitorable
+    DO_mod[1] <- DO_start + zz # make monitorable
     
     for (i in 1:(num.measurements-1)){		
       

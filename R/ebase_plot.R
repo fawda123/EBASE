@@ -48,6 +48,7 @@ ebase_plot <- function(res, instantaneous = TRUE){
     
     toplo <- res %>% 
       dplyr::select(DateTimeStamp, P, R, D) %>% 
+      na.omit() %>% 
       tidyr::pivot_longer(cols = -matches('DateTimeStamp')) %>% 
       dplyr::rename(xval = DateTimeStamp)
 

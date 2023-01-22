@@ -33,7 +33,7 @@
 #' 
 #' \deqn{ \frac{\delta{C_d}}{\delta{t}} = [\,aPAR]\, - [\,r]\, - \frac{1}{H}\left[-bU_{10}^2\left(\frac{s_c}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )\right]}
 #' 
-#' Gross production is provided by \emph{aPAR}, respiration is provided by \emph{r}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{r}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The estimated concentration is also returned for comparison to observed as one measure of model performance.   
+#' Gross production is provided by \emph{aPAR}, respiration is provided by \emph{r}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{r}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The first modeled value starts at the mean oxygen concentration for all measurements in the optimization period.  The estimated concentration at each time step is also returned for comparison to observed as one measure of model performance.   
 #' 
 #' The prior distributions for the \emph{a}, \emph{r}, and \emph{b} parameters are defined in the model file included with the package as normal distributions with mean and standard deviations provided by the \code{aprior}, \code{rprior}, and \code{bprior} arguments. The default values were chosen based on the ability of EBASE to reproduce known parameters from a forward metabolism model.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above. The upper limit for \emph{b} is set as twice the default value of the mean in the \code{bprior} argument. Units for each parameter are (mmol/m3/d)/(W/m2) for \emph{a}, mmol/m3/d for \emph{r}, and (cm/hr)/(m2/s2) for \emph{b}. 
 #' 
@@ -41,8 +41,7 @@
 #' 
 #' Missing values in the input data are also interpolated prior to estimating metabolism.  It is the responsibility of the user to verify that these interpolated values are not wildly inaccurate.  Missing values are linearly interpolated between non-missing values at the time step specified by the value in \code{interval}.  This works well for small gaps, but can easily create inaccurate values at gaps larger than a few hours. The \code{\link{interp_plot}} function can be used to visually assess the interpolated values. Records at the start or end of the input time series that do not include a full day are also removed.  A warning is returned to the console if gaps are found or dangling records are found. 
 #' 
-#' The \code{maxinterp} argument specifies a minimum number of observations that must not be interpolated within groups defined by \code{ndays} that are assigned \code{NA} in the output (except \code{Date} and 
-#' \code{DateTimeStamp}).  Groups with continuous rows of interpolated values with length longer than this argument are assigned \code{NA}.  The default value is half a day, i.e., 43200 seconds divided by the value in \code{interval}.
+#' The \code{maxinterp} argument specifies a minimum number of observations that must not be interpolated within groups defined by \code{ndays} that are assigned \code{NA} in the output (except \code{Date} and \code{DateTimeStamp}).  Groups with continuous rows of interpolated values with length longer than this argument are assigned \code{NA}.  The default value is half a day, i.e., 43200 seconds divided by the value in \code{interval}.
 #' 
 #' @return A data frame with metabolic estimates for areal gross production (\code{P}, O2 mmol/m2/d), respiration (\code{R},  O2 mmol/m2/d; the \code{r} parameter converted to areal units), and gas exchange (\code{D}, O2 mmol/m2/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of (mmol/m3/d)/(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).  Observed dissolved oxygen (\code{DO_obs}, mmol/m3), modeled dissolved oxygen (\code{DO_mod}, mmol/m3), and delta dissolved oxygen of the modeled results (\code{dDO}, mmol/m3/d) are also returned.  Note that delta dissolved oxygen is a daily rate.
 #' 
@@ -137,13 +136,10 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.1), rprior = c(
     sc <- dat.sub$sc
     H <- dat.sub$H
     U10 <- dat.sub$WSpd
-  
-    # Different random seeds
-    kern <- as.integer(runif(1000,min=1,max=10000))
-    iters <- sample(kern,1)
-  
+    DO_start <- mean(DO_obs)
+    
     # Set
-    dat.list <- list("num.measurements", "nstepd", "interval", "aprior", "rprior", "bprior", "bmax", "DO_obs", "PAR", "DO_sat", "sc", "H", "U10")
+    dat.list <- list("num.measurements", "nstepd", "interval", "aprior", "rprior", "bprior", "bmax", "DO_obs", "PAR", "DO_sat", "sc", "H", "U10", "DO_start")
   
     # Define monitoring variables (returned by jags)
     params <- c("ats", "bts", "gppts", "erts", "gets", "DO_mod")
@@ -210,7 +206,6 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.1), rprior = c(
 
   # correct instantaneous obs to daily, g to mmol
   out <- do.call('rbind', output) %>%
-    na.omit() %>%
     dplyr::mutate(
       Date = lubridate::ymd(Date), 
       a = ats * nstepd, # (mmol/m3/ts)/(W/m2) to (mmol/m3/d)/(W/m2)

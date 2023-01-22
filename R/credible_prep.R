@@ -55,6 +55,7 @@ credible_prep <- function(res, params = c('a', 'r', 'b'), labels = FALSE){
       rhi = Rhi / H
     ) %>% 
     dplyr::select(dplyr::any_of(c('Date', 'grp', params, paramslo, paramshi))) %>% 
+    na.omit() %>% 
     unique() %>% 
     tidyr::pivot_longer(-c('Date', 'grp'), names_to = 'var', values_to = 'val') %>% 
     dplyr::group_by(grp) %>% 
