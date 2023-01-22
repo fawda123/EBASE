@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EBASE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9005</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,21 +103,22 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># get credible intervals</span></span></span>
 <span class="r-in"><span><span class="fu">credible_prep</span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 21 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   grp [5]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Date         grp var      mean       lo      hi</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2012-06-01     1 a      0.068<span style="text-decoration: underline;">1</span>  0.050<span style="text-decoration: underline;">1</span>   0.088<span style="text-decoration: underline;">6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2012-06-01     1 r     15.8     6.81    25.1   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2012-06-01     1 b      0.252   0.232    0.271 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2012-06-02    <span style="color: #BB0000;">NA</span> a     <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2012-06-02    <span style="color: #BB0000;">NA</span> r     <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2012-06-02    <span style="color: #BB0000;">NA</span> b     <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2012-06-02     2 a      0.020<span style="text-decoration: underline;">8</span>  0.005<span style="text-decoration: underline;">12</span>  0.036<span style="text-decoration: underline;">8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2012-06-02     2 r     32.0    23.3     41.5   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2012-06-02     2 b      0.249   0.231    0.269 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2012-06-03    <span style="color: #BB0000;">NA</span> a     <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 11 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   grp [4]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Date         grp var      mean      lo      hi</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2012-06-01     1 a      0.040<span style="text-decoration: underline;">8</span>  0.023<span style="text-decoration: underline;">8</span>  0.059<span style="text-decoration: underline;">8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2012-06-01     1 r     26.4    17.3    35.8   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2012-06-01     1 b      0.251   0.231   0.271 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2012-06-02     2 a      0.033<span style="text-decoration: underline;">8</span>  0.017<span style="text-decoration: underline;">8</span>  0.049<span style="text-decoration: underline;">5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2012-06-02     2 r     30.9    21.3    39.9   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2012-06-02     2 b      0.249   0.229   0.268 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2012-06-03     3 a      0.032<span style="text-decoration: underline;">2</span>  0.018<span style="text-decoration: underline;">5</span>  0.046<span style="text-decoration: underline;">0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2012-06-03     3 r     32.4    23.8    41.2   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2012-06-03     3 b      0.250   0.231   0.269 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2012-06-04     4 a      0.039<span style="text-decoration: underline;">0</span>  0.024<span style="text-decoration: underline;">6</span>  0.052<span style="text-decoration: underline;">4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> 2012-06-04     4 r     36.9    28.5    45.2   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 2012-06-04     4 b      0.248   0.228   0.268 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
