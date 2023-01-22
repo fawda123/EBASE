@@ -1,7 +1,7 @@
 Package: EBASE
 Title: Estuarine Bayesian Single-Station Estimation Method for Ecosystem Metabolism
-Version: 0.0.0.9004
-Date: 2022-10-07
+Version: 0.0.0.9005
+Date: 2023-01-22
 Authors@R: c(
     person(given = "Marcus",
       family = "Beck",
