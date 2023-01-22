@@ -27,7 +27,7 @@
 #' @import R2jags
 #' @importFrom dplyr %>%
 #'
-#' @details Required input data are time series for dissolved oxygen (mg/L), water temperature (C), salinity (psu), total PAR (W/m2/s), and wind speed (m/s).  See the \code{\link{exdat}} example data file for a representation of the required data.  Data are typically from continuously monitored water quality and weather parameters are hourly of sub-hourly time steps.  Oxygen concentrations are converted to mmol/m3 prior to metabolic estimation. Water column depth is also required to return volumetric estimates.  This can be supplied as a single value or a vector of length equal to the number of rows in \code{dat}.
+#' @details Required input data are time series for dissolved oxygen (mg/L), water temperature (C), salinity (psu), total PAR (W/m2/s), and wind speed (m/s).  See the \code{\link{exdat}} example data file for a representation of the required data.  Data are typically from continuously monitored water quality and weather parameters are hourly of sub-hourly time steps.  Oxygen concentrations are converted to mmol/m3 prior to metabolic estimation. Water column depth is also required.  This can be supplied as a single value or a vector of length equal to the number of rows in \code{dat}.
 #' 
 #' The metabolic estimates are based on a mass balance equation in Grace et al. 2015 with the gas exchange estimate from Wanninkhof 2004.  It is similar to that provided by the BASEmetab R package at \url{https://github.com/dgiling/BASEmetab}, with modifications to estimate different parameters. The equation optimized in the JAGS model is: 
 #' 
@@ -44,9 +44,9 @@
 #' The \code{maxinterp} argument specifies a minimum number of observations that must not be interpolated within groups defined by \code{ndays} that are assigned \code{NA} in the output (except \code{Date} and 
 #' \code{DateTimeStamp}).  Groups with continuous rows of interpolated values with length longer than this argument are assigned \code{NA}.  The default value is half a day, i.e., 43200 seconds divided by the value in \code{interval}.
 #' 
-#' @return A data frame with metabolic estimates for volumetric gross production (\code{Pg_vol}, O2 mmol/m3/d), respiration (\code{Rt_vol},  O2 mmol/m3/d), and gas exchange (\code{D}, O2 mmol/m3/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)/(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).  Observed dissolved oxygen (\code{DO_obs}, mmol/m3), modeled dissolved oxygen (\code{DO_mod}, mmol/m3), and delta dissolved oxygen of the modeled results (\code{dDO}, mmol/m3/d) are also returned.  Note that delta dissolved oxygen is a daily rate.
+#' @return A data frame with metabolic estimates for areal gross production (\code{P}, O2 mmol/m2/d), respiration (\code{R},  O2 mmol/m2/d; the \code{r} parameter converted to areal units), and gas exchange (\code{D}, O2 mmol/m2/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of (mmol/m3/d)/(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).  Observed dissolved oxygen (\code{DO_obs}, mmol/m3), modeled dissolved oxygen (\code{DO_mod}, mmol/m3), and delta dissolved oxygen of the modeled results (\code{dDO}, mmol/m3/d) are also returned.  Note that delta dissolved oxygen is a daily rate.
 #' 
-#' 95% credible intervals for \code{a}, \code{b}, and \code{Rt_vol} are also returned in the corresponding columns \code{alo}, \code{ahi}, \code{blo}, \code{bhi}, \code{Rt_vollo}, and \code{Rt_volhi}, for the 2.5th and 97.5th percentile estimates for each parameter, respectively.  These values indicate the interval within which there is a 95% probability that the true parameter is in this range. Note that all values for these parameters are repeated across rows, although only one estimate for each is returned based on the number of days defined by \code{ndays}. 
+#' 95% credible intervals for \code{a}, \code{b}, and \code{r} are also returned in the corresponding columns \code{alo}, \code{ahi}, \code{blo}, \code{bhi}, \code{Rlo}, and \code{Rhi}, for the 2.5th and 97.5th percentile estimates for each parameter, respectively.  These values indicate the interval within which there is a 95% probability that the true parameter is in this range. Note that all values for these parameters are repeated across rows, although only one estimate for each is returned based on the number of days defined by \code{ndays}. 
 #' 
 #' Model fit can also be assessed using the \code{converge} and \code{rsq} columns.  The values in these columns apply to each group in the \code{grp} column as specified with the \code{ndays} argument. The \code{converge} column indicates \code{"Check convergence"} or \code{"Fine"} if the JAGS estimate converged at that iteration (repeated across rows for the group).  The \code{n.chains} argument can be increased if convergence is not achieved. Similarly, the \code{rsq} column shows the r-squared values of the linear fit between the modeled and observed dissolved oxygen (repeated across rows for the group).  These values can also be viewed with \code{\link{fit_plot}}.
 #' 
@@ -89,7 +89,7 @@
 #'
 #' stopCluster(cl)
 #' }
-ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.1), rprior = c(20, 5), bprior = c(0.251, 0.01), bmax = 0.504, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = FALSE, model_file = NULL){
+ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.1), rprior = c(20, 5), bprior = c(0.251, 0.01), bmax = 0.502, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = FALSE, model_file = NULL){
   
   # prep data
   dat <- ebase_prep(dat, H = H, interval = interval, ndays = ndays)
@@ -173,6 +173,7 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.1), rprior = c(
     result <- data.frame(
       Date = dat.sub$Date,
       grp = dat.sub$grp,
+      H = H, #m
       DO_obs = dat.sub$DO_obs,
       DO_mod = metabfit$BUGSoutput$mean$DO_mod,
       DO_modlo = cred[cred$var == 'DO_mod', 'X2.5.'],
@@ -184,16 +185,16 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.1), rprior = c(
       bts = c(NA, metabfit$BUGSoutput$mean$bts), # ts/m
       btslo = c(NA, cred[cred$var == 'bts', 'X2.5.']),
       btshi = c(NA, cred[cred$var == 'bts', 'X97.5.']),
-      gppts = c(NA, metabfit$BUGSoutput$mean$gppts), # O2, mmol/m3/ts
+      gppts = c(NA, metabfit$BUGSoutput$mean$gppts), # O2, mmol/m2/ts
       gpptslo = c(NA, cred[cred$var == 'gppts', 'X2.5.']),
       gpptshi = c(NA, cred[cred$var == 'gppts', 'X97.5.']),
-      erts = c(NA, metabfit$BUGSoutput$mean$erts), # O2, mmol/m3/ts
+      erts = c(NA, metabfit$BUGSoutput$mean$erts), # O2, mmol/m2/ts
       ertslo = c(NA, cred[cred$var == 'erts', 'X2.5.']),
       ertshi = c(NA, cred[cred$var == 'erts', 'X97.5.']),
-      gets = c(NA, metabfit$BUGSoutput$mean$gets), # O2, mmol/m3/ts
+      gets = c(NA, metabfit$BUGSoutput$mean$gets), # O2, mmol/m2/ts
       getslo = c(NA, cred[cred$var == 'gets', 'X2.5.']),
       getshi = c(NA, cred[cred$var == 'gets', 'X97.5.']),
-      dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO_mod)), # O2 mmol/m3/ts
+      dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO_mod)), # O2 mmol/m2/ts
       converge = Rhat.test
     )
   
@@ -218,13 +219,13 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.1), rprior = c(
       b = bts * 100 * 3600 / interval, # (m/ts)/(m2/s2) to (cm/hr)/(m2/s2)
       blo = btslo * 100 * 3600 / interval, 
       bhi = btshi * 100 * 3600 / interval,
-      Pg_vol = gppts * nstepd, # O2 mmol/m3/ts to O2 mmol/m3/d
-      Pg_vollo = gpptslo * nstepd,
-      Pg_volhi = gpptshi * nstepd,
-      Rt_vol = erts * nstepd, # O2 mmol/m3/ts to O2 mmol/m3/d
-      Rt_vollo = ertslo * nstepd, 
-      Rt_volhi = ertshi * nstepd,
-      D = gets * nstepd, #  # O2 mmol/m3/ts to O2 mmol/m3/d
+      P = gppts * nstepd, # O2 mmol/m2/ts to O2 mmol/m2/d
+      Plo = gpptslo * nstepd,
+      Phi = gpptshi * nstepd,
+      R = erts * nstepd, # O2 mmol/m2/ts to O2 mmol/m2/d
+      Rlo = ertslo * nstepd, 
+      Rhi = ertshi * nstepd,
+      D = gets * nstepd, #  # O2 mmol/m2/ts to O2 mmol/m2/d
       Dlo = getslo * nstepd, 
       Dhi = getshi * nstepd,
       dDO = dDO * nstepd #  # O2 mmol/m3/ts to O2 mmol/m3/d

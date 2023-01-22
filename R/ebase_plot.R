@@ -6,7 +6,7 @@
 #' @return A \code{\link[ggplot2]{ggplot}} object
 #' @export
 #'
-#' @details Both \code{D} and \code{Rt_vol} are plotted as negative values to express their contribution to net metabolism.
+#' @details Both \code{D} and \code{R} are plotted as negative values to express their contribution to net metabolism.
 #' 
 #' @examples
 #' library(dplyr)
@@ -37,17 +37,17 @@ ebase_plot <- function(res, instantaneous = TRUE){
   # make respiration negative
   res <- res %>% 
     dplyr::mutate(
-      Rt_vol = -1 * Rt_vol, 
+      R = -1 * R, 
       D = -1 * D
       )
   
   # instantaneous results
   if(instantaneous){
     
-    ylab <- expression(paste('Instantaneous ', O [2], ' mmol (', m^-3, ' ', d^-1, ')'))
+    ylab <- expression(paste('Instantaneous (', O [2], ' mmol ', m^-2, ' ', d^-1, ')'))
     
     toplo <- res %>% 
-      dplyr::select(DateTimeStamp, Pg_vol, Rt_vol, D) %>% 
+      dplyr::select(DateTimeStamp, P, R, D) %>% 
       tidyr::pivot_longer(cols = -matches('DateTimeStamp')) %>% 
       dplyr::rename(xval = DateTimeStamp)
 
@@ -56,10 +56,10 @@ ebase_plot <- function(res, instantaneous = TRUE){
   # daily averaged results
   if(!instantaneous){
     
-    ylab <- expression(paste('Daily-averaged  ', O [2], ' (mmol ', m^-3, ' ', d^-1, ')'))
+    ylab <- expression(paste('Daily-averaged (', O [2], ' mmol ', m^-2, ' ', d^-1, ')'))
     
     toplo <- res %>% 
-      dplyr::select(Date, Pg_vol, Rt_vol, D) %>% 
+      dplyr::select(Date, P, R, D) %>% 
       tidyr::pivot_longer(cols = -matches('Date')) %>% 
       dplyr::group_by(Date, name) %>% 
       dplyr::summarise(value = mean(value, na.rm = T), .groups = 'drop') %>% 
@@ -75,8 +75,8 @@ ebase_plot <- function(res, instantaneous = TRUE){
       legend.position = 'top'
     ) +
     ggplot2::scale_color_discrete(
-      breaks = c('Pg_vol', 'Rt_vol', 'D'),
-      labels = c(expression(Pg[vol]), expression(Rt[vol]), 'D')
+      breaks = c('P', 'R', 'D'),
+      labels = c(expression(P), expression(R), 'D')
     ) +
     ggplot2::labs(
       y = ylab, 

@@ -2,13 +2,13 @@
 % Please edit documentation in R/prior_plot.R
 \name{prior_plot}
 \alias{prior_plot}
-\title{Plot prior distributions for a, Rt_vol, and b}
+\title{Plot prior distributions for a, r, and b}
 \usage{
 prior_plot(
   aprior = c(0.2, 0.1),
   rprior = c(20, 5),
   bprior = c(0.251, 0.01),
-  bmax = 0.504,
+  bmax = 0.502,
   n = 1000
 )
 }
@@ -27,14 +27,12 @@ prior_plot(
 A \code{\link[ggplot2]{ggplot}} object
 }
 \description{
-Plot prior distributions for a, Rt_vol, and b
+Plot prior distributions for a, r, and b
 }
 \details{
 This function produces a plot of the prior distributions that are used in \code{\link{ebase}} for the \emph{a}, \emph{r}, and \emph{b} parameters for the optimization equation for estimating metabolism.  The \code{\link{ebase}} function uses the same default values for the arguments for \code{aprior}, \code{rprior}, and \code{bprior} as required for this function.  If the default values are changed for \code{\link{ebase}}, this function can be used to assess how changing characteristics of the prior distributions could influence the resulting parameter estimates and their posterior distributions (e.g., as shown with \code{\link{credible_plot}}.
 
 All parameters follow a normal Gaussian distribution for the prios with the means and standard deviations defined by the arguments. All distributions are truncated to include only values greater than zero as required by the core metabolism equation. The upper limit for \emph{b} is also set as twice the default value of the mean in the \code{bprior} argument. Truncated normal distributions are obtained using the \code{\link[truncnorm]{rtruncnorm}} function with the number of random samples defined by the \code{n} argument.
-
-The x-axis label for the \emph{r} parameter is shown using the volumetric notation for respiration for consistency with \code{\link{credible_plot}}.
 }
 \examples{
 # default plot

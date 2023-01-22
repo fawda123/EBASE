@@ -1,13 +1,13 @@
-#' Get credible intervals for a, Rt_vol, b
+#' Get credible intervals for a, r, b
 #' 
 #' @param res output data frame from \code{\link{ebase}}
-#' @param params character vector indicating which parameters to plot, one to any of \code{a}, \code{Rt_vol}, or \code{b} (default all)
+#' @param params character vector indicating which parameters to plot, one to any of \code{a}, \code{r}, or \code{b} (default all)
 #' @param labels logical indicating of parameter labels are output as an expression for parsing in plot facets, default \code{FALSE}
 #'
 #' @return A data frame
 #' @export
 #'
-#' @details This function gets 95% credible intervals (2.5th to 97.5th percentiles, approximate posterior distributions) for \code{a}, \code{Rt_vol}, and/or \code{b} using the output from \code{\link{ebase}}. The function is used in \code{\link{credible_plot}}, but is provided as a separate function for convenience.
+#' @details This function gets 95% credible intervals (2.5th to 97.5th percentiles, approximate posterior distributions) for \code{a}, \code{r}, and/or \code{b} using the output from \code{\link{ebase}}. The function is used in \code{\link{credible_plot}}, but is provided as a separate function for convenience.
 #' 
 #' @examples 
 #' 
@@ -32,23 +32,28 @@
 #' 
 #' # get credible intervals
 #' credible_prep(res)
-credible_prep <- function(res, params = c('a', 'Rt_vol', 'b'), labels = FALSE){
+credible_prep <- function(res, params = c('a', 'r', 'b'), labels = FALSE){
   
-  chk <- params %in% c('a', 'Rt_vol', 'b') 
+  chk <- params %in% c('a', 'r', 'b') 
   if(any(!chk))
-    stop('param must be a, Rt_vol and/or b') 
+    stop('param must be a, r, and/or b') 
   
   paramslo <- paste0(params, 'lo') 
   paramshi <- paste0(params, 'hi')
   
-  labs <- c('a', 'Rt_vol', 'b')
+  labs <- c('a', 'r', 'b')
   if(labels)
-    labs <- c('a~(mmol~m^{-3}~d^{-1})/(W~m^{-2})', 
-              'Rt[vol]~(mmol~m^{-3}~d^{-1})',
-              'b~(cm~hr^{-1})/(m^{2}~s^{-2})'
+    labs <- c('italic(a)~(mmol~m^{-3}~d^{-1})/(W~m^{-2})', 
+              'italic(r)~(mmol~m^{-3}~d^{-1})',
+              'italic(b)~(cm~hr^{-1})/(m^{2}~s^{-2})'
     )
-  
+
   out <- res %>% 
+    dplyr::mutate(
+      r = R / H, 
+      rlo = Rlo / H, 
+      rhi = Rhi / H
+    ) %>% 
     dplyr::select(dplyr::any_of(c('Date', 'grp', params, paramslo, paramshi))) %>% 
     unique() %>% 
     tidyr::pivot_longer(-c('Date', 'grp'), names_to = 'var', values_to = 'val') %>% 
@@ -67,7 +72,7 @@ credible_prep <- function(res, params = c('a', 'Rt_vol', 'b'), labels = FALSE){
       est = gsub(paste(paste0('^', params), collapse = '|'), '', var),
       var = gsub('lo$|hi$|mean$', '', var), 
       var = factor(var, 
-                   levels = c('a', 'Rt_vol', 'b'), 
+                   levels = c('a', 'r', 'b'), 
                    labels = labs
       )
     ) %>% 

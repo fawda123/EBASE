@@ -77,7 +77,7 @@ res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
 head(res)
 ```
 
-The results are returned as a data frame with instantaneous metabolic estimates for volumetric gross production (O2 mmol/m3/d, `Pg_vol` or $aPAR$ from above), respiration (O2 mmol/m3/d, `Rt_vol` or $r$ from above), and gas exchange (O2 mmol/m3/d, `D` or the remainder of the equation from above).  Additional parameters estimated by the model that are returned include `a` and `b` as shown in the above equation.  The `a` parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)/(W/m2) and is used to estimate gross production [@Grace15].  The `b` parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in @Wanninkhof14).
+The results are returned as a data frame with instantaneous metabolic estimates for areal gross production (O2 mmol/m2/d, `P` or $aPAR$ from above as volumetric), respiration (O2 mmol/m2/d, `R` or $r$ from above as volumetric), and gas exchange (O2 mmol/m2/d, `D` or the remainder of the equation from above as volumetric).  Additional parameters estimated by the model that are returned include `a` and `b` as shown in the above equation.  The `a` parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)/(W/m2) and is used to estimate gross production [@Grace15].  The `b` parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in @Wanninkhof14).
 
 A plot of the results can be made with `ebase_plot()`.
 
@@ -138,7 +138,7 @@ The prior distributions can be viewed with the `prior_plot()` function.  No chan
 prior_plot()
 ```
 
-95% credible intervals for `a`, `Rt_vol`, and `b` are also returned with the output from `ebase()` in the corresponding columns `alo`, `ahi`, `blo`, `bhi`, `Rt_vollo`, and `Rt_volhi`, for the 2.5th and 97.5th percentile estimates for each parameter, respectively.  These values indicate the interval within which there is a 95% probability that the true parameter is in this range and is a representation of the posterior distributions for each parameter. Note that all values for these parameters are repeated across rows, although only one estimate for each is returned based on the number of days defined by `ndays`. 
+95% credible intervals for `a`, `r` (`R` as volumetric), and `b` are also returned with the output from `ebase()` in the corresponding columns `alo`, `ahi`, `blo`, `bhi`, `Rlo`, and `Rhi`, for the 2.5th and 97.5th percentile estimates for each parameter, respectively.  These values indicate the interval within which there is a 95% probability that the true parameter is in this range and is a representation of the posterior distributions for each parameter. Note that all values for these parameters are repeated across rows, although only one estimate for each is returned based on the number of days defined by `ndays`. 
 
 The credible intervals can be plotted with the `credible_plot()` function.
 

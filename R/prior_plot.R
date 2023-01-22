@@ -1,4 +1,4 @@
-#' Plot prior distributions for a, Rt_vol, and b
+#' Plot prior distributions for a, r, and b
 #'
 #' @param aprior numeric vector of length two indicating the mean and standard deviation for the prior distribution of the \emph{a} parameter, see details
 #' @param rprior numeric vector of length two indicating the mean and standard deviation for the prior distribution of the \emph{r} parameter, see details
@@ -13,19 +13,17 @@
 #' 
 #' All parameters follow a normal Gaussian distribution for the prios with the means and standard deviations defined by the arguments. All distributions are truncated to include only values greater than zero as required by the core metabolism equation. The upper limit for \emph{b} is also set as twice the default value of the mean in the \code{bprior} argument. Truncated normal distributions are obtained using the \code{\link[truncnorm]{rtruncnorm}} function with the number of random samples defined by the \code{n} argument. 
 #' 
-#' The x-axis label for the \emph{r} parameter is shown using the volumetric notation for respiration for consistency with \code{\link{credible_plot}}. 
-#' 
 #' @examples
 #' # default plot
 #' prior_plot()
 #' 
 #' # changing the mean and standard deviation for the b parameter
 #' prior_plot(bprior = c(0.2, 0.1))
-prior_plot <- function(aprior = c(0.2, 0.1), rprior = c(20, 5), bprior = c(0.251, 0.01), bmax = 0.504, n = 1000){
+prior_plot <- function(aprior = c(0.2, 0.1), rprior = c(20, 5), bprior = c(0.251, 0.01), bmax = 0.502, n = 1000){
   
-  labs <- c('a~(mmol~m^{-3}~d^{-1})/(W~m^{-2})', 
-            'Rt[vol]~(mmol~m^{-3}~d^{-1})',
-            'b~(cm~hr^{-1})/(m^{2}~s^{-2})'
+  labs <- c('italic(a)~(mmol~m^{-3}~d^{-1})/(W~m^{-2})', 
+            'italic(r)~(mmol~m^{-3}~d^{-1})',
+            'italic(b)~(cm~hr^{-1})/(m^{2}~s^{-2})'
   )
 
   aprior <- data.frame(var = 'aprior', mean = aprior[1], sd = aprior[2])

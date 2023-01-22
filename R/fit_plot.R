@@ -52,9 +52,11 @@ fit_plot <- function(res, bygroup = FALSE, scatter = FALSE, showfit = TRUE){
       rsq = paste0('R.Sq. ', round(100 * rsq, 0), '%')
     ) %>% 
     tidyr::unite(grp, c('grp', 'rsq'), sep = ', ')
-
   
-  if(!scatter)
+  if(!scatter){
+    
+    ylab <- expression(paste('Dissolved Oxygen (mmol ', m^{-3}, ')'))
+    
     p <- ggplot2::ggplot(toplo, ggplot2::aes(x = DateTimeStamp, y = DO_obs, group = grp)) + 
       ggplot2::geom_point(ggplot2::aes(color = 'Observed')) + 
       ggplot2::geom_line(ggplot2::aes(y = DO_mod, color = 'Estimated')) + 
@@ -66,19 +68,24 @@ fit_plot <- function(res, bygroup = FALSE, scatter = FALSE, showfit = TRUE){
         color = ggplot2::guide_legend(override.aes = list(shape = c(NA, 16), linetype = c(1, NA)))
       ) +
       ggplot2::labs(
-        y = "Dissolved Oxygen (mmol/m3)",
+        y = ylab,
         color = NULL,
         x = NULL
       )
+    
+  }
   
   if(scatter){
+    
+    ylab <- expression(paste('Modeled Dissolved Oxygen (mmol ', m^{-3}, ')'))
+    xlab <- expression(paste('Observed Oxygen (mmol ', m^{-3}, ')'))
     
     p <- ggplot2::ggplot(toplo, ggplot2::aes(x = DO_obs, y = DO_mod, group = grp)) + 
       ggplot2::geom_point() + 
       ggplot2::theme_minimal() +
       ggplot2::labs(
-        y = "Modeled Dissolved Oxygen (mmol/m3)",
-        x = "Observed Dissolved Oxygen (mmol/m3)"
+        y = ylab,
+        x = xlab
       )
     
     if(showfit)

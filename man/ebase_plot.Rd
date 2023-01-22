@@ -18,7 +18,7 @@ A \code{\link[ggplot2]{ggplot}} object
 Plot results from EBASE
 }
 \details{
-Both \code{D} and \code{Rt_vol} are plotted as negative values to express their contribution to net metabolism.
+Both \code{D} and \code{R} are plotted as negative values to express their contribution to net metabolism.
 }
 \examples{
 library(dplyr)

@@ -2,14 +2,14 @@
 % Please edit documentation in R/credible_prep.R
 \name{credible_prep}
 \alias{credible_prep}
-\title{Get credible intervals for a, Rt_vol, b}
+\title{Get credible intervals for a, r, b}
 \usage{
-credible_prep(res, params = c("a", "Rt_vol", "b"), labels = FALSE)
+credible_prep(res, params = c("a", "r", "b"), labels = FALSE)
 }
 \arguments{
 \item{res}{output data frame from \code{\link{ebase}}}
 
-\item{params}{character vector indicating which parameters to plot, one to any of \code{a}, \code{Rt_vol}, or \code{b} (default all)}
+\item{params}{character vector indicating which parameters to plot, one to any of \code{a}, \code{r}, or \code{b} (default all)}
 
 \item{labels}{logical indicating of parameter labels are output as an expression for parsing in plot facets, default \code{FALSE}}
 }
@@ -17,10 +17,10 @@ credible_prep(res, params = c("a", "Rt_vol", "b"), labels = FALSE)
 A data frame
 }
 \description{
-Get credible intervals for a, Rt_vol, b
+Get credible intervals for a, r, b
 }
 \details{
-This function gets 95\% credible intervals (2.5th to 97.5th percentiles, approximate posterior distributions) for \code{a}, \code{Rt_vol}, and/or \code{b} using the output from \code{\link{ebase}}. The function is used in \code{\link{credible_plot}}, but is provided as a separate function for convenience.
+This function gets 95\% credible intervals (2.5th to 97.5th percentiles, approximate posterior distributions) for \code{a}, \code{r}, and/or \code{b} using the output from \code{\link{ebase}}. The function is used in \code{\link{credible_plot}}, but is provided as a separate function for convenience.
 }
 \examples{
 

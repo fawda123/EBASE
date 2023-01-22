@@ -28,8 +28,8 @@
 interp_plot <- function(dat, param = c('DO_obs', 'DO_sat', 'H', 'Temp', 'Sal', 'PAR', 'WSpd', 'sc'), H, interval, ndays = 1){
   
   param <- match.arg(param)
-  
-  labs <- c('DO (mmol/m3/)', 'DO sat (mmol/m3)', 'Water column height (m)', 'Water temperature (C)', 'Salinity (psu)', 'PAR (W/m2/s)', 'Wind speed (m/2)', 'Schmidt number')
+
+  labs <- expression(paste('DO (mmol ', m^{-3}, ')'), paste('DO sat (mmol ', m^{-3}, ')'), 'Water column height (m)', 'Water temperature (C)', 'Salinity (psu)', paste('PAR (W ', m^{-2}, '/s)'), 'Wind speed (m / s)', 'Schmidt number')
   names(labs) <- c('DO_obs', 'DO_sat', 'H', 'Temp', 'Sal','PAR', 'WSpd', 'sc')
 
   dat <- ebase_prep(dat, H = H, interval = interval, ndays = ndays)
