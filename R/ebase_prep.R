@@ -46,7 +46,7 @@ ebase_prep <- function(dat, H, interval, ndays = 1){
     msg <- paste0('Supplied value for H has length ', lenh, ', should be 1 or ', nrow(dat))
     stop(msg)
   }
-  
+
   # sort dat by DateTimeStamp, add H
   dat <- dat %>% 
     dplyr::arrange(DateTimeStamp) %>% 
@@ -67,14 +67,18 @@ ebase_prep <- function(dat, H, interval, ndays = 1){
     dplyr::ungroup()
   chk <- c(dat$uniobs[1], dat$uniobs[nrow(dat)]) != 86400 / interval
   if(any(chk)){
-    msg <- 'Incomplete daily observations removed at start or end of dat'
-    warning(msg, call. = FALSE)
-    if(chk[1])
+    if(chk[1]){
+      msg <- 'Incomplete daily observations removed at start of dat'
+      warning(msg, call. = FALSE)
       dat <- dat %>% 
         dplyr::filter(!Date %in% min(Date))
-    if(chk[2])
+    }
+    if(chk[2]){
+      msg <- 'Incomplete daily observations removed at end of dat'
+      warning(msg, call. = FALSE)
       dat <- dat %>% 
         dplyr::filter(Date != max(Date))
+    }
   }
   dat <- dat %>% 
     dplyr::select(-uniobs, -Date)

@@ -35,9 +35,14 @@ test_that("Checking ebase_prep interpolation", {
   dat2 <- dat %>% 
     slice_sample(prop = 0.9) %>% 
     arrange(DateTimeStamp)
-  expect_warning(expect_warning(expect_equal(
-    ebase_prep(dat2, H = 1.85, interval = 900, ndays = 1) %>% nrow(), 96
-    )))
+  
+  expect_warning(
+    expect_warning(
+      expect_warning(
+        expect_equal(ebase_prep(dat2, H = 1.85, interval = 900, ndays = 1) %>% nrow(), 96)
+        )
+      )
+  )
   
 })
 
@@ -59,7 +64,11 @@ test_that("Checking strip of dangling start or end dates", {
     full_join(dat, by = 'DateTimeStamp') %>% 
     arrange(DateTimeStamp)
   
-  expect_warning(expect_equal(ebase_prep(dat2, H = 1.85, interval = 900) %>% nrow(), 288))
+  expect_warning(
+    expect_warning(
+      expect_equal(ebase_prep(dat2, H = 1.85, interval = 900) %>% nrow(), 288)
+      )
+  )
   
 })
 
