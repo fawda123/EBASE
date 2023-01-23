@@ -8,3 +8,12 @@ test_that("Checking ebase names", {
                          "bhi", "P", "Plo", "Phi", "R", "Rlo", "Rhi", "D", "Dlo", "Dhi"))
   
 })
+
+test_that("Checking ebase output, doave as F", {
+  
+  result <- EBASE::ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2, doave = F, 
+                      model_file = system.file("ebase_model.txt", package = "EBASE")) 
+  
+  expect_s3_class(result, 'data.frame')
+  
+})

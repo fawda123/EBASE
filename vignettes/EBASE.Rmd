@@ -156,7 +156,7 @@ credible_prep(res)
 
 ### Equation optimization length 
 
-The `ndays` argument in `ebase()` defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., `ndays = 1` such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for `a`, `r`, and `b` are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every `ndays` specified by the argument.  The `ndays` argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to `ndays`.  The final block may not include the complete number of days specified by `ndays` if the number of unique dates in the input data includes a remainder when divided by `ndays`, e.g., if seven days are in the input data and `ndays = 5`, there will be two groups where the first has five days and the second has two days. The output data from `ebase` includes a column that specifies the grouping that was used based on `ndays`.
+The `ndays` argument in `ebase()` defines the model optimization period as the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., `ndays = 1` such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for `a`, `r`, and `b` are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every `ndays` specified by the argument.  The `ndays` argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to `ndays`.  The final block may not include the complete number of days specified by `ndays` if the number of unique dates in the input data includes a remainder when divided by `ndays`, e.g., if seven days are in the input data and `ndays = 5`, there will be two groups where the first has five days and the second has two days. The output data from `ebase` includes a column that specifies the grouping that was used based on `ndays`.
 
 Here, the number of days used to optimize the equation is set to all days in the input data. 
 
@@ -176,6 +176,25 @@ ebase_plot(res, instantaneous = TRUE)
 ```
 
 And the fit of observed and modeled dissolved oxygen (note the unbroken line for all days estimated together): 
+
+```{r, fig.height = 3, fig.width = 9}
+fit_plot(res)
+```
+
+### Starting value
+
+The `doave` argument can be used to define which dissolved oxygen value is used as the starting point in the Bayesian estimation for the optimization period.  The default setting (`doave = TRUE`) will use the average of all the dissolved oxygen values in the optimization period defined by `ndays`.  For example, the average of all dissolved oxygen values in each 24 hour period will be used if `doave = TRUE` and `ndays = 1`.  The first dissolved oxygen observation of the time series in the optimization period will be used as the starting point if `doave = F`.  In this case, the simulated dissolved oxygen time series will always start at the first observed dissolved oxygen value for each optimization period. 
+
+The default setting uses the average observed dissolved oxygen in each optimization period as the starting value.  Below, `doave = FALSE` is used to set the first observed dissolved oxygen as the starting value.
+
+```{r}
+cl <- makeCluster(2)
+registerDoParallel(cl)
+
+res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2, ndays = 1, doave = F)
+
+stopCluster(cl)
+```
 
 ```{r, fig.height = 3, fig.width = 9}
 fit_plot(res)

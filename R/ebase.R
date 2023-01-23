@@ -10,6 +10,7 @@
 #' @param rprior numeric vector of length two indicating the mean and standard deviation for the prior distribution of the \emph{r} parameter, see details
 #' @param bprior numeric vector of length two indicating the mean and standard deviation for the prior distribution of the \emph{b} parameter, see details
 #' @param bmax numeric value for the upper limit on the prior distribution for \code{bprior}, set as twice the default value of the mean
+#' @param doave logical indicating if the average dissolved oxygen concentration is used as the starting value for the estimation (default), otherwise the first observation will be used if \code{FALSE}, see details
 #' @param maxinterp numeric value for minimum number of continuous observations that must not be interpolated within a group defined by \code{ndays} to assign as \code{NA} in output, see details
 #' @param n.iter number of MCMC iterations, passed to \code{\link[R2jags]{jags}}
 #' @param update.chains logical to run \code{\link{metab_update}} if chains do not converge
@@ -37,11 +38,13 @@
 #' 
 #' The prior distributions for the \emph{a}, \emph{r}, and \emph{b} parameters are defined in the model file included with the package as normal distributions with mean and standard deviations provided by the \code{aprior}, \code{rprior}, and \code{bprior} arguments. The default values were chosen based on the ability of EBASE to reproduce known parameters from a forward metabolism model.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above. The upper limit for \emph{b} is set as twice the default value of the mean in the \code{bprior} argument. Units for each parameter are (mmol/m3/d)/(W/m2) for \emph{a}, mmol/m3/d for \emph{r}, and (cm/hr)/(m2/s2) for \emph{b}. 
 #' 
-#' The \code{ndays} argument defines the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., \code{ndays= 1} such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for \emph{a}, \emph{r}, and \emph{b} are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every \code{ndays} specified by the argument.  The \code{ndays} argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to \code{ndays}.  The final block may not include the complete number of days specified by \code{ndays} if the number of unique dates in the input data includes a remainder when divided by \code{ndays}, e.g., if seven days are in the input data and \code{ndays = 5}, there will be two groups where the first has five days and the second has two days. The output data from \code{ebase} includes a column that specifies the grouping that was used based on \code{ndays}.
+#' The \code{ndays} argument defines the model optimization period as the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., \code{ndays= 1} such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for \emph{a}, \emph{r}, and \emph{b} are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every \code{ndays} specified by the argument.  The \code{ndays} argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to \code{ndays}.  The final block may not include the complete number of days specified by \code{ndays} if the number of unique dates in the input data includes a remainder when divided by \code{ndays}, e.g., if seven days are in the input data and \code{ndays = 5}, there will be two groups where the first has five days and the second has two days. The output data from \code{ebase} includes a column that specifies the grouping that was used based on \code{ndays}.
 #' 
 #' Missing values in the input data are also interpolated prior to estimating metabolism.  It is the responsibility of the user to verify that these interpolated values are not wildly inaccurate.  Missing values are linearly interpolated between non-missing values at the time step specified by the value in \code{interval}.  This works well for small gaps, but can easily create inaccurate values at gaps larger than a few hours. The \code{\link{interp_plot}} function can be used to visually assess the interpolated values. Records at the start or end of the input time series that do not include a full day are also removed.  A warning is returned to the console if gaps are found or dangling records are found. 
 #' 
 #' The \code{maxinterp} argument specifies a minimum number of observations that must not be interpolated within groups defined by \code{ndays} that are assigned \code{NA} in the output (except \code{Date} and \code{DateTimeStamp}).  Groups with continuous rows of interpolated values with length longer than this argument are assigned \code{NA}.  The default value is half a day, i.e., 43200 seconds divided by the value in \code{interval}.
+#' 
+#' The \code{doave} argument can be used to define which dissolved oxygen value is used as the starting point in the Bayesian estimation for the optimization period.  The default setting (\code{doave = TRUE}) will use the average of all the dissolved oxygen values in the optimization period defined by \code{ndays}.  For example, the average of all dissolved oxygen values in each 24 hour period will be used if \code{doave = TRUE} and \code{ndays = 1}.  The first dissolved oxygen observation of the time series in the optimization period will be used as the starting point if \code{doave = F}.  In this case, the simulated dissolved oxygen time series will always start at the first observed dissolved oxygen value for each optimization period. 
 #' 
 #' @return A data frame with metabolic estimates for areal gross production (\code{P}, O2 mmol/m2/d), respiration (\code{R},  O2 mmol/m2/d; the \code{r} parameter converted to areal units), and gas exchange (\code{D}, O2 mmol/m2/d).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of (mmol/m3/d)/(W/m2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).  Observed dissolved oxygen (\code{DO_obs}, mmol/m3), modeled dissolved oxygen (\code{DO_mod}, mmol/m3), and delta dissolved oxygen of the modeled results (\code{dDO}, mmol/m3/d) are also returned.  Note that delta dissolved oxygen is a daily rate.
 #' 
@@ -88,7 +91,7 @@
 #'
 #' stopCluster(cl)
 #' }
-ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.1), rprior = c(20, 5), bprior = c(0.251, 0.01), bmax = 0.502, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = FALSE, model_file = NULL){
+ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.1), rprior = c(20, 5), bprior = c(0.251, 0.01), bmax = 0.502, doave = TRUE, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = FALSE, model_file = NULL){
   
   # prep data
   dat <- ebase_prep(dat, H = H, interval = interval, ndays = ndays)
@@ -115,7 +118,7 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.1), rprior = c(
   # iterate through each date to estimate metabolism ------------------------
 
   # process
-  output <- foreach(i = grps, .packages = c('here', 'R2jags', 'rjags', 'dplyr'), .export = c('nstepd', 'metab_update', 'interval', 'aprior', 'rprior', 'bprior', 'bmax')
+  output <- foreach(i = grps, .packages = c('here', 'R2jags', 'rjags', 'dplyr'), .export = c('nstepd', 'metab_update', 'interval', 'aprior', 'rprior', 'bprior', 'bmax', 'doave')
                                                                          ) %dopar% {
   
     if(progress){
@@ -136,7 +139,10 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 0.1), rprior = c(
     sc <- dat.sub$sc
     H <- dat.sub$H
     U10 <- dat.sub$WSpd
-    DO_start <- mean(DO_obs)
+    
+    DO_start <- DO_obs[1]
+    if(doave)
+      DO_start <- mean(DO_obs)
     
     # Set
     dat.list <- list("num.measurements", "nstepd", "interval", "aprior", "rprior", "bprior", "bmax", "DO_obs", "PAR", "DO_sat", "sc", "H", "U10", "DO_start")
