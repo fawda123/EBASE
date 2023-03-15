@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EBASE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9007</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,9 +52,9 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">prior_plot</span><span class="op">(</span></span>
-<span>  aprior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.1</span><span class="op">)</span>,</span>
-<span>  rprior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">5</span><span class="op">)</span>,</span>
-<span>  bprior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.251</span>, <span class="fl">0.01</span><span class="op">)</span>,</span>
+<span>  aprior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  rprior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span><span class="op">)</span>,</span>
+<span>  bprior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span><span class="op">)</span>,</span>
 <span>  bmax <span class="op">=</span> <span class="fl">0.502</span>,</span>
 <span>  n <span class="op">=</span> <span class="fl">1000</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -91,7 +91,7 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function produces a plot of the prior distributions that are used in <code><a href="ebase.html">ebase</a></code> for the <em>a</em>, <em>r</em>, and <em>b</em> parameters for the optimization equation for estimating metabolism.  The <code><a href="ebase.html">ebase</a></code> function uses the same default values for the arguments for <code>aprior</code>, <code>rprior</code>, and <code>bprior</code> as required for this function.  If the default values are changed for <code><a href="ebase.html">ebase</a></code>, this function can be used to assess how changing characteristics of the prior distributions could influence the resulting parameter estimates and their posterior distributions (e.g., as shown with <code><a href="credible_plot.html">credible_plot</a></code>.</p>
-<p>All parameters follow a normal Gaussian distribution for the prios with the means and standard deviations defined by the arguments. All distributions are truncated to include only values greater than zero as required by the core metabolism equation. The upper limit for <em>b</em> is also set as twice the default value of the mean in the <code>bprior</code> argument. Truncated normal distributions are obtained using the <code><a href="https://rdrr.io/pkg/truncnorm/man/dtruncnorm.html" class="external-link">rtruncnorm</a></code> function with the number of random samples defined by the <code>n</code> argument.</p>
+<p>All parameters follow a normal Gaussian distribution for the priors with the means and standard deviations defined by the arguments. All distributions are truncated to include only values greater than zero as required by the core metabolism equation. The upper limit for <em>b</em> is also set as twice the default value of the mean in the <code>bprior</code> argument. Truncated normal distributions are obtained using the <code><a href="https://rdrr.io/pkg/truncnorm/man/dtruncnorm.html" class="external-link">rtruncnorm</a></code> function with the number of random samples defined by the <code>n</code> argument.</p>
     </div>
 
     <div class="section level2">
@@ -101,7 +101,7 @@
 <span class="r-plt img"><img src="prior_plot-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># changing the mean and standard deviation for the b parameter</span></span></span>
-<span class="r-in"><span><span class="fu">prior_plot</span><span class="op">(</span>bprior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">prior_plot</span><span class="op">(</span>bprior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="prior_plot-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
