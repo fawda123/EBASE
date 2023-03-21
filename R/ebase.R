@@ -91,7 +91,7 @@
 #'
 #' stopCluster(cl)
 #' }
-ebase <- function(dat, H, interval, ndays = 1, aprior = c(0, 1), rprior = c(0, 50), bprior = c(0, 0.1), bmax = 0.502, doave = TRUE, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = FALSE, model_file = NULL){
+ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 1), rprior = c(20, 50), bprior = c(0.251, 0.1), bmax = 0.502, doave = TRUE, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = FALSE, model_file = NULL){
   
   # prep data
   dat <- ebase_prep(dat, H = H, interval = interval, ndays = ndays)

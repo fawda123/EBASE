@@ -1,7 +1,7 @@
 Package: EBASE
 Title: Estuarine Bayesian Single-Station Estimation Method for Ecosystem Metabolism
-Version: 0.0.0.9007
-Date: 2023-03-15
+Version: 0.0.0.9008
+Date: 2023-03-21
 Authors@R: c(
     person(given = "Marcus",
       family = "Beck",
@@ -64,7 +64,7 @@ License: CC0
 SystemRequirements: JAGS 4.x.y (https://mcmc-jags.sourceforge.net)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 URL: https://fawda123.github.io/EBASE,
     https://github.com/fawda123/EBASE
 BugReports: https://github.com/fawda123/EBASE/issues

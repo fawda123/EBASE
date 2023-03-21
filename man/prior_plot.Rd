@@ -5,9 +5,9 @@
 \title{Plot prior distributions for a, r, and b}
 \usage{
 prior_plot(
-  aprior = c(0, 1),
-  rprior = c(0, 50),
-  bprior = c(0, 0.1),
+  aprior = c(0.2, 1),
+  rprior = c(20, 50),
+  bprior = c(0.251, 0.1),
   bmax = 0.502,
   n = 1000
 )
