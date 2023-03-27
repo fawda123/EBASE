@@ -24,13 +24,8 @@ This vignette provides an overview of the theory and use of the the Estuarine BA
 
 
 ``` r
-# Enable the r-universe repo
-options(repos = c(
-    fawda123 = 'https://fawda123.r-universe.dev',
-    CRAN = 'https://cloud.r-project.org'))
-
-# Install
-install.packages('EBASE')
+# Install EBASE in R:
+install.packages('EBASE', repos = c('https://fawda123.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 Load the package after installation to use the functions. 

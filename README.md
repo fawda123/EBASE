@@ -15,13 +15,8 @@ R package for Estuarine BAyesian Single-station Estimation (EBASE) method for ec
 Install the package as follows:
 
 ``` r
-# Enable the r-universe repo
-options(repos = c(
-    fawda123 = 'https://fawda123.r-universe.dev',
-    CRAN = 'https://cloud.r-project.org'))
-
-# Install
-install.packages('EBASE')
+# Install EBASE in R:
+install.packages('EBASE', repos = c('https://fawda123.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 The [JAGS](https://mcmc-jags.sourceforge.io/) software must also be installed to use this package.  Follow the instructions in the link to download and install the version appropriate for your operating system.   
