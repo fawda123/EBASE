@@ -129,19 +129,16 @@ estimate from <span class="citation">Wanninkhof (2014)</span>. It is
 similar to that provided by the BASEmetab R package at <a href="https://github.com/dgiling/BASEmetab" class="external-link uri">https://github.com/dgiling/BASEmetab</a>, with modifications
 to estimate different parameters optimized by the JAGS model:</p>
 <p><span class="math display">\[
-\frac{\delta{C_d}}{\delta{t}} = [\,aPAR]\, - [\,r]\, -
-\frac{1}{H}\left[-bU_{10}^2\left(\frac{s_c}{600} \right)^{-0.5}
-\left(C_{Sat} - C_d \right )\right]
+H\frac{dC}{dt} = aPAR - r - \left[bU_{10}^2\left(\frac{Sc}{600}
+\right)^{-0.5} \left(C_{Sat} - C \right )\right]
 \]</span></p>
 <p>The metabolic estimates are defined by the change in dissolved oxygen
-over the time step <span class="math inline">\(\frac{\delta{C_d}}{\delta{t}}\)</span>, where
-gross production is provided by <span class="math inline">\(aPAR\)</span>, respiration is provided by <span class="math inline">\(r\)</span>, and gas exchange is provided by the
+over the time step <span class="math inline">\(\frac{dC}{dt}\)</span>,
+where gross production is provided by <span class="math inline">\(aPAR\)</span>, respiration is provided by <span class="math inline">\(r\)</span>, and gas exchange is provided by the
 remainder. Required inputs for the equation are dissolved oxygen
-concentration as <span class="math inline">\(C_d\)</span>, solar
-radiation as <span class="math inline">\(PAR\)</span>, water column
-depth as <span class="math inline">\(H\)</span> (meters), and wind speed
-as <span class="math inline">\(U\)</span>. Other inputs for the schmidt
-number <span class="math inline">\(s_c\)</span> and dissolved oxygen at
+concentration as <span class="math inline">\(C\)</span>, solar radiation
+as <span class="math inline">\(PAR\)</span>, water column depth as <span class="math inline">\(H\)</span> (meters), and wind speed as <span class="math inline">\(U\)</span>. Other inputs for the schmidt number
+<span class="math inline">\(Sc\)</span> and dissolved oxygen at
 saturation <span class="math inline">\(C_{Sat}\)</span> are calculated
 from the observed data by the package. The remaining three parameters
 <span class="math inline">\(a\)</span>, <span class="math inline">\(r\)</span>, and <span class="math inline">\(b\)</span> are estimated by likelihood given the
@@ -174,14 +171,6 @@ subset is used:</p>
 <span><span class="co">#&gt; 4 2012-06-01 00:45:00    4.8 29.5 23.3   0  2.0</span></span>
 <span><span class="co">#&gt; 5 2012-06-01 01:00:00    4.8 29.5 23.1   0  1.7</span></span>
 <span><span class="co">#&gt; 6 2012-06-01 01:15:00    5.0 29.5 24.0   0  1.8</span></span></code></pre></div>
-<p>Then, the <code><a href="../reference/ebase.html">ebase()</a></code> function is used to estimate the
-metabolic rates with the appropriate function arguments. The timestep
-<code>interval</code> is 900 seconds (15 minutes), the water column
-depth <code>H</code> is 1.85 meters, a log file of the model iterations
-for each day is created by setting <code>progress = TRUE</code>, and
-only two Markov chains are used with <code>n.chains = 2</code>. In
-practice, a larger number for <code>n.chains</code> should be used to
-verify model convergence.</p>
 <p>Also note that any “dangling” observations at the start or end of the
 time series that do not include an entire day are removed from the input
 data prior to estimating metabolism. A warning is returned if these
