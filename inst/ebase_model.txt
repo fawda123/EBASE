@@ -33,15 +33,15 @@
       
       DO_obs[i+1] ~ dnorm(DO_mod[i+1], tau)
       DO_mod[i+1] <- DO_mod[i] 
-        + a * PAR[i] 
+        + (a * PAR[i] 
         - r 
-        - (1 / H[i]) * (-b * pow(U10[i], 2) * pow(sc[i] / 600, -0.5) * (DO_sat[i] - DO_mod[i]))
+        - (b * pow(U10[i], 2) * pow(sc[i] / 600, -0.5) * (DO_sat[i] - DO_mod[i]))) / H[i]
       
       # posterior predictive assessment nodes #
       ats[i] <- a 
       bts[i] <- b
-      gppts[i] <- a * PAR[i] * H[i]
-      erts[i] <- r * H[i]
+      gppts[i] <- a * PAR[i]
+      erts[i] <- r
       gets[i] <- (b * pow(U10[i], 2) * pow(sc[i] / 600, -0.5) * (DO_sat[i] - DO_mod[i]))
       
     }

@@ -118,7 +118,7 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 1), rprior = c(20
   # iterate through each date to estimate metabolism ------------------------
 
   # process
-  output <- foreach(i = grps, .packages = c('here', 'R2jags', 'rjags', 'dplyr'), .export = c('nstepd', 'metab_update', 'interval', 'aprior', 'rprior', 'bprior', 'bmax', 'doave')
+  output <- foreach(i = grps, .packages = c('here', 'R2jags', 'rjags', 'dplyr'), .export = c('nstepd', 'metab_update', 'interval', 'aprior', 'rprior', 'bprior', 'bmax')
                                                                          ) %dopar% {
   
     if(progress){

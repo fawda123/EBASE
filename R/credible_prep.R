@@ -49,10 +49,10 @@ credible_prep <- function(res, params = c('a', 'r', 'b'), labels = FALSE){
     )
 
   out <- res %>% 
-    dplyr::mutate(
-      r = R / H, 
-      rlo = Rlo / H, 
-      rhi = Rhi / H
+    dplyr::rename(
+      r = R, 
+      rlo = Rlo, 
+      rhi = Rhi
     ) %>% 
     dplyr::select(dplyr::any_of(c('Date', 'grp', params, paramslo, paramshi))) %>% 
     na.omit() %>% 
