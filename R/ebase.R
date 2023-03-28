@@ -137,7 +137,7 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 1), rprior = c(20
     PAR <- dat.sub$PAR
     DO_sat <- dat.sub$DO_sat
     sc <- dat.sub$sc
-    H <- dat.sub$H
+    H <- mean(dat.sub$H)
     U10 <- dat.sub$WSpd
     
     DO_start <- DO_obs[1]
