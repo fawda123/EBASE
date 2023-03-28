@@ -184,19 +184,19 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(0.2, 1), rprior = c(20
       ats = c(NA, metabfit$BUGSoutput$mean$ats), # (mmol/m3/ts)/(W/m2)
       atslo = c(NA, cred[cred$var == 'ats', 'X2.5.']),
       atshi = c(NA, cred[cred$var == 'ats', 'X97.5.']),
-      bts = c(NA, metabfit$BUGSoutput$mean$bts), # ts/m
+      bts = c(NA, metabfit$BUGSoutput$mean$bts), # (m/ts)/(m2/s2)
       btslo = c(NA, cred[cred$var == 'bts', 'X2.5.']),
       btshi = c(NA, cred[cred$var == 'bts', 'X97.5.']),
-      gppts = c(NA, metabfit$BUGSoutput$mean$gppts), # O2, mmol/m2/ts
-      gpptslo = c(NA, cred[cred$var == 'gppts', 'X2.5.']),
-      gpptshi = c(NA, cred[cred$var == 'gppts', 'X97.5.']),
-      erts = c(NA, metabfit$BUGSoutput$mean$erts), # O2, mmol/m2/ts
-      ertslo = c(NA, cred[cred$var == 'erts', 'X2.5.']),
-      ertshi = c(NA, cred[cred$var == 'erts', 'X97.5.']),
+      gppts = c(NA, metabfit$BUGSoutput$mean$gppts) * mean(H), # O2, mmol/m3/ts to mmol/m2/ts
+      gpptslo = c(NA, cred[cred$var == 'gppts', 'X2.5.']) * mean(H),
+      gpptshi = c(NA, cred[cred$var == 'gppts', 'X97.5.']) * mean(H),
+      erts = c(NA, metabfit$BUGSoutput$mean$erts) * mean(H), # O2, mmol/m3/ts to mmol/m2/ts
+      ertslo = c(NA, cred[cred$var == 'erts', 'X2.5.']) * mean(H),
+      ertshi = c(NA, cred[cred$var == 'erts', 'X97.5.']) * mean(H),
       gets = c(NA, metabfit$BUGSoutput$mean$gets), # O2, mmol/m2/ts
       getslo = c(NA, cred[cred$var == 'gets', 'X2.5.']),
       getshi = c(NA, cred[cred$var == 'gets', 'X97.5.']),
-      dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO_mod)), # O2 mmol/m2/ts
+      dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO_mod)), # O2 mmol/m3/ts
       converge = Rhat.test
     )
   

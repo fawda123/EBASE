@@ -35,11 +35,14 @@ credible_plot <- function(res, params = c('a', 'r', 'b')){
   
   toplo <- credible_prep(res, params = params, labels = TRUE)
  
-  p <- ggplot2::ggplot(toplo, ggplot2::aes(x = Date, y = mean, group = grp)) + 
+  toplo2 <- na.omit(toplo)
+                    
+  p <- ggplot2::ggplot(toplo2, ggplot2::aes(x = Date, y = mean, group = grp)) + 
     ggplot2::geom_point() + 
     ggplot2::geom_errorbar(ggplot2::aes(ymin = lo, ymax = hi), width = 0.1)  +
     ggplot2::facet_wrap(~var, ncol = 1, scales = 'free_y', labeller = ggplot2::label_parsed, strip.position = 'left') +
     ggplot2::theme_minimal() + 
+    ggplot2::coord_cartesian(xlim = range(toplo$Date)) + 
     ggplot2::theme(
       strip.placement = 'outside', 
       strip.text = ggplot2::element_text(size = ggplot2::rel(1))

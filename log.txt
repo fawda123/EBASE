@@ -1,3 +1,3 @@
-Log entry time 2023-03-28 09:52:49 
-Group  1  of  1 
-Time difference of 0.9871142 secs
+Log entry time 2023-03-28 15:33:10 
+Group  1  of  2 
+Time difference of 0.970377 ssec
