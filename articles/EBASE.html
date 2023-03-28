@@ -129,16 +129,18 @@ estimate from <span class="citation">Wanninkhof (2014)</span>. It is
 similar to that provided by the BASEmetab R package at <a href="https://github.com/dgiling/BASEmetab" class="external-link uri">https://github.com/dgiling/BASEmetab</a>, with modifications
 to estimate different parameters optimized by the JAGS model:</p>
 <p><span class="math display">\[
-H\frac{dC}{dt} = aPAR - r - \left[bU_{10}^2\left(\frac{Sc}{600}
-\right)^{-0.5} \left(C_{Sat} - C \right )\right]
+H\frac{dC_d}{dt} = aPAR - r - \left[bU_{10}^2\left(\frac{Sc}{600}
+\right)^{-0.5} \left(C_{Sat} - C_d \right )\right]
 \]</span></p>
 <p>The metabolic estimates are defined by the change in dissolved oxygen
-over the time step <span class="math inline">\(\frac{dC}{dt}\)</span>,
+over the time step <span class="math inline">\(\frac{dC_d}{dt}\)</span>,
 where gross production is provided by <span class="math inline">\(aPAR\)</span>, respiration is provided by <span class="math inline">\(r\)</span>, and gas exchange is provided by the
 remainder. Required inputs for the equation are dissolved oxygen
-concentration as <span class="math inline">\(C\)</span>, solar radiation
-as <span class="math inline">\(PAR\)</span>, water column depth as <span class="math inline">\(H\)</span> (meters), and wind speed as <span class="math inline">\(U\)</span>. Other inputs for the schmidt number
-<span class="math inline">\(Sc\)</span> and dissolved oxygen at
+concentration as <span class="math inline">\(C_d\)</span>, solar
+radiation as <span class="math inline">\(PAR\)</span>, water column
+depth as <span class="math inline">\(H\)</span> (meters), and wind speed
+as <span class="math inline">\(U\)</span>. Other inputs for the schmidt
+number <span class="math inline">\(Sc\)</span> and dissolved oxygen at
 saturation <span class="math inline">\(C_{Sat}\)</span> are calculated
 from the observed data by the package. The remaining three parameters
 <span class="math inline">\(a\)</span>, <span class="math inline">\(r\)</span>, and <span class="math inline">\(b\)</span> are estimated by likelihood given the
