@@ -317,20 +317,20 @@ to parse the results from <code><a href="../reference/ebase.html">ebase()</a></c
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/credible_prep.html">credible_prep</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 6</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Groups:   grp [4]</span></span></span>
-<span><span class="co">#&gt;    Date         grp var       mean      lo      hi</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2012-06-01     1 a       0.096<span style="text-decoration: underline;">4</span>  0.057<span style="text-decoration: underline;">0</span>  0.135 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2012-06-01     1 R     127.     <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2012-06-01     1 b       0.283   0.104   0.455 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2012-06-02     2 a       0.103   0.075<span style="text-decoration: underline;">0</span>  0.131 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2012-06-02     2 R     165.     <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2012-06-02     2 b       0.267   0.087<span style="text-decoration: underline;">5</span>  0.443 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2012-06-03     3 a       0.070<span style="text-decoration: underline;">9</span>  0.045<span style="text-decoration: underline;">8</span>  0.096<span style="text-decoration: underline;">7</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2012-06-03     3 R     125.     <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2012-06-03     3 b       0.301   0.124   0.461 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2012-06-04     4 a       0.084<span style="text-decoration: underline;">5</span>  0.060<span style="text-decoration: underline;">2</span>  0.110 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2012-06-04     4 R     135.     <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2012-06-04     4 b       0.262   0.089<span style="text-decoration: underline;">6</span>  0.437</span></span></code></pre></div>
+<span><span class="co">#&gt;    Date         grp var       mean       lo       hi</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2012-06-01     1 a       0.096<span style="text-decoration: underline;">4</span>   0.057<span style="text-decoration: underline;">0</span>   0.135 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2012-06-01     1 R     127.      78.0    177.    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2012-06-01     1 b       0.283    0.104    0.455 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2012-06-02     2 a       0.103    0.075<span style="text-decoration: underline;">0</span>   0.131 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2012-06-02     2 R     165.     116.     210.    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2012-06-02     2 b       0.267    0.087<span style="text-decoration: underline;">5</span>   0.443 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2012-06-03     3 a       0.070<span style="text-decoration: underline;">9</span>   0.045<span style="text-decoration: underline;">8</span>   0.096<span style="text-decoration: underline;">7</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2012-06-03     3 R     125.      91.2    155.    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2012-06-03     3 b       0.301    0.124    0.461 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2012-06-04     4 a       0.084<span style="text-decoration: underline;">5</span>   0.060<span style="text-decoration: underline;">2</span>   0.110 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2012-06-04     4 R     135.     104.     165.    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2012-06-04     4 b       0.262    0.089<span style="text-decoration: underline;">6</span>   0.437</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="changing-the-default-arguments">Changing the default arguments<a class="anchor" aria-label="anchor" href="#changing-the-default-arguments"></a>
