@@ -49,10 +49,6 @@ credible_prep <- function(res, params = c('a', 'R', 'b'), labels = FALSE){
     )
 
   out <- res %>% 
-    dplyr::rename(
-      rlo = Rlo, 
-      rhi = Rhi
-    ) %>% 
     dplyr::select(dplyr::any_of(c('Date', 'grp', params, paramslo, paramshi))) %>% 
     na.omit() %>% 
     unique() %>% 
