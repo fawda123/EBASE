@@ -2,23 +2,23 @@
 % Please edit documentation in R/credible_plot.R
 \name{credible_plot}
 \alias{credible_plot}
-\title{Plot credible intervals for a, r, and b}
+\title{Plot credible intervals for a, R, and b}
 \usage{
-credible_plot(res, params = c("a", "r", "b"))
+credible_plot(res, params = c("a", "R", "b"))
 }
 \arguments{
 \item{res}{output data frame from \code{\link{ebase}}}
 
-\item{params}{character vector indicating which parameters to plot, one to any of \code{a}, \code{r}, or \code{b},  (default all)}
+\item{params}{character vector indicating which parameters to plot, one to any of \code{a}, \code{R}, or \code{b},  (default all)}
 }
 \value{
 A \code{\link[ggplot2]{ggplot}} object
 }
 \description{
-Plot credible intervals for a, r, and b
+Plot credible intervals for a, R, and b
 }
 \details{
-This function plots 95\% credible intervals (2.5th to 97.5th percentiles, approximate posterior distributions) for \code{a}, \code{r} and/or \code{b} using the output from \code{\link{ebase}}. Results in the plot are grouped by the \code{ndays} argument that was used in \code{\link{ebase}}.
+This function plots 95\% credible intervals (2.5th to 97.5th percentiles, approximate posterior distributions) for \code{a}, \code{R} and/or \code{b} using the output from \code{\link{ebase}}. Results in the plot are grouped by the \code{ndays} argument that was used in \code{\link{ebase}}.
 }
 \examples{
 

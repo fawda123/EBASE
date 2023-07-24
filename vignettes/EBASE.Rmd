@@ -45,10 +45,10 @@ head(exdat)
 The core function to estimate metabolism is `ebase()`.  The metabolic estimates are based on a mass balance equation in @Grace15 with the gas exchange estimate from @Wanninkhof14.  It is similar to that provided by the BASEmetab R package at https://github.com/dgiling/BASEmetab, with modifications to estimate different parameters optimized by the JAGS model: 
 
 $$
-H\frac{dC_d}{dt} = aPAR - r - \left[bU_{10}^2\left(\frac{Sc}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )\right]
+H\frac{dC_d}{dt} = aPAR - R - \left[bU_{10}^2\left(\frac{Sc}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )\right]
 $$
 
-The metabolic estimates are defined by the change in dissolved oxygen over the time step $\frac{dC_d}{dt}$, where gross production is provided by $aPAR$, respiration is provided by $r$, and gas exchange is provided by the remainder.  Required inputs for the equation are dissolved oxygen concentration as $C_d$, solar radiation as $PAR$, water column depth as $H$ (meters), and wind speed as $U$.  Other inputs for the schmidt number $Sc$ and dissolved oxygen at saturation $C_{Sat}$ are calculated from the observed data by the package.  The remaining three parameters $a$, $r$, and $b$ are estimated by likelihood given the observed data with the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The first modeled value starts at the mean oxygen concentration for all measurements in the optimization period.  The estimated concentration is also returned at each time step, which can be compared to observed as one measure of model performance.
+The metabolic estimates are defined by the change in dissolved oxygen over the time step $\frac{dC_d}{dt}$, where gross production is provided by $aPAR$, respiration is provided by $r$, and gas exchange is provided by the remainder.  Required inputs for the equation are dissolved oxygen concentration as $C_d$, solar radiation as $PAR$, water column depth as $H$ (meters), and wind speed as $U$.  Other inputs for the schmidt number $Sc$ and dissolved oxygen at saturation $C_{Sat}$ are calculated from the observed data by the package.  The remaining three parameters $a$, $R$, and $b$ are estimated by likelihood given the observed data with the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The first modeled value starts at the mean oxygen concentration for all measurements in the optimization period.  The estimated concentration is also returned at each time step, which can be compared to observed as one measure of model performance.
 
 The following shows how to use the `ebase()` function with a subset of four days from the `exdat()` example dataset.  Running the model on the entire year will take a few minutes, so a subset is used: 
 
@@ -71,7 +71,7 @@ res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
 head(res)
 ```
 
-The results are returned as a data frame with instantaneous metabolic estimates for areal gross production (O2 mmol/m2/d, `P` or $aPAR$ from above as volumetric), respiration (O2 mmol/m2/d, `R` or $r$ from above as volumetric), and gas exchange (O2 mmol/m2/d, `D` or the remainder of the equation from above as volumetric).  Additional parameters estimated by the model that are returned include `a` and `b` as shown in the above equation.  The `a` parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)/(W/m2) and is used to estimate gross production [@Grace15].  The `b` parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in @Wanninkhof14).
+The results are returned as a data frame with instantaneous metabolic estimates for areal gross production (O2 mmol/m2/d, `P` or $aPAR$ from above as volumetric), respiration (O2 mmol/m2/d, `R` from above as volumetric), and gas exchange (O2 mmol/m2/d, `D` or the remainder of the equation from above as volumetric).  Additional parameters estimated by the model that are returned include `a` and `b` as shown in the above equation.  The `a` parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m3/d)/(W/m2) and is used to estimate gross production [@Grace15].  The `b` parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in @Wanninkhof14).
 
 A plot of the results can be made with `ebase_plot()`.
 
@@ -118,13 +118,13 @@ A scatterplot showing modeled versus observed dissolved oxygen can also be retur
 fit_plot(res, bygroup = TRUE, scatter = TRUE)
 ```
 
-The prior distributions for the $a$, $r$, and $b$ parameters are defined in the model file included with the package as normal Gaussian distributions with mean and standard deviations provided by the `aprior`, `rprior`, and `bprior` arguments in `ebase()`.  The location of the model file can be viewed as follows.
+The prior distributions for the $a$, $R$, and $b$ parameters are defined in the model file included with the package as normal Gaussian distributions with mean and standard deviations provided by the `aprior`, `rprior`, and `bprior` arguments in `ebase()`.  The location of the model file can be viewed as follows.
 
 ```{r, eval = F}
 system.file('ebase_model.txt', package = 'EBASE')
 ```
 
-The default values for the priors were chosen based on the ability of EBASE to reproduce known parameters from a forward metabolism model.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above.  The upper limit for $b$ is also set as twice the default value of the mean in the `bprior` argument. Units for each parameter are (mmol/m3/d)/(W/m2) for $a$, mmol/m3/d for $r$, and (cm/hr)/(m2/s2) for $b$. 
+The default values for the priors were chosen based on the ability of EBASE to reproduce known parameters from a forward metabolism model.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above.  The upper limit for $b$ is also set as twice the default value of the mean in the `bprior` argument. Units for each parameter are (mmol/m3/d)/(W/m2) for $a$, mmol/m3/d for $R$, and (cm/hr)/(m2/s2) for $b$. 
 
 The prior distributions can be viewed with the `prior_plot()` function.  No changes are needed to the default arguments for this function if the default arguments are used for `ebase()`. 
 
@@ -132,7 +132,7 @@ The prior distributions can be viewed with the `prior_plot()` function.  No chan
 prior_plot()
 ```
 
-95% credible intervals for `a`, `r` (`R` as volumetric), and `b` are also returned with the output from `ebase()` in the corresponding columns `alo`, `ahi`, `blo`, `bhi`, `Rlo`, and `Rhi`, for the 2.5th and 97.5th percentile estimates for each parameter, respectively.  These values indicate the interval within which there is a 95% probability that the true parameter is in this range and is a representation of the posterior distributions for each parameter. Note that all values for these parameters are repeated across rows, although only one estimate for each is returned based on the number of days defined by `ndays`. 
+95% credible intervals for `a`, `R` (as areal), and `b` are also returned with the output from `ebase()` in the corresponding columns `alo`, `ahi`, `blo`, `bhi`, `Rlo`, and `Rhi`, for the 2.5th and 97.5th percentile estimates for each parameter, respectively.  These values indicate the interval within which there is a 95% probability that the true parameter is in this range and is a representation of the posterior distributions for each parameter. Note that all values for these parameters are repeated across rows, although only one estimate for each is returned based on the number of days defined by `ndays`. 
 
 The credible intervals can be plotted with the `credible_plot()` function.
 
@@ -150,7 +150,7 @@ credible_prep(res)
 
 ### Equation optimization length 
 
-The `ndays` argument in `ebase()` defines the model optimization period as the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., `ndays = 1` such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for `a`, `r`, and `b` are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every `ndays` specified by the argument.  The `ndays` argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to `ndays`.  The final block may not include the complete number of days specified by `ndays` if the number of unique dates in the input data includes a remainder when divided by `ndays`, e.g., if seven days are in the input data and `ndays = 5`, there will be two groups where the first has five days and the second has two days. The output data from `ebase` includes a column that specifies the grouping that was used based on `ndays`.
+The `ndays` argument in `ebase()` defines the model optimization period as the number of days that are used for optimizing the above mass balance equation.  By default, this is done each day, i.e., `ndays = 1` such that a loop is used that applies the model equation to observations within each day, evaluated iteratively from the first observation in a day to the last.  Individual parameter estimates for `a`, `R`, and `b` are then returned for each day.  However, more days can be used to estimate the unknown parameters, such that the loop can be evaluated for every `ndays` specified by the argument.  The `ndays` argument will separate the input data into groups of consecutive days, where each group has a total number of days equal to `ndays`.  The final block may not include the complete number of days specified by `ndays` if the number of unique dates in the input data includes a remainder when divided by `ndays`, e.g., if seven days are in the input data and `ndays = 5`, there will be two groups where the first has five days and the second has two days. The output data from `ebase` includes a column that specifies the grouping that was used based on `ndays`.
 
 Here, the number of days used to optimize the equation is set to all days in the input data. 
 

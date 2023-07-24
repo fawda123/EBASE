@@ -1,12 +1,12 @@
-#' Plot credible intervals for a, r, and b
+#' Plot credible intervals for a, R, and b
 #' 
 #' @param res output data frame from \code{\link{ebase}}
-#' @param params character vector indicating which parameters to plot, one to any of \code{a}, \code{r}, or \code{b},  (default all)
+#' @param params character vector indicating which parameters to plot, one to any of \code{a}, \code{R}, or \code{b},  (default all)
 #'
 #' @return A \code{\link[ggplot2]{ggplot}} object
 #' @export
 #'
-#' @details This function plots 95% credible intervals (2.5th to 97.5th percentiles, approximate posterior distributions) for \code{a}, \code{r} and/or \code{b} using the output from \code{\link{ebase}}. Results in the plot are grouped by the \code{ndays} argument that was used in \code{\link{ebase}}.
+#' @details This function plots 95% credible intervals (2.5th to 97.5th percentiles, approximate posterior distributions) for \code{a}, \code{R} and/or \code{b} using the output from \code{\link{ebase}}. Results in the plot are grouped by the \code{ndays} argument that was used in \code{\link{ebase}}.
 #' 
 #' @examples 
 #' 
@@ -31,7 +31,7 @@
 #' 
 #' # plot credible intervals
 #' credible_plot(res)
-credible_plot <- function(res, params = c('a', 'r', 'b')){
+credible_plot <- function(res, params = c('a', 'R', 'b')){
   
   toplo <- credible_prep(res, params = params, labels = TRUE)
  
