@@ -43,7 +43,7 @@ credible_prep <- function(res, params = c('a', 'R', 'b'), labels = FALSE){
   
   labs <- c('a', 'R', 'b')
   if(labels)
-    labs <- c('italic(a)~(mmol~m^{-3}~d^{-1})/(W~m^{-2})', 
+    labs <- c('italic(a)~(mmol~m^{-2}~d^{-1})/(W~m^{-2})', 
               'italic(R)~(mmol~m^{-2}~d^{-1})',
               'italic(b)~(cm~hr^{-1})/(m^{2}~s^{-2})'
     )

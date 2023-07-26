@@ -21,8 +21,8 @@
 #' prior_plot(bprior = c(0.2, 0.05))
 prior_plot <- function(aprior = c(0.2, 1), rprior = c(20, 50), bprior = c(0.251, 0.1), bmax = 0.502, n = 1000){
   
-  labs <- c('italic(a)~(mmol~m^{-3}~d^{-1})/(W~m^{-2})', 
-            'italic(R)~(mmol~m^{-3}~d^{-1})',
+  labs <- c('italic(a)~(mmol~m^{-2}~d^{-1})/(W~m^{-2})', 
+            'italic(R)~(mmol~m^{-2}~d^{-1})',
             'italic(b)~(cm~hr^{-1})/(m^{2}~s^{-2})'
   )
 
