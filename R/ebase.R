@@ -137,7 +137,7 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(4, 1), rprior = c(300,
     PAR <- dat.sub$PAR
     DO_sat <- dat.sub$DO_sat
     sc <- dat.sub$sc
-    H <- mean(dat.sub$H)
+    H <- dat.sub$H
     U10 <- dat.sub$WSpd
     
     DO_start <- DO_obs[1]
@@ -145,7 +145,7 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(4, 1), rprior = c(300,
       DO_start <- mean(DO_obs)
     
     # Set
-    dat.list <- list("num.measurements", "nstepd", "interval", "aprior", "rprior", "bprior", "bmax", "DO_obs", "PAR", "DO_sat", "sc", "H", "U10", "DO_start")
+    dat.list <- list("num.measurements", "nstepd", "interval", "aprior", "rprior", "bprior", "bmax", "DO_obs", "PAR", "DO_sat", "sc", "U10", "DO_start")
   
     # Define monitoring variables (returned by jags)
     params <- c("ats", "bts", "gppts", "erts", "gets", "DO_mod")
@@ -176,10 +176,10 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(4, 1), rprior = c(300,
       Date = dat.sub$Date,
       grp = dat.sub$grp,
       H = H, #m
-      DO_obs = dat.sub$DO_obs,
-      DO_mod = metabfit$BUGSoutput$mean$DO_mod,
-      DO_modlo = cred[cred$var == 'DO_mod', 'X2.5.'],
-      DO_modhi = cred[cred$var == 'DO_mod', 'X97.5.'],
+      DO_obs = dat.sub$DO_obs / H, # mmol/m2 to mmol/m3
+      DO_mod = metabfit$BUGSoutput$mean$DO_mod / H, # mmol/m2 to mmol/m3
+      DO_modlo = cred[cred$var == 'DO_mod', 'X2.5.'] / H,
+      DO_modhi = cred[cred$var == 'DO_mod', 'X97.5.'] / H,
       DateTimeStamp = dat.sub$DateTimeStamp,
       ats = c(NA, metabfit$BUGSoutput$mean$ats), # (mmol/m2/ts)/(W/m2)
       atslo = c(NA, cred[cred$var == 'ats', 'X2.5.']),
@@ -187,16 +187,16 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(4, 1), rprior = c(300,
       bts = c(NA, metabfit$BUGSoutput$mean$bts), # (m/ts)/(m2/s2)
       btslo = c(NA, cred[cred$var == 'bts', 'X2.5.']),
       btshi = c(NA, cred[cred$var == 'bts', 'X97.5.']),
-      gppts = c(NA, metabfit$BUGSoutput$mean$gppts) * mean(H), # O2, mmol/m3/ts to mmol/m2/ts
-      gpptslo = c(NA, cred[cred$var == 'gppts', 'X2.5.']) * mean(H),
-      gpptshi = c(NA, cred[cred$var == 'gppts', 'X97.5.']) * mean(H),
-      erts = c(NA, metabfit$BUGSoutput$mean$erts) * mean(H), # O2, mmol/m3/ts to mmol/m2/ts
-      ertslo = c(NA, cred[cred$var == 'erts', 'X2.5.']) * mean(H),
-      ertshi = c(NA, cred[cred$var == 'erts', 'X97.5.']) * mean(H),
+      gppts = c(NA, metabfit$BUGSoutput$mean$gppts), # O2, mmol/m2/ts
+      gpptslo = c(NA, cred[cred$var == 'gppts', 'X2.5.']),
+      gpptshi = c(NA, cred[cred$var == 'gppts', 'X97.5.']),
+      erts = c(NA, metabfit$BUGSoutput$mean$erts), # O2, mmol/m2/ts
+      ertslo = c(NA, cred[cred$var == 'erts', 'X2.5.']),
+      ertshi = c(NA, cred[cred$var == 'erts', 'X97.5.']),
       gets = c(NA, metabfit$BUGSoutput$mean$gets), # O2, mmol/m2/ts
       getslo = c(NA, cred[cred$var == 'gets', 'X2.5.']),
       getshi = c(NA, cred[cred$var == 'gets', 'X97.5.']),
-      dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO_mod)), # O2 mmol/m3/ts
+      dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO_mod)) / H, # O2, mmol/m2/ts to mmol/m3/ts
       converge = Rhat.test
     )
   
@@ -226,7 +226,7 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(4, 1), rprior = c(300,
       R = erts * nstepd, # O2 mmol/m2/ts to O2 mmol/m2/d
       Rlo = ertslo * nstepd, 
       Rhi = ertshi * nstepd,
-      D = gets * nstepd, #  # O2 mmol/m2/ts to O2 mmol/m2/d
+      D = gets * nstepd, # O2 mmol/m2/ts to O2 mmol/m2/d
       Dlo = getslo * nstepd, 
       Dhi = getshi * nstepd,
       dDO = dDO * nstepd #  # O2 mmol/m3/ts to O2 mmol/m3/d

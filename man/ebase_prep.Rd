@@ -16,7 +16,7 @@ ebase_prep(dat, H, interval, ndays = 1)
 \item{ndays}{numeric for number of days in \code{dat} for optimizing the metabolic equation, see details}
 }
 \value{
-A data frame with additional columns required for \code{\link{ebase}}.  If multiple time steps are identified, the number of rows in data frame is expanded based on the time step define by \code{interval}.  Numeric values in the expanded rows will be interpolated if \code{interp = TRUE}, otherwise they will remain as \code{NA} values.
+A data frame with additional columns required for \code{\link{ebase}}. Dissolved oxygen as a volumetric concentration in \code{dat} as mg/L is returned in areal units as mmol/m2. If multiple time steps are identified, the number of rows in data frame is expanded based on the time step define by \code{interval}.  Numeric values in the expanded rows will be interpolated if \code{interp = TRUE}, otherwise they will remain as \code{NA} values.
 }
 \description{
 Prepare data for ebase

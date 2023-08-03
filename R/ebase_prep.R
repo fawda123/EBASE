@@ -15,7 +15,7 @@
 #' 
 #' Missing values are interpolated at the interval specified by the \code{interval} argument for conformance with the core model equation. Records at the start or end of the input time series that do not include a full day are also removed.  A warning is returned to the console if gaps are found or dangling records are found. 
 #' 
-#' @return A data frame with additional columns required for \code{\link{ebase}}.  If multiple time steps are identified, the number of rows in data frame is expanded based on the time step define by \code{interval}.  Numeric values in the expanded rows will be interpolated if \code{interp = TRUE}, otherwise they will remain as \code{NA} values.
+#' @return A data frame with additional columns required for \code{\link{ebase}}. Dissolved oxygen as a volumetric concentration in \code{dat} as mg/L is returned in areal units as mmol/m2. If multiple time steps are identified, the number of rows in data frame is expanded based on the time step define by \code{interval}.  Numeric values in the expanded rows will be interpolated if \code{interp = TRUE}, otherwise they will remain as \code{NA} values.
 #' 
 #' @importFrom dplyr %>%
 #' 
@@ -115,14 +115,14 @@ ebase_prep <- function(dat, H, interval, ndays = 1){
 
   }
   
-  # convert DO to mmol/m3
+  # convert DO to mmol/m2
   # add schmidt number as unitless
-  # add DO sat as mmol/m3
+  # add DO sat as mmol/m2
   dat <- dat %>% 
     dplyr::mutate(
-      DO_obs = DO_obs / 32 * 1000,
+      DO_obs = H * DO_obs / 32 * 1000,
       sc = fun_schmidt_oxygen(Temp, Sal), 
-      DO_sat = fun_eqb_oxygen(Temp, Sal), 
+      DO_sat = H * fun_eqb_oxygen(Temp, Sal), 
       Date = as.Date(DateTimeStamp, tz = attr(DateTimeStamp, 'tzone'))
     ) %>% 
     dplyr::select(Date, DateTimeStamp, isinterp, DO_obs, DO_sat, H, dplyr::everything())
