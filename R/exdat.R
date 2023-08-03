@@ -8,7 +8,7 @@
 #'   \item{DO_obs}{dissolved oxygen, mg/L}
 #'   \item{Temp}{water temperature, C}
 #'   \item{Sal}{salinity, psu}
-#'   \item{PAR}{total PAR, W/m2/s}
+#'   \item{PAR}{total PAR, W/m2}
 #'   \item{WSpd}{num, m/s}
 #' }
 #' @family utilities
@@ -21,7 +21,6 @@
 #'
 #' exdat <- read.csv('inst/APNERR2012.csv') %>% 
 #'   rename(
-#'     PAR = I,
 #'     Sal = salinity,
 #'     Temp = tempC, 
 #'     DO_obs = DO.meas
