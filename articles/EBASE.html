@@ -181,26 +181,26 @@ observations are found and removed.</p>
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         DateTimeStamp       Date grp    H  DO_obs   DO_mod DO_modlo DO_modhi</span></span>
-<span><span class="co">#&gt; 1 2012-06-01 00:00:00 2012-06-01   1 1.85 140.625 166.1133 166.1123 166.1143</span></span>
-<span><span class="co">#&gt; 2 2012-06-01 00:15:00 2012-06-01   1 1.85 159.375 165.1928 164.9408 165.4420</span></span>
-<span><span class="co">#&gt; 3 2012-06-01 00:30:00 2012-06-01   1 1.85 150.000 164.3409 163.8461 164.8459</span></span>
-<span><span class="co">#&gt; 4 2012-06-01 00:45:00 2012-06-01   1 1.85 150.000 163.4477 162.7049 164.2013</span></span>
-<span><span class="co">#&gt; 5 2012-06-01 01:00:00 2012-06-01   1 1.85 150.000 162.5379 161.5455 163.5363</span></span>
-<span><span class="co">#&gt; 6 2012-06-01 01:15:00 2012-06-01   1 1.85 156.250 161.5729 160.3273 162.8221</span></span>
-<span><span class="co">#&gt;         dDO converge       rsq         a       alo      ahi         b       blo</span></span>
-<span><span class="co">#&gt; 1        NA     Fine 0.3402866        NA        NA       NA        NA        NA</span></span>
-<span><span class="co">#&gt; 2 -88.36930     Fine 0.3402866 0.9811098 0.6540453 1.312886 0.3522783 0.1882117</span></span>
-<span><span class="co">#&gt; 3 -81.78204     Fine 0.3402866 0.9811098 0.6540453 1.312886 0.3522783 0.1882117</span></span>
-<span><span class="co">#&gt; 4 -85.74842     Fine 0.3402866 0.9811098 0.6540453 1.312886 0.3522783 0.1882117</span></span>
-<span><span class="co">#&gt; 5 -87.34303     Fine 0.3402866 0.9811098 0.6540453 1.312886 0.3522783 0.1882117</span></span>
-<span><span class="co">#&gt; 6 -92.64075     Fine 0.3402866 0.9811098 0.6540453 1.312886 0.3522783 0.1882117</span></span>
-<span><span class="co">#&gt;         bhi  P Plo Phi        R     Rlo      Rhi        D      Dlo      Dhi</span></span>
-<span><span class="co">#&gt; 1        NA NA  NA  NA       NA      NA       NA       NA       NA       NA</span></span>
-<span><span class="co">#&gt; 2 0.4862494  0   0   0 199.3898 152.616 248.7118 35.90662 19.18381 49.56205</span></span>
-<span><span class="co">#&gt; 3 0.4862494  0   0   0 199.3898 152.616 248.7118 48.09306 25.77302 66.45579</span></span>
-<span><span class="co">#&gt; 4 0.4862494  0   0   0 199.3898 152.616 248.7118 40.75525 21.87325 56.31675</span></span>
-<span><span class="co">#&gt; 5 0.4862494  0   0   0 199.3898 152.616 248.7118 37.80523 20.29075 52.30022</span></span>
-<span><span class="co">#&gt; 6 0.4862494  0   0   0 199.3898 152.616 248.7118 28.00444 14.94878 38.81521</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 2012-06-01 00:00:00 2012-06-01   1 1.85 140.625 166.1133 166.1121 166.1144</span></span>
+<span><span class="co">#&gt; 2 2012-06-01 00:15:00 2012-06-01   1 1.85 159.375 165.2211 164.9648 165.4582</span></span>
+<span><span class="co">#&gt; 3 2012-06-01 00:30:00 2012-06-01   1 1.85 150.000 164.3625 163.8540 164.8344</span></span>
+<span><span class="co">#&gt; 4 2012-06-01 00:45:00 2012-06-01   1 1.85 150.000 163.4837 162.7213 164.1918</span></span>
+<span><span class="co">#&gt; 5 2012-06-01 01:00:00 2012-06-01   1 1.85 150.000 162.5967 161.5825 163.5420</span></span>
+<span><span class="co">#&gt; 6 2012-06-01 01:15:00 2012-06-01   1 1.85 156.250 161.6825 160.4096 162.8696</span></span>
+<span><span class="co">#&gt;         dDO converge       rsq        a      alo      ahi         b       blo</span></span>
+<span><span class="co">#&gt; 1        NA     Fine 0.3243926       NA       NA       NA        NA        NA</span></span>
+<span><span class="co">#&gt; 2 -85.65069     Fine 0.3243926 1.115538 0.821394 1.441575 0.3205838 0.1383834</span></span>
+<span><span class="co">#&gt; 3 -82.41866     Fine 0.3243926 1.115538 0.821394 1.441575 0.3205838 0.1383834</span></span>
+<span><span class="co">#&gt; 4 -84.36660     Fine 0.3243926 1.115538 0.821394 1.441575 0.3205838 0.1383834</span></span>
+<span><span class="co">#&gt; 5 -85.15366     Fine 0.3243926 1.115538 0.821394 1.441575 0.3205838 0.1383834</span></span>
+<span><span class="co">#&gt; 6 -87.76113     Fine 0.3243926 1.115538 0.821394 1.441575 0.3205838 0.1383834</span></span>
+<span><span class="co">#&gt;         bhi  P Plo Phi        R      Rlo      Rhi        D       Dlo      Dhi</span></span>
+<span><span class="co">#&gt; 1        NA NA  NA  NA       NA       NA       NA       NA        NA       NA</span></span>
+<span><span class="co">#&gt; 2 0.4808712  0   0   0 176.1165 130.2994 223.5502 17.66278  7.624329 26.49464</span></span>
+<span><span class="co">#&gt; 3 0.4808712  0   0   0 176.1165 130.2994 223.5502 23.64202 10.130050 35.52445</span></span>
+<span><span class="co">#&gt; 4 0.4808712  0   0   0 176.1165 130.2994 223.5502 20.03833  8.558407 30.04991</span></span>
+<span><span class="co">#&gt; 5 0.4808712  0   0   0 176.1165 130.2994 223.5502 18.58227  7.910019 27.83821</span></span>
+<span><span class="co">#&gt; 6 0.4808712  0   0   0 176.1165 130.2994 223.5502 13.75845  5.837911 20.58276</span></span></code></pre></div>
 <p>The results are returned as a data frame with instantaneous metabolic
 estimates for areal gross production (O2 mmol/m2/d, <code>P</code> or
 <span class="math inline">\(aPAR\)</span> from above as volumetric),
@@ -312,18 +312,18 @@ to parse the results from <code><a href="../reference/ebase.html">ebase()</a></c
 <span><span class="co">#&gt; <span style="color: #949494;"># Groups:   grp [4]</span></span></span>
 <span><span class="co">#&gt;    Date         grp var      mean      lo      hi</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2012-06-01     1 a       0.981   0.654   1.31 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2012-06-01     1 R     199.    153.    249.   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2012-06-01     1 b       0.352   0.188   0.486</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2012-06-02     2 a       0.971   0.732   1.21 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2012-06-02     2 R     235.    185.    287.   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2012-06-02     2 b       0.330   0.177   0.473</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2012-06-03     3 a       0.554   0.303   0.804</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2012-06-03     3 R     159.    126.    192.   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2012-06-03     3 b       0.314   0.161   0.461</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2012-06-04     4 a       0.617   0.347   0.882</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2012-06-04     4 R     175.    136.    210.   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2012-06-04     4 b       0.289   0.120   0.450</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2012-06-01     1 a       1.12    0.821   1.44 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2012-06-01     1 R     176.    130.    224.   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2012-06-01     1 b       0.321   0.138   0.481</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2012-06-02     2 a       1.04    0.819   1.27 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2012-06-02     2 R     202.    157.    244.   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2012-06-02     2 b       0.323   0.156   0.471</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2012-06-03     3 a       0.708   0.497   0.914</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2012-06-03     3 R     144.    114.    174.   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2012-06-03     3 b       0.317   0.136   0.477</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2012-06-04     4 a       0.783   0.589   0.988</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2012-06-04     4 R     152.    122.    179.   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2012-06-04     4 b       0.294   0.114   0.465</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="changing-the-default-arguments">Changing the default arguments<a class="anchor" aria-label="anchor" href="#changing-the-default-arguments"></a>
