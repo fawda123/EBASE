@@ -137,7 +137,7 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(4, 1), rprior = c(300,
     PAR <- dat.sub$PAR
     DO_sat <- dat.sub$DO_sat
     sc <- dat.sub$sc
-    H <- dat.sub$H
+    H <- mean(dat.sub$H)
     U10 <- dat.sub$WSpd
     
     DO_start <- DO_obs[1]
@@ -145,7 +145,7 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(4, 1), rprior = c(300,
       DO_start <- mean(DO_obs)
     
     # Set
-    dat.list <- list("num.measurements", "nstepd", "interval", "aprior", "rprior", "bprior", "bmax", "DO_obs", "PAR", "DO_sat", "sc", "U10", "DO_start")
+    dat.list <- list("num.measurements", "nstepd", "interval", "aprior", "rprior", "bprior", "bmax", "DO_obs", "PAR", "DO_sat", "H", "sc", "U10", "DO_start")
   
     # Define monitoring variables (returned by jags)
     params <- c("ats", "bts", "gppts", "erts", "gets", "DO_mod")
