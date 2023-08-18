@@ -19,7 +19,7 @@
 #' 
 #' # changing the mean and standard deviation for the b parameter
 #' prior_plot(bprior = c(0.2, 0.05))
-prior_plot <- function(aprior = c(4, 2.25), rprior = c(300, 170), bprior = c(0.251, 0.1255), bmax = 0.502, n = 1000){
+prior_plot <- function(aprior = c(4, 2), rprior = c(300, 150), bprior = c(0.251, 0.125), bmax = 0.502, n = 1000){
   
   labs <- c('italic(a)~(mmol~m^{-2}~d^{-1})/(W~m^{-2})', 
             'italic(R)~(mmol~m^{-2}~d^{-1})',
