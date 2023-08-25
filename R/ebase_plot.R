@@ -77,7 +77,7 @@ ebase_plot <- function(res, instantaneous = TRUE){
     ) +
     ggplot2::scale_color_discrete(
       breaks = c('P', 'R', 'D'),
-      labels = c(expression(P), expression(R), 'D')
+      labels = c(expression(P), expression(-R), expression(-D))
     ) +
     ggplot2::labs(
       y = ylab, 
