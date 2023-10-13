@@ -13,6 +13,8 @@
 #' 
 #' All parameters follow a normal Gaussian distribution for the priors with the means and standard deviations defined by the arguments. All distributions are truncated to include only values greater than zero as required by the core metabolism equation. The upper limit for \emph{b} is also set as twice the default value of the mean in the \code{bprior} argument. Truncated normal distributions are obtained using the \code{\link[truncnorm]{rtruncnorm}} function with the number of random samples defined by the \code{n} argument. 
 #' 
+#' The density curves for each parameter are normalized such that the peak values are always equal to 1. 
+#' 
 #' @examples
 #' # default plot
 #' prior_plot()
@@ -49,9 +51,9 @@ prior_plot <- function(aprior = c(4, 2), rprior = c(300, 150), bprior = c(0.251,
     dplyr::ungroup() %>% 
     dplyr::select(var, val) %>% 
     tidyr::unnest('val')
-  
+
   p <- ggplot2::ggplot(toplo, ggplot2::aes(x = val)) + 
-    ggplot2::geom_density(fill = 'grey', adjust = 2) +
+    ggplot2::geom_density(ggplot2::aes(y = ggplot2::after_stat(scaled)), fill = 'grey', adjust = 2) +
     ggplot2::facet_wrap(~var, scales = 'free', labeller = ggplot2::label_parsed, strip.position = 'bottom') +
     ggplot2::theme_minimal() + 
     ggplot2::theme(
@@ -59,7 +61,7 @@ prior_plot <- function(aprior = c(4, 2), rprior = c(300, 150), bprior = c(0.251,
       strip.text = ggplot2::element_text(size = ggplot2::rel(1))
     ) + 
     ggplot2::labs(
-      y = 'Density', 
+      y = 'Normalized density', 
       x = NULL
     )
   
