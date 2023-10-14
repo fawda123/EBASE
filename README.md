@@ -30,7 +30,7 @@ library(doParallel)
 
 # get four days of data
 dat <- exdat %>%
-  filter(month(exdat$DateTimeStamp) == 6 & day(exdat$DateTimeStamp) %in% 1:4)
+  filter(month(DateTimeStamp) == 6 & day(DateTimeStamp) %in% 1:4)
 
 ##
 # run ebase with defaults
