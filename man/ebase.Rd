@@ -76,6 +76,10 @@ The metabolic estimates are based on a mass balance equation in Grace et al. 201
 
 \deqn{ H\frac{dC_d}{dt} = aPAR - R - bU_{10}^2\left(\frac{Sc}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )}
 
+More simply:
+
+\deqn{ H\frac{dC_d}{dt} = P - R -D}
+
 Gross production is provided by \emph{aPAR}, respiration is provided by \emph{R}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{R}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The first modeled value starts at the mean oxygen concentration for all measurements in the optimization period.  The estimated concentration at each time step is also returned for comparison to observed as one measure of model performance.
 
 The prior distributions for the \emph{a}, \emph{R}, and \emph{b} parameters are defined in the model file included with the package as normal distributions with mean and standard deviations provided by the \code{aprior}, \code{rprior}, and \code{bprior} arguments. The default values were chosen based on approximate values from national syntheses of metabolic estimates.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above. The upper limit for \emph{b} is set as two times 0.251, as given in eqn. 4 in Wanninkhof 2014. Units for each parameter are (mmol/m2/d)/(W/m2) for \emph{a}, mmol/m2/d for \emph{R}, and (cm/hr)/(m2/s2) for \emph{b}.
