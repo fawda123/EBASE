@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EBASE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9014</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9015</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -132,9 +132,13 @@ to estimate different parameters optimized by the JAGS model:</p>
 H\frac{dC_d}{dt} = aPAR - R - bU_{10}^2\left(\frac{Sc}{600}
 \right)^{-0.5} \left(C_{Sat} - C_d \right )
 \]</span></p>
+<p>More simply:</p>
+<p><span class="math display">\[
+H\frac{dC_d}{dt} = P - R - D
+\]</span></p>
 <p>The metabolic estimates are defined by the change in dissolved oxygen
 over the time step <span class="math inline">\(\frac{dC_d}{dt}\)</span>,
-where gross production is provided by <span class="math inline">\(aPAR\)</span>, respiration is provided by <span class="math inline">\(r\)</span>, and gas exchange is provided by the
+where gross production is provided by <span class="math inline">\(aPAR\)</span>, respiration is provided by <span class="math inline">\(R\)</span>, and gas exchange is provided by the
 remainder. Required inputs for the equation are dissolved oxygen
 concentration as <span class="math inline">\(C_d\)</span>, solar
 radiation as <span class="math inline">\(PAR\)</span>, water column
@@ -142,8 +146,7 @@ depth as <span class="math inline">\(H\)</span> (meters), and wind speed
 as <span class="math inline">\(U\)</span>. Other inputs for the schmidt
 number <span class="math inline">\(Sc\)</span> and dissolved oxygen at
 saturation <span class="math inline">\(C_{Sat}\)</span> are calculated
-from the observed data by the package. The remaining three parameters
-<span class="math inline">\(a\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\(b\)</span> are estimated by likelihood given the
+from the observed data. The remaining three parameters <span class="math inline">\(a\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\(b\)</span> are estimated by likelihood given the
 observed data with the JAGS model using prior distributions shown in the
 model file. At each time step, the change in oxygen concentration
 between time steps is calculated from the equation using model inputs
