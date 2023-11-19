@@ -6,7 +6,7 @@
 #' @return A \code{\link[ggplot2]{ggplot}} object
 #' @export
 #'
-#' @details Both \code{D} and \code{R} are plotted as negative values to express their contribution to net metabolism.
+#' @details All metabolic estimates are plotted as positive values (\code{D} is represented as net ingassing).
 #' 
 #' @examples
 #' library(dplyr)
@@ -33,13 +33,6 @@
 #' # plot daily-averaged
 #' ebase_plot(res, instantaneous = FALSE)
 ebase_plot <- function(res, instantaneous = TRUE){
-  
-  # make respiration negative
-  res <- res %>% 
-    dplyr::mutate(
-      R = -1 * R, 
-      D = -1 * D
-      )
   
   # instantaneous results
   if(instantaneous){
@@ -77,7 +70,7 @@ ebase_plot <- function(res, instantaneous = TRUE){
     ) +
     ggplot2::scale_color_discrete(
       breaks = c('P', 'R', 'D'),
-      labels = c(expression(P), expression(-R), expression(-D))
+      labels = c(expression(P), expression(R), expression(D))
     ) +
     ggplot2::labs(
       y = ylab, 

@@ -18,7 +18,7 @@ A \code{\link[ggplot2]{ggplot}} object
 Plot results from EBASE
 }
 \details{
-Both \code{D} and \code{R} are plotted as negative values to express their contribution to net metabolism.
+All metabolic estimates are plotted as positive values (\code{D} is represented as net ingassing).
 }
 \examples{
 library(dplyr)
