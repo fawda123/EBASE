@@ -1,26 +1,26 @@
 test_that("Checking ebase_prep names", {
-  result <- ebase_prep(dat, H = 1.85, interval = 900) %>% 
+  result <- ebase_prep(dat, Z = 1.85, interval = 900) %>% 
     names
   
-  expect_equal(result, c("Date", "DateTimeStamp", "isinterp", "DO_obs", "DO_sat", "H", "Temp", "Sal", 
+  expect_equal(result, c("Date", "DateTimeStamp", "isinterp", "DO_obs", "DO_sat", "Z", "Temp", "Sal", 
                          "PAR", "WSpd", "sc", "grp"))
 })
 
 test_that("Checking ebase_prep incorrect input", {
   
-  expect_error(ebase_prep(exdat[,-5], interval = 900, H = 1.85))
+  expect_error(ebase_prep(exdat[,-5], interval = 900, Z = 1.85))
                
 })
 
-test_that("Checking ebase_prep incorrect H input", {
+test_that("Checking ebase_prep incorrect Z input", {
   
-  expect_error(ebase_prep(exdat, interval = 900, H = c(1, 1.85)))
+  expect_error(ebase_prep(exdat, interval = 900, Z = c(1, 1.85)))
   
 })
 
 test_that("Checking ebase_prep all groups", {
   
-  result <- ebase_prep(dat, H = 1.85, interval = 900, ndays = 3) %>% 
+  result <- ebase_prep(dat, Z = 1.85, interval = 900, ndays = 3) %>% 
     pull(grp) %>% 
     unique %>% 
     length
@@ -39,7 +39,7 @@ test_that("Checking ebase_prep interpolation", {
   expect_warning(
     expect_warning(
       expect_warning(
-        expect_equal(ebase_prep(dat2, H = 1.85, interval = 900, ndays = 1) %>% nrow(), 96)
+        expect_equal(ebase_prep(dat2, Z = 1.85, interval = 900, ndays = 1) %>% nrow(), 96)
         )
       )
   )
@@ -66,7 +66,7 @@ test_that("Checking strip of dangling start or end dates", {
   
   expect_warning(
     expect_warning(
-      expect_equal(ebase_prep(dat2, H = 1.85, interval = 900) %>% nrow(), 288)
+      expect_equal(ebase_prep(dat2, Z = 1.85, interval = 900) %>% nrow(), 288)
       )
   )
   

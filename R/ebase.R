@@ -3,7 +3,7 @@
 #' Estuarine Bayesian Single-station Estimation method for ecosystem metabolism
 #' 
 #' @param dat input data frame
-#' @param H numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}
+#' @param Z numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}
 #' @param interval timestep interval in seconds
 #' @param ndays numeric for number of days in \code{dat} for optimizing the metabolic equation, see details
 #' @param aprior numeric vector of length two indicating the mean and standard deviation for the prior distribution of the \emph{a} parameter, see details
@@ -32,11 +32,11 @@
 #' 
 #' The metabolic estimates are based on a mass balance equation in Grace et al. 2015 with the gas exchange estimate from Wanninkhof 2004.  It is similar to that provided by the BASEmetab R package at \url{https://github.com/dgiling/BASEmetab}, with modifications to estimate different parameters. The equation optimized in the JAGS model is: 
 #' 
-#' \deqn{ H\frac{dC_d}{dt} = aPAR - R - bU_{10}^2\left(\frac{Sc}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )}
+#' \deqn{ Z\frac{dC_d}{dt} = aPAR - R - bU_{10}^2\left(\frac{Sc}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )}
 #' 
 #' More simply:
 #' 
-#' \deqn{ H\frac{dC_d}{dt} = P - R -D}
+#' \deqn{ Z\frac{dC_d}{dt} = P - R -D}
 #' 
 #' Gross production is provided by \emph{aPAR}, respiration is provided by \emph{R}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{R}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The first modeled value starts at the mean oxygen concentration for all measurements in the optimization period.  The estimated concentration at each time step is also returned for comparison to observed as one measure of model performance.   
 #' 
@@ -79,7 +79,7 @@
 #' cl <- makeCluster(2)
 #' registerDoParallel(cl)
 #'
-#' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
+#' res <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2)
 #' 
 #' stopCluster(cl)
 #'
@@ -91,14 +91,14 @@
 #' cl <- makeCluster(2)
 #' registerDoParallel(cl)
 #'   
-#' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2, bprior = c(0.2, 0.05))
+#' res <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2, bprior = c(0.2, 0.05))
 #'
 #' stopCluster(cl)
 #' }
-ebase <- function(dat, H, interval, ndays = 1, aprior = c(4, 2), rprior = c(300, 150), bprior = c(0.251, 0.125), bmax = 0.502, doave = TRUE, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = FALSE, model_file = NULL){
+ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300, 150), bprior = c(0.251, 0.125), bmax = 0.502, doave = TRUE, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = FALSE, model_file = NULL){
   
   # prep data
-  dat <- ebase_prep(dat, H = H, interval = interval, ndays = ndays)
+  dat <- ebase_prep(dat, Z = Z, interval = interval, ndays = ndays)
   
   # the number of time steps for each iteration of the loop in days
   nstepd <- 86400 / interval
@@ -141,7 +141,7 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
     PAR <- dat.sub$PAR
     DO_sat <- dat.sub$DO_sat
     sc <- dat.sub$sc
-    H <- mean(dat.sub$H)
+    Z <- mean(dat.sub$Z)
     U10 <- dat.sub$WSpd
     
     DO_start <- DO_obs[1]
@@ -149,7 +149,7 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
       DO_start <- mean(DO_obs)
     
     # Set
-    dat.list <- list("num.measurements", "nstepd", "interval", "aprior", "rprior", "bprior", "bmax", "DO_obs", "PAR", "DO_sat", "H", "sc", "U10", "DO_start")
+    dat.list <- list("num.measurements", "nstepd", "interval", "aprior", "rprior", "bprior", "bmax", "DO_obs", "PAR", "DO_sat", "Z", "sc", "U10", "DO_start")
   
     # Define monitoring variables (returned by jags)
     params <- c("ats", "bts", "gppts", "erts", "gets", "DO_mod")
@@ -179,11 +179,11 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
     result <- data.frame(
       Date = dat.sub$Date,
       grp = dat.sub$grp,
-      H = H, #m
-      DO_obs = dat.sub$DO_obs / H, # mmol/m2 to mmol/m3
-      DO_mod = metabfit$BUGSoutput$mean$DO_mod / H, # mmol/m2 to mmol/m3
-      DO_modlo = cred[cred$var == 'DO_mod', 'X2.5.'] / H,
-      DO_modhi = cred[cred$var == 'DO_mod', 'X97.5.'] / H,
+      Z = Z, #m
+      DO_obs = dat.sub$DO_obs / Z, # mmol/m2 to mmol/m3
+      DO_mod = metabfit$BUGSoutput$mean$DO_mod / Z, # mmol/m2 to mmol/m3
+      DO_modlo = cred[cred$var == 'DO_mod', 'X2.5.'] / Z,
+      DO_modhi = cred[cred$var == 'DO_mod', 'X97.5.'] / Z,
       DateTimeStamp = dat.sub$DateTimeStamp,
       ats = c(NA, metabfit$BUGSoutput$mean$ats), # (mmol/m2/ts)/(W/m2)
       atslo = c(NA, cred[cred$var == 'ats', 'X2.5.']),
@@ -200,7 +200,7 @@ ebase <- function(dat, H, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
       gets = c(NA, metabfit$BUGSoutput$mean$gets), # O2, mmol/m2/ts
       getslo = c(NA, cred[cred$var == 'gets', 'X2.5.']),
       getshi = c(NA, cred[cred$var == 'gets', 'X97.5.']),
-      dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO_mod)) / H, # O2, mmol/m2/ts to mmol/m3/ts
+      dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO_mod)) / Z, # O2, mmol/m2/ts to mmol/m3/ts
       converge = Rhat.test
     )
   

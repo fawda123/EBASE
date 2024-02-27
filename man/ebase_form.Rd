@@ -41,11 +41,11 @@ dat <- exdat \%>\%
 cl <- makeCluster(2)
 registerDoParallel(cl)
 
-out <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
+out <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2)
 
 stopCluster(cl)
 
-dat <- ebase_prep(dat, H = 1.85, interval = 900, ndays = 1)
+dat <- ebase_prep(dat, Z = 1.85, interval = 900, ndays = 1)
 
 ebase_form(out, dat, interval = 900, maxinterp = 48) 
 }

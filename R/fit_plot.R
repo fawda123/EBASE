@@ -27,7 +27,7 @@
 #' cl <- makeCluster(2)
 #' registerDoParallel(cl)
 #'
-#' res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
+#' res <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2)
 #' 
 #' stopCluster(cl)
 #' 

@@ -6,8 +6,8 @@
 \usage{
 interp_plot(
   dat,
-  param = c("DO_obs", "DO_sat", "H", "Temp", "Sal", "PAR", "WSpd", "sc"),
-  H,
+  param = c("DO_obs", "DO_sat", "Z", "Temp", "Sal", "PAR", "WSpd", "sc"),
+  Z,
   interval,
   ndays = 1
 )
@@ -15,9 +15,9 @@ interp_plot(
 \arguments{
 \item{dat}{input data frame}
 
-\item{param}{character string of the parameter to plot, one of \code{DO_obs}, \code{DO_sat}, \code{H}, \code{Temp}, \code{Sal}, \code{PAR}, \code{WSpd}, or \code{sc}}
+\item{param}{character string of the parameter to plot, one of \code{DO_obs}, \code{DO_sat}, \code{Z}, \code{Temp}, \code{Sal}, \code{PAR}, \code{WSpd}, or \code{sc}}
 
-\item{H}{numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}}
+\item{Z}{numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}}
 
 \item{interval}{timestep interval in seconds}
 
@@ -46,5 +46,5 @@ dat <- dat \%>\%
   slice_sample(prop = 0.9) \%>\% 
   arrange(DateTimeStamp)
 
-interp_plot(dat, H = 1.85, interval = 900, param = 'DO_sat')
+interp_plot(dat, Z = 1.85, interval = 900, param = 'DO_sat')
 }

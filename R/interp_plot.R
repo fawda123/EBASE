@@ -1,7 +1,7 @@
 #' Create a diagnostic plot showing interpolated values prior to metabolism estimates
 #'
 #' @inheritParams ebase_prep
-#' @param param character string of the parameter to plot, one of \code{DO_obs}, \code{DO_sat}, \code{H}, \code{Temp}, \code{Sal}, \code{PAR}, \code{WSpd}, or \code{sc}
+#' @param param character string of the parameter to plot, one of \code{DO_obs}, \code{DO_sat}, \code{Z}, \code{Temp}, \code{Sal}, \code{PAR}, \code{WSpd}, or \code{sc}
 #'
 #' @return A \code{\link[ggplot2]{ggplot}} object
 #' @export
@@ -24,15 +24,15 @@
 #'   slice_sample(prop = 0.9) %>% 
 #'   arrange(DateTimeStamp)
 #'
-#' interp_plot(dat, H = 1.85, interval = 900, param = 'DO_sat')
-interp_plot <- function(dat, param = c('DO_obs', 'DO_sat', 'H', 'Temp', 'Sal', 'PAR', 'WSpd', 'sc'), H, interval, ndays = 1){
+#' interp_plot(dat, Z = 1.85, interval = 900, param = 'DO_sat')
+interp_plot <- function(dat, param = c('DO_obs', 'DO_sat', 'Z', 'Temp', 'Sal', 'PAR', 'WSpd', 'sc'), Z, interval, ndays = 1){
   
   param <- match.arg(param)
 
   labs <- expression(paste('DO (mmol ', m^{-3}, ')'), paste('DO sat (mmol ', m^{-3}, ')'), 'Water column height (m)', 'Water temperature (C)', 'Salinity (psu)', paste('PAR (W ', m^{-2}, '/s)'), 'Wind speed (m / s)', 'Schmidt number')
-  names(labs) <- c('DO_obs', 'DO_sat', 'H', 'Temp', 'Sal','PAR', 'WSpd', 'sc')
+  names(labs) <- c('DO_obs', 'DO_sat', 'Z', 'Temp', 'Sal','PAR', 'WSpd', 'sc')
 
-  dat <- ebase_prep(dat, H = H, interval = interval, ndays = ndays)
+  dat <- ebase_prep(dat, Z = Z, interval = interval, ndays = ndays)
 
   toplo <- dat %>% 
     dplyr::rename(yval = !!param)

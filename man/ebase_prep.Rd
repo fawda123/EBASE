@@ -4,12 +4,12 @@
 \alias{ebase_prep}
 \title{Prepare data for ebase}
 \usage{
-ebase_prep(dat, H, interval, ndays = 1)
+ebase_prep(dat, Z, interval, ndays = 1)
 }
 \arguments{
 \item{dat}{input data frame}
 
-\item{H}{numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}}
+\item{Z}{numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}}
 
 \item{interval}{timestep interval in seconds}
 
@@ -29,6 +29,6 @@ The \code{ndays} argument defines the number of days that are used for optimizin
 Missing values are interpolated at the interval specified by the \code{interval} argument for conformance with the core model equation. Records at the start or end of the input time series that do not include a full day are also removed.  A warning is returned to the console if gaps are found or dangling records are found.
 }
 \examples{
-dat <- ebase_prep(exdat, H = 1.85, interval = 900)
+dat <- ebase_prep(exdat, Z = 1.85, interval = 900)
 head(dat)
 }

@@ -6,7 +6,7 @@
 \usage{
 ebase(
   dat,
-  H,
+  Z,
   interval,
   ndays = 1,
   aprior = c(4, 2),
@@ -27,7 +27,7 @@ ebase(
 \arguments{
 \item{dat}{input data frame}
 
-\item{H}{numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}}
+\item{Z}{numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}}
 
 \item{interval}{timestep interval in seconds}
 
@@ -74,11 +74,11 @@ Required input data are time series for dissolved oxygen (mg/L), water temperatu
 
 The metabolic estimates are based on a mass balance equation in Grace et al. 2015 with the gas exchange estimate from Wanninkhof 2004.  It is similar to that provided by the BASEmetab R package at \url{https://github.com/dgiling/BASEmetab}, with modifications to estimate different parameters. The equation optimized in the JAGS model is:
 
-\deqn{ H\frac{dC_d}{dt} = aPAR - R - bU_{10}^2\left(\frac{Sc}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )}
+\deqn{ Z\frac{dC_d}{dt} = aPAR - R - bU_{10}^2\left(\frac{Sc}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )}
 
 More simply:
 
-\deqn{ H\frac{dC_d}{dt} = P - R -D}
+\deqn{ Z\frac{dC_d}{dt} = P - R -D}
 
 Gross production is provided by \emph{aPAR}, respiration is provided by \emph{R}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{R}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The first modeled value starts at the mean oxygen concentration for all measurements in the optimization period.  The estimated concentration at each time step is also returned for comparison to observed as one measure of model performance.
 
@@ -109,7 +109,7 @@ dat <- exdat \%>\%
 cl <- makeCluster(2)
 registerDoParallel(cl)
 
-res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
+res <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2)
 
 stopCluster(cl)
 
@@ -121,7 +121,7 @@ stopCluster(cl)
 cl <- makeCluster(2)
 registerDoParallel(cl)
   
-res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2, bprior = c(0.2, 0.05))
+res <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2, bprior = c(0.2, 0.05))
 
 stopCluster(cl)
 }

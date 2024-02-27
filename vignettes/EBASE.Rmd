@@ -44,16 +44,16 @@ head(exdat)
 The core function to estimate metabolism is `ebase()`.  The metabolic estimates are based on a mass balance equation in @Grace15 with the gas exchange estimate from @Wanninkhof14.  It is similar to that provided by the BASEmetab R package at https://github.com/dgiling/BASEmetab, with modifications to estimate different parameters optimized by the JAGS model: 
 
 $$
-H\frac{dC_d}{dt} = aPAR - R - bU_{10}^2\left(\frac{Sc}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )
+Z\frac{dC_d}{dt} = aPAR - R - bU_{10}^2\left(\frac{Sc}{600} \right)^{-0.5} \left(C_{Sat} - C_d \right )
 $$
 
 More simply:
 
 $$
-H\frac{dC_d}{dt} = P - R - D
+Z\frac{dC_d}{dt} = P - R - D
 $$
 
-The metabolic estimates are defined by the change in dissolved oxygen over the time step $\frac{dC_d}{dt}$, where gross production is provided by $aPAR$, respiration is provided by $R$, and gas exchange is provided by the remainder.  Required inputs for the equation are dissolved oxygen concentration as $C_d$, solar radiation as $PAR$, water column depth as $H$ (meters), and wind speed as $U$.  Other inputs for the schmidt number $Sc$ and dissolved oxygen at saturation $C_{Sat}$ are calculated from the observed data.  The remaining three parameters $a$, $R$, and $b$ are estimated by likelihood given the observed data with the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The first modeled value starts at the mean oxygen concentration for all measurements in the optimization period.  The estimated concentration is also returned at each time step, which can be compared to observed as one measure of model performance.
+The metabolic estimates are defined by the change in dissolved oxygen over the time step $\frac{dC_d}{dt}$, where gross production is provided by $aPAR$, respiration is provided by $R$, and gas exchange is provided by the remainder.  Required inputs for the equation are dissolved oxygen concentration as $C_d$, solar radiation as $PAR$, water column depth as $Z$ (meters), and wind speed as $U$.  Other inputs for the schmidt number $Sc$ and dissolved oxygen at saturation $C_{Sat}$ are calculated from the observed data.  The remaining three parameters $a$, $R$, and $b$ are estimated by likelihood given the observed data with the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The first modeled value starts at the mean oxygen concentration for all measurements in the optimization period.  The estimated concentration is also returned at each time step, which can be compared to observed as one measure of model performance.
 
 The following shows how to use the `ebase()` function with a subset of four days from the `exdat()` example dataset.  Running the model on the entire year will take a few minutes, so a subset is used: 
 
@@ -72,7 +72,7 @@ head(dat)
 Also note that any "dangling" observations at the start or end of the time series that do not include an entire day are removed from the input data prior to estimating metabolism.  A warning is returned if these observations are found and removed.  
 
 ```{r}
-res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
+res <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2)
 head(res)
 ```
 
@@ -98,7 +98,7 @@ library(doParallel)
 cl <- makeCluster(2)
 registerDoParallel(cl)
 
-res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2)
+res <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2)
 
 stopCluster(cl)
 ```
@@ -163,7 +163,7 @@ Here, the number of days used to optimize the equation is set to all days in the
 cl <- makeCluster(2)
 registerDoParallel(cl)
 
-res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2, ndays = 4)
+res <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2, ndays = 4)
 
 stopCluster(cl)
 ```
@@ -190,7 +190,7 @@ The default setting uses the average observed dissolved oxygen in each optimizat
 cl <- makeCluster(2)
 registerDoParallel(cl)
 
-res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2, ndays = 1, doave = F)
+res <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2, ndays = 1, doave = F)
 
 stopCluster(cl)
 ```
@@ -216,14 +216,14 @@ head(dat2)
 The `ebase_prep()` function is used internally to `ebase` to prepare the data for the metabolism calculations.  This function interpolates the missing data and returns a column `isinterp` that specifies `TRUE` or `FALSE` if a value is interpolated.  
 
 ```{r, message = F}
-dat2interp <- ebase_prep(dat2, H = 1.85, interval = 900)
+dat2interp <- ebase_prep(dat2, Z = 1.85, interval = 900)
 head(dat2interp)
 ```
 
 The interpolated values can be visually inspected using the `interp_plot()` function.  
 
 ```{r, fig.height = 3, fig.width = 9, message = F}
-interp_plot(dat2, H = 1.85, interval = 900, param = 'DO_sat')
+interp_plot(dat2, Z = 1.85, interval = 900, param = 'DO_sat')
 ```
 
 The `ebase()` function includes the `maxinterp` argument to assign `NA` values to continuously interpolated rows with length greater than the value defined by `maxinterp`.  This value is set to 12 hours by default and applies to the groupings defined by `ndays`, i.e., any group with a continuous set of interpolated values where the time is greater than 12 hours are assigned `NA` (except `Date` and `DateTimeStamp`).  The numeric value passed to `maxinterp` is the number of time steps for the input data, e.g., 48 would be 12 hours if the time step is 900 seconds.  
@@ -243,7 +243,7 @@ The same change to the prior distribution for the $b$ parameter is applied to `e
 cl <- makeCluster(2)
 registerDoParallel(cl)
 
-res <- ebase(dat, interval = 900, H = 1.85, progress = TRUE, n.chains = 2, bprior = c(0.2, 0.1))
+res <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2, bprior = c(0.2, 0.1))
 
 stopCluster(cl)
 

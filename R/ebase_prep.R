@@ -3,7 +3,7 @@
 #' Prepare data for ebase
 #' 
 #' @param dat input data frame
-#' @param H numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}
+#' @param Z numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}
 #' @param interval timestep interval in seconds
 #' @param ndays numeric for number of days in \code{dat} for optimizing the metabolic equation, see details
 #' 
@@ -22,9 +22,9 @@
 #' @export
 #' 
 #' @examples 
-#' dat <- ebase_prep(exdat, H = 1.85, interval = 900)
+#' dat <- ebase_prep(exdat, Z = 1.85, interval = 900)
 #' head(dat)
-ebase_prep <- function(dat, H, interval, ndays = 1){
+ebase_prep <- function(dat, Z, interval, ndays = 1){
   
   ##
   # sanity checks
@@ -39,19 +39,19 @@ ebase_prep <- function(dat, H, interval, ndays = 1){
     stop(msg)
   }
 
-  # check if H is equal in length to dat if not equal to 1
-  lenh <- length(H)
-  chk <- !(lenh == 1 | lenh == nrow(dat))
+  # check if Z is equal in length to dat if not equal to 1
+  lenz <- length(Z)
+  chk <- !(lenz == 1 | lenz == nrow(dat))
   if(chk){
-    msg <- paste0('Supplied value for H has length ', lenh, ', should be 1 or ', nrow(dat))
+    msg <- paste0('Supplied value for Z has length ', lenz, ', should be 1 or ', nrow(dat))
     stop(msg)
   }
 
-  # sort dat by DateTimeStamp, add H
+  # sort dat by DateTimeStamp, add Z
   dat <- dat %>% 
     dplyr::arrange(DateTimeStamp) %>% 
     dplyr::mutate(
-      H = H
+      Z = Z
     )
   
   # check if dangling start or stop observations
@@ -120,12 +120,12 @@ ebase_prep <- function(dat, H, interval, ndays = 1){
   # add DO sat as mmol/m2
   dat <- dat %>% 
     dplyr::mutate(
-      DO_obs = H * DO_obs / 32 * 1000,
+      DO_obs = Z * DO_obs / 32 * 1000,
       sc = fun_schmidt_oxygen(Temp, Sal), 
-      DO_sat = H * fun_eqb_oxygen(Temp, Sal), 
+      DO_sat = Z * fun_eqb_oxygen(Temp, Sal), 
       Date = as.Date(DateTimeStamp, tz = attr(DateTimeStamp, 'tzone'))
     ) %>% 
-    dplyr::select(Date, DateTimeStamp, isinterp, DO_obs, DO_sat, H, dplyr::everything())
+    dplyr::select(Date, DateTimeStamp, isinterp, DO_obs, DO_sat, Z, dplyr::everything())
   
   # add groups defined by ndays to out
   # its an even cut by ndays with remainder assigned
