@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="EBASE overview">
 <meta property="og:description" content="EBASE">
@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EBASE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9015</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9016</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -129,12 +129,12 @@ estimate from <span class="citation">Wanninkhof (2014)</span>. It is
 similar to that provided by the BASEmetab R package at <a href="https://github.com/dgiling/BASEmetab" class="external-link uri">https://github.com/dgiling/BASEmetab</a>, with modifications
 to estimate different parameters optimized by the JAGS model:</p>
 <p><span class="math display">\[
-H\frac{dC_d}{dt} = aPAR - R - bU_{10}^2\left(\frac{Sc}{600}
+Z\frac{dC_d}{dt} = aPAR - R - bU_{10}^2\left(\frac{Sc}{600}
 \right)^{-0.5} \left(C_{Sat} - C_d \right )
 \]</span></p>
 <p>More simply:</p>
 <p><span class="math display">\[
-H\frac{dC_d}{dt} = P - R - D
+Z\frac{dC_d}{dt} = P - R - D
 \]</span></p>
 <p>The metabolic estimates are defined by the change in dissolved oxygen
 over the time step <span class="math inline">\(\frac{dC_d}{dt}\)</span>,
@@ -142,7 +142,7 @@ where gross production is provided by <span class="math inline">\(aPAR\)</span>,
 remainder. Required inputs for the equation are dissolved oxygen
 concentration as <span class="math inline">\(C_d\)</span>, solar
 radiation as <span class="math inline">\(PAR\)</span>, water column
-depth as <span class="math inline">\(H\)</span> (meters), and wind speed
+depth as <span class="math inline">\(Z\)</span> (meters), and wind speed
 as <span class="math inline">\(U\)</span>. Other inputs for the schmidt
 number <span class="math inline">\(Sc\)</span> and dissolved oxygen at
 saturation <span class="math inline">\(C_{Sat}\)</span> are calculated
@@ -181,9 +181,9 @@ time series that do not include an entire day are removed from the input
 data prior to estimating metabolism. A warning is returned if these
 observations are found and removed.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, Z <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         DateTimeStamp       Date grp    H  DO_obs   DO_mod DO_modlo DO_modhi</span></span>
+<span><span class="co">#&gt;         DateTimeStamp       Date grp    Z  DO_obs   DO_mod DO_modlo DO_modhi</span></span>
 <span><span class="co">#&gt; 1 2012-06-01 00:00:00 2012-06-01   1 1.85 140.625 166.1133 166.1122 166.1143</span></span>
 <span><span class="co">#&gt; 2 2012-06-01 00:15:00 2012-06-01   1 1.85 159.375 165.4136 165.1512 165.6796</span></span>
 <span><span class="co">#&gt; 3 2012-06-01 00:30:00 2012-06-01   1 1.85 150.000 164.7459 164.2171 165.2783</span></span>
@@ -235,7 +235,7 @@ package and registering a parallel backend as below.</p>
 <span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, Z <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span></code></pre></div>
 <p>Model fit can be assessed using the <code>converge</code> and
@@ -361,7 +361,7 @@ days in the input data.</p>
 <code class="sourceCode R"><span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span>, ndays <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, Z <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span>, ndays <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span></code></pre></div>
 <p>And the resulting plot:</p>
@@ -397,7 +397,7 @@ oxygen as the starting value.</p>
 <code class="sourceCode R"><span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span>, ndays <span class="op">=</span> <span class="fl">1</span>, doave <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, Z <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span>, ndays <span class="op">=</span> <span class="fl">1</span>, doave <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
@@ -436,9 +436,9 @@ This function interpolates the missing data and returns a column
 <code>isinterp</code> that specifies <code>TRUE</code> or
 <code>FALSE</code> if a value is interpolated.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dat2interp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase_prep.html">ebase_prep</a></span><span class="op">(</span><span class="va">dat2</span>, H <span class="op">=</span> <span class="fl">1.85</span>, interval <span class="op">=</span> <span class="fl">900</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">dat2interp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase_prep.html">ebase_prep</a></span><span class="op">(</span><span class="va">dat2</span>, Z <span class="op">=</span> <span class="fl">1.85</span>, interval <span class="op">=</span> <span class="fl">900</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat2interp</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         Date       DateTimeStamp isinterp   DO_obs   DO_sat    H Temp  Sal PAR</span></span>
+<span><span class="co">#&gt;         Date       DateTimeStamp isinterp   DO_obs   DO_sat    Z Temp  Sal PAR</span></span>
 <span><span class="co">#&gt; 1 2012-06-02 2012-06-02 00:00:00    FALSE 323.7500 394.9605 1.85 28.8 21.8   0</span></span>
 <span><span class="co">#&gt; 2 2012-06-02 2012-06-02 00:15:00    FALSE 329.5313 393.4299 1.85 28.8 22.5   0</span></span>
 <span><span class="co">#&gt; 3 2012-06-02 2012-06-02 00:30:00    FALSE 323.7500 391.6884 1.85 28.9 23.0   0</span></span>
@@ -455,7 +455,7 @@ This function interpolates the missing data and returns a column
 <p>The interpolated values can be visually inspected using the
 <code><a href="../reference/interp_plot.html">interp_plot()</a></code> function.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/interp_plot.html">interp_plot</a></span><span class="op">(</span><span class="va">dat2</span>, H <span class="op">=</span> <span class="fl">1.85</span>, interval <span class="op">=</span> <span class="fl">900</span>, param <span class="op">=</span> <span class="st">'DO_sat'</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/interp_plot.html">interp_plot</a></span><span class="op">(</span><span class="va">dat2</span>, Z <span class="op">=</span> <span class="fl">1.85</span>, interval <span class="op">=</span> <span class="fl">900</span>, param <span class="op">=</span> <span class="st">'DO_sat'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="EBASE_files/figure-html/unnamed-chunk-22-1.png" width="864" style="display: block; margin: auto;"></p>
 <p>The <code><a href="../reference/ebase.html">ebase()</a></code> function includes the <code>maxinterp</code>
 argument to assign <code>NA</code> values to continuously interpolated
@@ -487,7 +487,7 @@ distributions (e.g., as shown with <code><a href="../reference/credible_plot.htm
 <code class="sourceCode R"><span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, H <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span>, bprior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, Z <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span>, bprior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">stopCluster</a></span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span>
 <span></span>
@@ -504,7 +504,7 @@ distributions of the parameters.</p>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-Grace15" class="csl-entry">
 Grace, Michael R, Darren P Giling, Sally Hladyz, Valerie Caron, Ross M
 Thompson, and Ralph Mac Nally. 2015. <span>“Fast Processing of Diel
