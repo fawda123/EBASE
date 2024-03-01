@@ -35,7 +35,7 @@ library(EBASE)
 
 ## Usage
 
-An example file called `exdat()` is included with the package that demonstrates the required time series format to use the functions.  It includes nearly a year of continuously monitored water quality and meteorological data at the Apalachicola National Estuarine Research Reserve.  The required data include a date and time vector (`DateTimeStamp`), dissolved oxygen (mg/L, `DO_obs`) , water temperature (C, `Temp`), salinity (psu, `Sal`), PAR (W/m2, `PAR`), and wind speed (m/s, `WSpd`).  The time step should be consistent throughout the dataset and is indicated as an argument to the `ebase()` function (see below).  The `exdat()` dataset can be viewed at any time after the package is loaded and is used in the examples in the help files:
+An example file called `exdat()` is included with the package that demonstrates the required time series format to use the functions.  It includes nearly a year of continuously monitored water quality and meteorological data at the Apalachicola National Estuarine Research Reserve.  The required data include a date and time vector (`DateTimeStamp`), dissolved oxygen (mg L-1, `DO_obs`) , water temperature (C, `Temp`), salinity (psu, `Sal`), PAR (W m-2, `PAR`), and wind speed (m s-1, `WSpd`).  The time step should be consistent throughout the dataset and is indicated as an argument to the `ebase()` function (see below).  The `exdat()` dataset can be viewed at any time after the package is loaded and is used in the examples in the help files:
 
 ```{r}
 head(exdat)
@@ -76,7 +76,7 @@ res <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2)
 head(res)
 ```
 
-The results are returned as a data frame with instantaneous metabolic estimates for areal gross production (O2 mmol/m2/d, `P` or $aPAR$ from above as volumetric), respiration (O2 mmol/m2/d, `R` from above as volumetric), and gas exchange (O2 mmol/m2/d, `D` or the remainder of the equation from above as volumetric).  Additional parameters estimated by the model that are returned include `a` and `b` as shown in the above equation.  The `a` parameter is a constant that represents the primary production per quantum of light with units of  (mmol/m2/d)/(W/m2) and is used to estimate gross production [@Grace15].  The `b` parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2) (provided as 0.251 in eqn. 4 in @Wanninkhof14).
+The results are returned as a data frame with instantaneous metabolic estimates for areal gross production (O2 mmol m-2 d-1, `P` or $aPAR$ from above as volumetric), respiration (O2 mmol m-2 d-1, `R` from above as volumetric), and gas exchange (O2 mmol m-2 d-1, `D` or the remainder of the equation from above as volumetric).  Additional parameters estimated by the model that are returned include `a` and `b` as shown in the above equation.  The `a` parameter is a constant that represents the primary production per quantum of light with units of  (mmol m-2 d-1)/(W m-2) and is used to estimate gross production [@Grace15].  The `b` parameter is a constant used to estimate gas exchange in (cm hr-1)/(m2 s-2) (provided as 0.251 in eqn. 4 in @Wanninkhof14).
 
 A plot of the results can be made with `ebase_plot()`.
 
@@ -129,7 +129,7 @@ The prior distributions for the $a$, $R$, and $b$ parameters are defined in the 
 system.file('ebase_model.txt', package = 'EBASE')
 ```
 
-The default values for the priors were chosen based on the ability of EBASE to reproduce known parameters from a forward metabolism model.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above.  The upper limit for $b$ is also set as twice the default value of the mean in the `bprior` argument. Units for each parameter are (mmol/m2/d)/(W/m2) for $a$, mmol/m2/d for $R$, and (cm/hr)/(m2/s2) for $b$. 
+The default values for the priors were chosen based on the ability of EBASE to reproduce known parameters from a forward metabolism model.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above.  The upper limit for $b$ is also set as twice the default value of the mean in the `bprior` argument. Units for each parameter are (mmol m-2 d-1)/(W m-2) for $a$, mmol m-2 d-1 for $R$, and (cm hr-1)/(m2 s-2) for $b$. 
 
 The prior distributions can be viewed with the `prior_plot()` function.  No changes are needed to the default arguments for this function if the default arguments are used for `ebase()`.  The density curves are normalized such that the peak value is always equal to 1.  
 
