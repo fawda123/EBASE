@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EBASE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9016</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9017</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,11 +106,11 @@ package that demonstrates the required time series format to use the
 functions. It includes nearly a year of continuously monitored water
 quality and meteorological data at the Apalachicola National Estuarine
 Research Reserve. The required data include a date and time vector
-(<code>DateTimeStamp</code>), dissolved oxygen (mg/L,
+(<code>DateTimeStamp</code>), dissolved oxygen (mg L-1,
 <code>DO_obs</code>) , water temperature (C, <code>Temp</code>),
-salinity (psu, <code>Sal</code>), PAR (W/m2, <code>PAR</code>), and wind
-speed (m/s, <code>WSpd</code>). The time step should be consistent
-throughout the dataset and is indicated as an argument to the
+salinity (psu, <code>Sal</code>), PAR (W m-2, <code>PAR</code>), and
+wind speed (m s-1, <code>WSpd</code>). The time step should be
+consistent throughout the dataset and is indicated as an argument to the
 <code><a href="../reference/ebase.html">ebase()</a></code> function (see below). The <code><a href="../reference/exdat.html">exdat()</a></code>
 dataset can be viewed at any time after the package is loaded and is
 used in the examples in the help files:</p>
@@ -205,18 +205,18 @@ observations are found and removed.</p>
 <span><span class="co">#&gt; 5 0.4880948  0   0   0 141.3441 91.81771 189.3398 17.74458 5.472469 28.00020</span></span>
 <span><span class="co">#&gt; 6 0.4880948  0   0   0 141.3441 91.81771 189.3398 13.08887 4.054759 20.68591</span></span></code></pre></div>
 <p>The results are returned as a data frame with instantaneous metabolic
-estimates for areal gross production (O2 mmol/m2/d, <code>P</code> or
+estimates for areal gross production (O2 mmol m-2 d-1, <code>P</code> or
 <span class="math inline">\(aPAR\)</span> from above as volumetric),
-respiration (O2 mmol/m2/d, <code>R</code> from above as volumetric), and
-gas exchange (O2 mmol/m2/d, <code>D</code> or the remainder of the
-equation from above as volumetric). Additional parameters estimated by
-the model that are returned include <code>a</code> and <code>b</code> as
-shown in the above equation. The <code>a</code> parameter is a constant
-that represents the primary production per quantum of light with units
-of (mmol/m2/d)/(W/m2) and is used to estimate gross production <span class="citation">(Grace et al. 2015)</span>. The <code>b</code>
-parameter is a constant used to estimate gas exchange in (cm/hr)/(m2/s2)
-(provided as 0.251 in eqn. 4 in <span class="citation">Wanninkhof
-(2014)</span>).</p>
+respiration (O2 mmol m-2 d-1, <code>R</code> from above as volumetric),
+and gas exchange (O2 mmol m-2 d-1, <code>D</code> or the remainder of
+the equation from above as volumetric). Additional parameters estimated
+by the model that are returned include <code>a</code> and <code>b</code>
+as shown in the above equation. The <code>a</code> parameter is a
+constant that represents the primary production per quantum of light
+with units of (mmol m-2 d-1)/(W m-2) and is used to estimate gross
+production <span class="citation">(Grace et al. 2015)</span>. The
+<code>b</code> parameter is a constant used to estimate gas exchange in
+(cm hr-1)/(m2 s-2) (provided as 0.251 in eqn. 4 in <span class="citation">Wanninkhof (2014)</span>).</p>
 <p>A plot of the results can be made with <code><a href="../reference/ebase_plot.html">ebase_plot()</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ebase_plot.html">ebase_plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
@@ -282,7 +282,7 @@ additional constraint is that all the prior distributions are truncated
 to be positive values as required by the core metabolism equation above.
 The upper limit for <span class="math inline">\(b\)</span> is also set
 as twice the default value of the mean in the <code>bprior</code>
-argument. Units for each parameter are (mmol/m2/d)/(W/m2) for <span class="math inline">\(a\)</span>, mmol/m2/d for <span class="math inline">\(R\)</span>, and (cm/hr)/(m2/s2) for <span class="math inline">\(b\)</span>.</p>
+argument. Units for each parameter are (mmol m-2 d-1)/(W m-2) for <span class="math inline">\(a\)</span>, mmol m-2 d-1 for <span class="math inline">\(R\)</span>, and (cm hr-1)/(m2 s-2) for <span class="math inline">\(b\)</span>.</p>
 <p>The prior distributions can be viewed with the
 <code><a href="../reference/prior_plot.html">prior_plot()</a></code> function. No changes are needed to the default
 arguments for this function if the default arguments are used for
