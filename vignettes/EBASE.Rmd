@@ -90,7 +90,7 @@ The daily averages can also be plotted by using `instantaneous = FALSE`.
 ebase_plot(res, instantaneous = FALSE)
 ```
 
-Execution time of the model can also be reduced by using multiple processors.  This is done using [doParrallel](https://cran.r-project.org/web/packages/doParallel/index.html) package and registering a parallel backend as below. 
+Execution time of the model can also be reduced by using multiple processors.  This is done using [doParrallel](https://cran.r-project.org/package=doParallel) package and registering a parallel backend as below. 
 
 ```{r}
 # setup parallel backend
