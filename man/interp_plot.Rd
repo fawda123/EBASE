@@ -33,16 +33,18 @@ Create a diagnostic plot showing interpolated values prior to metabolism estimat
 Missing values in the input data can also be interpolated prior to estimating metabolism.  This is the default behavior and it is the responsibility of the user to verify that these interpolated values are not wildly inaccurate.  Missing values are linearly interpolated between non-missing values at the time step specified by the value in \code{interval}.  This works well for small gaps, but can easily create inaccurate values at gaps larger than a few hours. The plot from this function can be used to visually assess the interpolated gaps.
 }
 \examples{
+library(dplyr)
+
 # get four days of data
 dat <- exdat \%>\% 
-  dplyr::filter(lubridate::month(DateTimeStamp) == 6) \%>\% 
-  dplyr::filter(lubridate::day(DateTimeStamp) \%in\% 1:4)
+  filter(lubridate::month(DateTimeStamp) == 6) \%>\% 
+  filter(lubridate::day(DateTimeStamp) \%in\% 1:4)
   
 # create missing values
 set.seed(222)
 dat <- dat \%>\% 
-  dplyr::slice_sample(prop = 0.9) \%>\% 
-  dplyr::arrange(DateTimeStamp)
+  slice_sample(prop = 0.9) \%>\% 
+  arrange(DateTimeStamp)
 
 interp_plot(dat, Z = 1.85, interval = 900, param = 'DO_sat')
 }

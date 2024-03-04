@@ -11,10 +11,12 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr)
+#' 
 #' # get four days of data
 #' dat <- exdat %>% 
-#'   dplyr::filter(lubridate::month(DateTimeStamp) == 6) %>% 
-#'   dplyr::filter(lubridate::day(DateTimeStamp) %in% 1:4)
+#'   filter(lubridate::month(DateTimeStamp) == 6) %>% 
+#'   filter(lubridate::day(DateTimeStamp) %in% 1:4)
 #' dat <- ebase_prep(dat, Z = 1.85, interval = 900, ndays = 1)
 #' 
 #' ebase_form(exres, dat, interval = 900, maxinterp = 48) 

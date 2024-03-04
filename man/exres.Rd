@@ -42,19 +42,7 @@ exres
 Example results for four days from Apalachicola NERRS
 }
 \examples{
-
-\donttest{
-library(dplyr)
-library(lubridate)
-
-# get four days of data
-dat <- exdat \%>\% 
-  filter(month(exdat$DateTimeStamp) == 6 & day(exdat$DateTimeStamp) \%in\% 1:4)
-
-exres <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2)
-
-save(exres, file = 'data/exres.RData', compress = 'xz')
-}
+head(exres)
 }
 \seealso{
 Other utilities: 

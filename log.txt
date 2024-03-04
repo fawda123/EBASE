@@ -1,3 +1,0 @@
-Log entry time 2024-03-04 15:56:55.648134 
-Group  1  of  1 
-Time difference of 0.07876611 secs
