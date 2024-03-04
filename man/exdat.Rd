@@ -42,5 +42,9 @@ exdat <- read.csv('inst/APNERR2012.csv') \%>\%
 save(exdat, file = 'data/exdat.RData', compress = 'xz')
 }
 }
+\seealso{
+Other utilities: 
+\code{\link{exres}}
+}
 \concept{utilities}
 \keyword{datasets}

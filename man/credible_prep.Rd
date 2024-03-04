@@ -23,26 +23,6 @@ Get credible intervals for a, R, b
 This function gets 95\% credible intervals (2.5th to 97.5th percentiles, approximate posterior distributions) for \code{a}, \code{R}, and/or \code{b} using the output from \code{\link{ebase}}. The function is used in \code{\link{credible_plot}}, but is provided as a separate function for convenience.
 }
 \examples{
-
-library(dplyr)
-library(lubridate)
-library(doParallel)
-
-# get four days of data
-dat <- exdat \%>\% 
-  filter(month(exdat$DateTimeStamp) == 6 & day(exdat$DateTimeStamp) \%in\% 1:4)
-
-##
-# run ebase with defaults, parallel
-
-# setup parallel backend
-cl <- makeCluster(2)
-registerDoParallel(cl)
-
-res <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2)
-
-stopCluster(cl)
-
 # get credible intervals
-credible_prep(res)
+credible_prep(exres)
 }

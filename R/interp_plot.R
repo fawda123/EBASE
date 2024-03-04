@@ -11,18 +11,16 @@
 #' @importFrom dplyr %>%
 #'
 #' @examples 
-#' library(dplyr)
-#' library(lubridate)
-#' 
 #' # get four days of data
 #' dat <- exdat %>% 
-#'   filter(month(exdat$DateTimeStamp) == 6 & day(exdat$DateTimeStamp) %in% 1:4)
+#'   dplyr::filter(lubridate::month(DateTimeStamp) == 6) %>% 
+#'   dplyr::filter(lubridate::day(DateTimeStamp) %in% 1:4)
 #'   
 #' # create missing values
 #' set.seed(222)
 #' dat <- dat %>% 
-#'   slice_sample(prop = 0.9) %>% 
-#'   arrange(DateTimeStamp)
+#'   dplyr::slice_sample(prop = 0.9) %>% 
+#'   dplyr::arrange(DateTimeStamp)
 #'
 #' interp_plot(dat, Z = 1.85, interval = 900, param = 'DO_sat')
 interp_plot <- function(dat, param = c('DO_obs', 'DO_sat', 'Z', 'Temp', 'Sal', 'PAR', 'WSpd', 'sc'), Z, interval, ndays = 1){

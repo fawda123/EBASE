@@ -9,29 +9,11 @@
 #' @details All metabolic estimates are plotted as positive values (\code{D} is represented as net ingassing).
 #' 
 #' @examples
-#' library(dplyr)
-#' library(lubridate)
-#' library(doParallel)
-#' 
-#' # get four days of data
-#' dat <- exdat %>% 
-#'   filter(month(exdat$DateTimeStamp) == 6 & day(exdat$DateTimeStamp) %in% 1:4)
-#' 
-#' # run ebase with defaults, parallel
-#' 
-#' # setup parallel backend
-#' cl <- makeCluster(2)
-#' registerDoParallel(cl)
-#'
-#' res <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2)
-#' 
-#' stopCluster(cl)
-#'
 #' # plot instantaneous
-#' ebase_plot(res)
+#' ebase_plot(exres)
 #' 
 #' # plot daily-averaged
-#' ebase_plot(res, instantaneous = FALSE)
+#' ebase_plot(exres, instantaneous = FALSE)
 ebase_plot <- function(res, instantaneous = TRUE){
   
   # instantaneous results

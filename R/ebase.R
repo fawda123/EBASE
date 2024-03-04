@@ -50,7 +50,7 @@
 #' 
 #' The \code{doave} argument can be used to define which dissolved oxygen value is used as the starting point in the Bayesian estimation for the optimization period.  The default setting (\code{doave = TRUE}) will use the average of all the dissolved oxygen values in the optimization period defined by \code{ndays}.  For example, the average of all dissolved oxygen values in each 24 hour period will be used if \code{doave = TRUE} and \code{ndays = 1}.  The first dissolved oxygen observation of the time series in the optimization period will be used as the starting point if \code{doave = F}.  In this case, the simulated dissolved oxygen time series will always start at the first observed dissolved oxygen value for each optimization period. 
 #' 
-#' @return A data frame with metabolic estimates for areal gross production (\code{P}, O2 mmol m-2 d-1), respiration (\code{R},  O2 mmol m-2 d-1), and gas exchange (\code{D}, O2 mmol m-2 d-1).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of (mmol m-2 d-1)/(W m-2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm hr-1)/(m2 s-2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).  Observed dissolved oxygen (\code{DO_obs}, mmol/m3), modeled dissolved oxygen (\code{DO_mod}, mmol/m3), and delta dissolved oxygen of the modeled results (\code{dDO}, mmol/m3/d) are also returned.  Note that delta dissolved oxygen is a daily rate.
+#' @return A data frame with metabolic estimates for areal gross production (\code{P}, O2 mmol m-2 d-1), respiration (\code{R},  O2 mmol m-2 d-1), and gas exchange (\code{D}, O2 mmol m-2 d-1).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of (mmol m-2 d-1)/(W m-2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm hr-1)/(m2 s-2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).  Observed dissolved oxygen (\code{DO_obs}, mmol m-3), modeled dissolved oxygen (\code{DO_mod}, mmol m-3), and delta dissolved oxygen of the modeled results (\code{dDO}, mmol m-3 d-1) are also returned.  Note that delta dissolved oxygen is a daily rate.
 #' 
 #' 95% credible intervals for \code{a}, \code{b}, and \code{R} are also returned in the corresponding columns \code{alo}, \code{ahi}, \code{blo}, \code{bhi}, \code{Rlo}, and \code{Rhi}, for the 2.5th and 97.5th percentile estimates for each parameter, respectively.  These values indicate the interval within which there is a 95% probability that the true parameter is in this range. Note that all values for these parameters are repeated across rows, although only one estimate for each is returned based on the number of days defined by \code{ndays}. 
 #' 
@@ -63,38 +63,11 @@
 #' Wanninkhof, R., 2014. Relationship between wind speed and gas exchange over the ocean revisited. Limnology and Oceanography: Methods 12, 351–362. https://doi.org/10.4319/lom.2014.12.351
 
 #' @examples 
+#' # get one day of data
+#' dat <- exdat[as.Date(exdat$DateTimeStamp) == as.Date('2012-02-23'), ]
 #' 
-#' library(dplyr)
-#' library(lubridate)
-#' library(doParallel)
-#' 
-#' # get four days of data
-#' dat <- exdat %>% 
-#'   filter(month(exdat$DateTimeStamp) == 6 & day(exdat$DateTimeStamp) %in% 1:4)
-#' 
-#' ##
-#' # run ebase with defaults, parallel
-#' 
-#' # setup parallel backend
-#' cl <- makeCluster(2)
-#' registerDoParallel(cl)
-#'
-#' res <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2)
-#' 
-#' stopCluster(cl)
-#'
-#'\dontrun{
-#' ##
-#' # run ebase with different prior distributions
-#' 
-#' # setup parallel backend
-#' cl <- makeCluster(2)
-#' registerDoParallel(cl)
-#'   
-#' res <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2, bprior = c(0.2, 0.05))
-#'
-#' stopCluster(cl)
-#' }
+#' # run ebase, use more chains and iterations for a better fit, update.chains as T
+#' ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2, n.iter = 100, update.chains = F)
 ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300, 150), bprior = c(0.251, 0.125), bmax = 0.502, doave = TRUE, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = FALSE, model_file = NULL){
   
   # prep data

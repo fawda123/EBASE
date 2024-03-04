@@ -25,28 +25,11 @@ Format ebase output
 This function is used internally with \code{\link{ebase}} and should not be called by itself.
 }
 \examples{
-library(dplyr)
-library(lubridate)
-library(doParallel)
-
 # get four days of data
 dat <- exdat \%>\% 
-  filter(month(exdat$DateTimeStamp) == 6 & day(exdat$DateTimeStamp) \%in\% 1:4)
-
-##
-# run ebase with defaults, parallel
-
-\dontrun{
-# setup parallel backend
-cl <- makeCluster(2)
-registerDoParallel(cl)
-
-out <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2)
-
-stopCluster(cl)
-
+  dplyr::filter(lubridate::month(DateTimeStamp) == 6) \%>\% 
+  dplyr::filter(lubridate::day(DateTimeStamp) \%in\% 1:4)
 dat <- ebase_prep(dat, Z = 1.85, interval = 900, ndays = 1)
 
-ebase_form(out, dat, interval = 900, maxinterp = 48) 
-}
+ebase_form(exres, dat, interval = 900, maxinterp = 48) 
 }
