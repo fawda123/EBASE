@@ -144,26 +144,28 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘lubridate’</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:base’:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     date, intersect, setdiff, union</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># get four days of data</span></span></span>
-<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">exdat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html" class="external-link">month</a></span><span class="op">(</span><span class="va">exdat</span><span class="op">$</span><span class="va">DateTimeStamp</span><span class="op">)</span> <span class="op">==</span> <span class="fl">6</span> <span class="op">&amp;</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/day.html" class="external-link">day</a></span><span class="op">(</span><span class="va">exdat</span><span class="op">$</span><span class="va">DateTimeStamp</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">exres</span> <span class="op">&lt;-</span> <span class="fu"><a href="ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, Z <span class="op">=</span> <span class="fl">1.85</span>, progress <span class="op">=</span> <span class="cn">TRUE</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">exres</span>, file <span class="op">=</span> <span class="st">'data/exres.RData'</span>, compress <span class="op">=</span> <span class="st">'xz'</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>cannot open compressed file 'data/exres.RData', probable reason 'No such file or directory'</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in xzfile(file, "wb", compression = 9):</span> cannot open the connection</span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">exres</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         DateTimeStamp       Date grp    Z  DO_obs   DO_mod DO_modlo DO_modhi</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2012-06-01 00:00:00 2012-06-01   1 1.85 140.625 166.1133 166.1122 166.1143</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2012-06-01 00:15:00 2012-06-01   1 1.85 159.375 165.4136 165.1512 165.6796</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2012-06-01 00:30:00 2012-06-01   1 1.85 150.000 164.7459 164.2171 165.2783</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2012-06-01 00:45:00 2012-06-01   1 1.85 150.000 164.0582 163.2677 164.8556</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2012-06-01 01:00:00 2012-06-01   1 1.85 150.000 163.3622 162.3142 164.4218</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2012-06-01 01:15:00 2012-06-01   1 1.85 156.250 162.6401 161.3214 163.9644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         dDO converge       rsq         a       alo     ahi         b      blo</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        NA     Fine 0.3316977        NA        NA      NA        NA       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -67.17105     Fine 0.3316977 0.8937188 0.5493401 1.23722 0.3099639 0.095399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -64.09917     Fine 0.3316977 0.8937188 0.5493401 1.23722 0.3099639 0.095399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -66.01785     Fine 0.3316977 0.8937188 0.5493401 1.23722 0.3099639 0.095399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -66.81056     Fine 0.3316977 0.8937188 0.5493401 1.23722 0.3099639 0.095399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 -69.32716     Fine 0.3316977 0.8937188 0.5493401 1.23722 0.3099639 0.095399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         bhi  P Plo Phi        R      Rlo      Rhi        D      Dlo      Dhi</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        NA NA  NA  NA       NA       NA       NA       NA       NA       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.4880948  0   0   0 141.3441 91.81771 189.3398 17.07767 5.256151 26.89177</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.4880948  0   0   0 141.3441 91.81771 189.3398 22.76065 7.016575 35.73629</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 0.4880948  0   0   0 141.3441 91.81771 189.3398 19.21109 5.935086 30.23658</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 0.4880948  0   0   0 141.3441 91.81771 189.3398 17.74458 5.472469 28.00020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.4880948  0   0   0 141.3441 91.81771 189.3398 13.08887 4.054759 20.68591</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
