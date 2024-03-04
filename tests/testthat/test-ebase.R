@@ -11,7 +11,7 @@ test_that("Checking ebase names", {
 
 test_that("Checking ebase output, doave as F", {
   
-  result <- EBASE::ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2, doave = F, 
+  result <- EBASE::ebase(dat, interval = 900, Z = 1.85, progress = FALSE, n.chains = 2, doave = F, 
                          n.iter = 100,
                       model_file = system.file("ebase_model.txt", package = "EBASE")) 
   

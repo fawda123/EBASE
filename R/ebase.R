@@ -67,7 +67,8 @@
 #' dat <- exdat[as.Date(exdat$DateTimeStamp, tz = 'America/Jamaica') == as.Date('2012-06-01'), ]
 #' 
 #' # run ebase, use more chains and iterations for a better fit, update.chains as T
-#' ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2, n.iter = 50, update.chains = F)
+#' ebase(dat, interval = 900, Z = 1.85, progress = FALSE, n.chains = 2, n.iter = 50, 
+#'  update.chains = FALSE)
 ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300, 150), bprior = c(0.251, 0.125), bmax = 0.502, doave = TRUE, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = FALSE, model_file = NULL){
   
   # prep data

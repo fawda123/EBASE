@@ -97,7 +97,8 @@ The \code{doave} argument can be used to define which dissolved oxygen value is 
 dat <- exdat[as.Date(exdat$DateTimeStamp, tz = 'America/Jamaica') == as.Date('2012-06-01'), ]
 
 # run ebase, use more chains and iterations for a better fit, update.chains as T
-ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2, n.iter = 50, update.chains = F)
+ebase(dat, interval = 900, Z = 1.85, progress = FALSE, n.chains = 2, n.iter = 50, 
+ update.chains = FALSE)
 }
 \references{
 Grace, M.R., Giling, D.P., Hladyz, S., Caron, V., Thompson, R.M., Nally, R.M., 2015. Fast processing of diel oxygen curves: Estimating stream metabolism with BASE (BAyesian Single-station Estimation). Limnology and Oceanography: Methods 13, e10011. https://doi.org/10.1002/lom3.10011
