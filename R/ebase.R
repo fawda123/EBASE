@@ -61,13 +61,13 @@
 #' Grace, M.R., Giling, D.P., Hladyz, S., Caron, V., Thompson, R.M., Nally, R.M., 2015. Fast processing of diel oxygen curves: Estimating stream metabolism with BASE (BAyesian Single-station Estimation). Limnology and Oceanography: Methods 13, e10011. https://doi.org/10.1002/lom3.10011
 #' 
 #' Wanninkhof, R., 2014. Relationship between wind speed and gas exchange over the ocean revisited. Limnology and Oceanography: Methods 12, 351–362. https://doi.org/10.4319/lom.2014.12.351
-
+#'
 #' @examples 
 #' # get one day of data
-#' dat <- exdat[as.Date(exdat$DateTimeStamp) == as.Date('2012-02-23'), ]
+#' dat <- exdat[as.Date(exdat$DateTimeStamp, tz = 'America/Jamaica') == as.Date('2012-06-01'), ]
 #' 
 #' # run ebase, use more chains and iterations for a better fit, update.chains as T
-#' ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2, n.iter = 100, update.chains = F)
+#' ebase(dat, interval = 900, Z = 1.85, progress = TRUE, n.chains = 2, n.iter = 50, update.chains = F)
 ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300, 150), bprior = c(0.251, 0.125), bmax = 0.502, doave = TRUE, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = FALSE, model_file = NULL){
   
   # prep data
