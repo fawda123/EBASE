@@ -5,6 +5,6 @@ library(lubridate)
 dat <- exdat %>%
   filter(month(DateTimeStamp) == 6 & day(DateTimeStamp) %in% 1:4)
 
-exres <- ebase(dat, interval = 900, Z = 1.85, progress = FALSE, n.chains = 2)
+exres <- ebase(dat, interval = 900, Z = 1.85, n.chains = 2)
 
 usethis::use_data(exres, overwrite = TRUE)

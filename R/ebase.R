@@ -17,7 +17,7 @@
 #' @param n.burnin number of MCMC chains to delete, passed to \code{\link[R2jags]{jags}}
 #' @param n.chains number of MCMC chains to run, passed to \code{\link[R2jags]{jags}}
 #' @param n.thin number of nth iterations to save for each chain, passed to \code{\link[R2jags]{jags}}
-#' @param progress logical if progress saved to a txt file named 'log.txt' in the working directory
+#' @param progress character string of path where progress is saved to a txt file named 'log.txt', use \code{NULL} to suppress (default)
 #' @param model_file \code{NULL} to use the model file included with the package or a path to a model text file can be used
 #' 
 #' @export
@@ -67,9 +67,9 @@
 #' dat <- exdat[as.Date(exdat$DateTimeStamp, tz = 'America/Jamaica') == as.Date('2012-06-01'), ]
 #' 
 #' # run ebase, use more chains and iterations for a better fit, update.chains as T
-#' ebase(dat, interval = 900, Z = 1.85, progress = FALSE, n.chains = 2, n.iter = 50, 
+#' ebase(dat, interval = 900, Z = 1.85, n.chains = 2, n.iter = 50, 
 #'  update.chains = FALSE)
-ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300, 150), bprior = c(0.251, 0.125), bmax = 0.502, doave = TRUE, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = FALSE, model_file = NULL){
+ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300, 150), bprior = c(0.251, 0.125), bmax = 0.502, doave = TRUE, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = NULL, model_file = NULL){
   
   # prep data
   dat <- ebase_prep(dat, Z = Z, interval = interval, ndays = ndays)
@@ -84,9 +84,6 @@ ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
   if(is.null(model_file))
     mod_in <- system.file('ebase_model.txt', package = 'EBASE')
   if(!is.null(model_file)){
-    chk <- file.exists(model_file)
-    if(!chk)
-      stop('model_file does not exist, did you make a typo?')
     mod_in <- model_file
   } 
   
@@ -96,11 +93,11 @@ ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
   # iterate through each date to estimate metabolism ------------------------
 
   # process
-  output <- foreach(i = grps, .packages = c('here', 'R2jags', 'rjags', 'dplyr'), .export = c('nstepd', 'metab_update', 'interval', 'aprior', 'rprior', 'bprior', 'bmax')
+  output <- foreach(i = grps, .packages = c('R2jags', 'rjags', 'dplyr'), .export = c('nstepd', 'metab_update', 'interval', 'aprior', 'rprior', 'bprior', 'bmax')
                                                                          ) %dopar% {
   
-    if(progress){
-      sink(here('log.txt'))
+    if(!is.null(progress)){
+      sink(file.path(progress, 'log.txt'))
       cat('Log entry time', as.character(Sys.time()), '\n')
       cat('Group ', which(i == grps), ' of ', length(grps), '\n')
       print(Sys.time() - strt)

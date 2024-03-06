@@ -20,7 +20,7 @@ ebase(
   n.burnin = n.iter * 0.5,
   n.chains = 3,
   n.thin = 10,
-  progress = FALSE,
+  progress = NULL,
   model_file = NULL
 )
 }
@@ -55,7 +55,7 @@ ebase(
 
 \item{n.thin}{number of nth iterations to save for each chain, passed to \code{\link[R2jags]{jags}}}
 
-\item{progress}{logical if progress saved to a txt file named 'log.txt' in the working directory}
+\item{progress}{character string of path where progress is saved to a txt file named 'log.txt', use \code{NULL} to suppress (default)}
 
 \item{model_file}{\code{NULL} to use the model file included with the package or a path to a model text file can be used}
 }
@@ -97,7 +97,7 @@ The \code{doave} argument can be used to define which dissolved oxygen value is 
 dat <- exdat[as.Date(exdat$DateTimeStamp, tz = 'America/Jamaica') == as.Date('2012-06-01'), ]
 
 # run ebase, use more chains and iterations for a better fit, update.chains as T
-ebase(dat, interval = 900, Z = 1.85, progress = FALSE, n.chains = 2, n.iter = 50, 
+ebase(dat, interval = 900, Z = 1.85, n.chains = 2, n.iter = 50, 
  update.chains = FALSE)
 }
 \references{

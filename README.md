@@ -39,7 +39,7 @@ dat <- exdat %>%
 cl <- makeCluster(2)
 registerDoParallel(cl)
 
-res <- ebase(dat, interval = 900, Z = 1.85, progress = TRUE)
+res <- ebase(dat, interval = 900, Z = 1.85)
 
 stopCluster(cl)
 ```

@@ -1,3 +1,7 @@
+## Resubmission
+
+Resubmission to fix issues with the package description and doi documentations.  Functions no longer write files or return messages by default.
+
 ## Test environments
 
 * ubuntu 22.04.4 (R 4.3.3, R 4.2.3, R devel)
