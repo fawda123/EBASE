@@ -17,12 +17,11 @@
 #' @param n.burnin number of MCMC chains to delete, passed to \code{\link[R2jags]{jags}}
 #' @param n.chains number of MCMC chains to run, passed to \code{\link[R2jags]{jags}}
 #' @param n.thin number of nth iterations to save for each chain, passed to \code{\link[R2jags]{jags}}
-#' @param progress character string of path where progress is saved to a txt file named 'log.txt', use \code{NULL} to suppress (default)
+#' @param progress character string of path where progress is saved to as 'log.txt', use \code{NULL} to suppress (default)
 #' @param model_file \code{NULL} to use the model file included with the package or a path to a model text file can be used
 #' 
 #' @export
 #' 
-#' @import here
 #' @import foreach
 #' @import rjags
 #' @import R2jags
@@ -84,6 +83,7 @@ ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
   if(is.null(model_file))
     mod_in <- system.file('ebase_model.txt', package = 'EBASE')
   if(!is.null(model_file)){
+    stopifnot(file.exists(model_file))
     mod_in <- model_file
   } 
   
