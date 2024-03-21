@@ -132,12 +132,12 @@ estimate from <span class="citation">Wanninkhof (2014)</span>. It is
 similar to that provided by the BASEmetab R package at <a href="https://github.com/dgiling/BASEmetab" class="external-link uri">https://github.com/dgiling/BASEmetab</a>, with modifications
 to estimate different parameters optimized by the JAGS model:</p>
 <p><span class="math display">\[
-Z\frac{dC_d}{dt} = aPAR - R - bU_{10}^2\left(\frac{Sc}{600}
+Z\frac{dC_d}{dt} = aPAR - R + bU_{10}^2\left(\frac{Sc}{600}
 \right)^{-0.5} \left(C_{Sat} - C_d \right )
 \]</span></p>
 <p>More simply:</p>
 <p><span class="math display">\[
-Z\frac{dC_d}{dt} = P - R - D
+Z\frac{dC_d}{dt} = P - R + D
 \]</span></p>
 <p>The metabolic estimates are defined by the change in dissolved oxygen
 over the time step <span class="math inline">\(\frac{dC_d}{dt}\)</span>,
