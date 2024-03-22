@@ -35,7 +35,7 @@
       DO_mod[i+1] <- DO_mod[i] 
         + a * PAR[i] 
         - r 
-        - (1 / Z) * (-b * pow(U10[i], 2) * pow(sc[i] / 600, -0.5) * (DO_sat[i] - DO_mod[i]))
+        + (1 / Z) * (b * pow(U10[i], 2) * pow(sc[i] / 600, -0.5) * (DO_sat[i] - DO_mod[i]))
       
       # posterior predictive assessment nodes #
       ats[i] <- a 

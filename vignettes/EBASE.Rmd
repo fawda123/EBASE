@@ -76,7 +76,7 @@ res <- ebase(dat, interval = 900, Z = 1.85, n.chains = 2)
 head(res)
 ```
 
-The results are returned as a data frame with instantaneous metabolic estimates for areal gross production (O2 mmol m-2 d-1, `P` or $aPAR$ from above as volumetric), respiration (O2 mmol m-2 d-1, `R` from above as volumetric), and gas exchange (O2 mmol m-2 d-1, `D` or the remainder of the equation from above as volumetric).  Additional parameters estimated by the model that are returned include `a` and `b` as shown in the above equation.  The `a` parameter is a constant that represents the primary production per quantum of light with units of  (mmol m-2 d-1)/(W m-2) and is used to estimate gross production [@Grace15].  The `b` parameter is a constant used to estimate gas exchange in (cm hr-1)/(m2 s-2) (provided as 0.251 in eqn. 4 in @Wanninkhof14).
+The results are returned as a data frame with instantaneous metabolic estimates for areal gross production (O2 mmol m-2 d-1, `P` or $aPAR$ from above as volumetric), respiration (O2 mmol m-2 d-1, `R` from above as volumetric), and gas exchange (O2 mmol m-2 d-1, `D` or the remainder of the equation from above as volumetric, positive values as ingassing, negative values as outgassing).  Additional parameters estimated by the model that are returned include `a` and `b` as shown in the above equation.  The `a` parameter is a constant that represents the primary production per quantum of light with units of  (mmol m-2 d-1)/(W m-2) and is used to estimate gross production [@Grace15].  The `b` parameter is a constant used to estimate gas exchange in (cm hr-1)/(m2 s-2) (provided as 0.251 in eqn. 4 in @Wanninkhof14).
 
 A plot of the results can be made with `ebase_plot()`.
 
