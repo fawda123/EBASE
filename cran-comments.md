@@ -1,6 +1,6 @@
 ## Resubmission
 
-Resubmission to fix issues with the package description and doi documentations.  Functions no longer write files or return messages by default.
+This is a version up for a minor documentation edit to the vignette and help files.
 
 ## Test environments
 
@@ -14,9 +14,6 @@ Resubmission to fix issues with the package description and doi documentations. 
 0 errors | 0 warnings | 1 note
 
 * checking CRAN incoming feasibility ... NOTE
-Maintainer: 'Marcus Beck <mbeck@tbep.org>'
-
-New submission
 
 Possibly misspelled words in DESCRIPTION:
   Estuarine (2:8)
