@@ -3,7 +3,7 @@
 #' Estuarine Bayesian Single-station Estimation method for ecosystem metabolism
 #' 
 #' @param dat input data frame
-#' @param Z numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}
+#' @param Z numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat} that will be averaged within \code{ndays}
 #' @param interval timestep interval in seconds
 #' @param ndays numeric for number of days in \code{dat} for optimizing the metabolic equation, see details
 #' @param aprior numeric vector of length two indicating the mean and standard deviation for the prior distribution of the \emph{a} parameter, see details
@@ -112,7 +112,7 @@ ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
     PAR <- dat.sub$PAR
     DO_sat <- dat.sub$DO_sat
     sc <- dat.sub$sc
-    Z <- mean(dat.sub$Z)
+    Z <- unique(dat.sub$Z)
     U10 <- dat.sub$WSpd
     
     DO_start <- DO_obs[1]

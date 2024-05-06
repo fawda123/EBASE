@@ -17,7 +17,7 @@ interp_plot(
 
 \item{param}{character string of the parameter to plot, one of \code{DO_obs}, \code{DO_sat}, \code{Z}, \code{Temp}, \code{Sal}, \code{PAR}, \code{WSpd}, or \code{sc}}
 
-\item{Z}{numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}}
+\item{Z}{numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat} that will be averaged within \code{ndays}}
 
 \item{interval}{timestep interval in seconds}
 

@@ -3,7 +3,7 @@
 #' Prepare data for ebase
 #' 
 #' @param dat input data frame
-#' @param Z numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}
+#' @param Z numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat} that will be averaged within \code{ndays}
 #' @param interval timestep interval in seconds
 #' @param ndays numeric for number of days in \code{dat} for optimizing the metabolic equation, see details
 #' 
@@ -113,35 +113,40 @@ ebase_prep <- function(dat, Z, interval, ndays = 1){
 
   }
   
+  # add groups defined by ndays to out
+  # its an even cut by ndays with remainder assigned
+  dat <- dat %>% 
+    dplyr::mutate(
+      Date = as.Date(DateTimeStamp, tz = attr(DateTimeStamp, 'tzone')),
+      grp = as.numeric(Date),
+      grp = grp - min(grp) + 1
+    )
+  
+  if(ndays >= length(unique(dat$grp))) {
+    dat$grp <- 1
+  } else {
+    brks <- seq(min(dat$grp), max(dat$grp), by = ndays)
+    dat$grp <- as.numeric(cut(dat$grp, breaks = brks, right = FALSE))
+    maxgrp <- unique(dat$grp) %>% max(na.rm = T)
+    maxgrp <- 1 + maxgrp
+    dat$grp <- ifelse(is.na(dat$grp), maxgrp, dat$grp)
+  }
+  
   # convert DO to mmol/m2
   # add schmidt number as unitless
   # add DO sat as mmol/m2
-  dat <- dat %>% 
+  out <- dat %>% 
+    dplyr::mutate(
+      Z = mean(Z, na.rm = T), 
+      .by = grp
+    ) |> 
     dplyr::mutate(
       DO_obs = Z * DO_obs / 32 * 1000,
       sc = ebase_schmidt(Temp, Sal), 
       DO_sat = Z * ebase_eqboxy(Temp, Sal), 
-      Date = as.Date(DateTimeStamp, tz = attr(DateTimeStamp, 'tzone'))
     ) %>% 
-    dplyr::select(Date, DateTimeStamp, isinterp, DO_obs, DO_sat, Z, dplyr::everything())
-  
-  # add groups defined by ndays to out
-  # its an even cut by ndays with remainder assigned
-  out <- dat %>% 
-    dplyr::mutate(
-      grp = as.numeric(Date),
-      grp = grp - min(grp) + 1
-    )
-
-  if(ndays >= length(unique(out$grp))) {
-    out$grp <- 1
-  } else {
-    brks <- seq(min(out$grp), max(out$grp), by = ndays)
-    out$grp <- as.numeric(cut(out$grp, breaks = brks, right = FALSE))
-    maxgrp <- unique(out$grp) %>% max(na.rm = T)
-    maxgrp <- 1 + maxgrp
-    out$grp <- ifelse(is.na(out$grp), maxgrp, out$grp)
-  }
+    dplyr::select(Date, DateTimeStamp, isinterp, DO_obs, DO_sat, Z, dplyr::everything()) |> 
+    dplyr::relocate(grp, .after = dplyr::last_col())
   
   return(out)
   
