@@ -48,25 +48,25 @@ jobs:
       - name: Download JAGS (windows)
         if: runner.os == 'Windows'
         run: |
-          curl.exe -o wjags.exe --url https://deac-fra.dl.sourceforge.net/project/mcmc-jags/JAGS/4.x/Windows/JAGS-4.3.1.exe
+          curl.exe -o JAGS-4.3.1.exe --url https://deac-fra.dl.sourceforge.net/project/mcmc-jags/JAGS/4.x/Windows/JAGS-4.3.1.exe
         shell: cmd
 
       - name: Change JAGS permissions (windows)
         if: runner.os == 'Windows'
         run: |
-          chmod +x wjags.exe
+          chmod +x JAGS-4.3.1.exe
         shell: cmd
       
       - name: Install JAGS (windows)
         if: runner.os == 'Windows'
         run: |
-          wjags.exe /S
+          JAGS-4.3.1.exe
         shell: cmd
         
       - name: Delete JAGS executable (windows)
         if: runner.os == 'Windows'
         run: |
-          del wjags.exe
+          del JAGS-4.3.1.exe
         shell: cmd
         
       - name: Install JAGS (macOS-latest)
