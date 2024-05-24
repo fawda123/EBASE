@@ -19,7 +19,7 @@ jobs:
       matrix:
         config:
           - {os: macos-12,   r: 'release'}
-          - {os: windows-2019, r: 'release'}
+          - {os: windows-latest r: 'release'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
@@ -45,28 +45,12 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y jags
       
-      - name: Download JAGS (windows)
-        if: runner.os == 'Windows'
-        run: |
-          curl.exe -L -v -o JAGS-4.3.1.exe --url https://deac-fra.dl.sourceforge.net/project/mcmc-jags/JAGS/4.x/Windows/JAGS-4.3.1.exe
-        shell: cmd
-
-      - name: Change JAGS permissions (windows)
-        if: runner.os == 'Windows'
-        run: |
-          chmod +x JAGS-4.3.1.exe
-        shell: cmd
-      
       - name: Install JAGS (windows)
         if: runner.os == 'Windows'
         run: |
-          JAGS-4.3.1.exe
-        shell: cmd
-        
-      - name: Delete JAGS executable (windows)
-        if: runner.os == 'Windows'
-        run: |
-          del JAGS-4.3.1.exe
+          curl.exe -L -o jags.exe --url https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Windows/JAGS-4.3.1.exe
+          jags.exe
+          del jags.exe
         shell: cmd
         
       - name: Install JAGS (macOS-latest)
