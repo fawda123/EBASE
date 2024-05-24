@@ -48,7 +48,7 @@ jobs:
       - name: Download JAGS (windows)
         if: runner.os == 'Windows'
         run: |
-          curl.exe -o JAGS-4.3.1.exe --url https://deac-fra.dl.sourceforge.net/project/mcmc-jags/JAGS/4.x/Windows/JAGS-4.3.1.exe
+          wget https://deac-fra.dl.sourceforge.net/project/mcmc-jags/JAGS/4.x/Windows/JAGS-4.3.1.exe -O JAGS-4.3.1.exe
         shell: cmd
 
       - name: Change JAGS permissions (windows)
