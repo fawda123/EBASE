@@ -45,15 +45,30 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y jags
       
-      - name: Install JAGS (windows-2019)
+      - name: Download JAGS (windows)
         if: runner.os == 'Windows'
         run: |
           curl.exe -o wjags.exe --url https://deac-fra.dl.sourceforge.net/project/mcmc-jags/JAGS/4.x/Windows/JAGS-4.3.1.exe
-          chmod +x wjags.exe
-          wjags.exe /S
-          del wjags.exe
         shell: cmd
 
+      - name: Change JAGS permissions (windows)
+        if: runner.os == 'Windows'
+        run: |
+          chmod +x wjags.exe
+        shell: cmd
+      
+      - name: Install JAGS (windows)
+        if: runner.os == 'Windows'
+        run: |
+          wjags.exe /S
+        shell: cmd
+        
+      - name: Delete JAGS executable (windows)
+        if: runner.os == 'Windows'
+        run: |
+          del wjags.exe
+        shell: cmd
+        
       - name: Install JAGS (macOS-latest)
         if: runner.os == 'macOS'
         run : |
