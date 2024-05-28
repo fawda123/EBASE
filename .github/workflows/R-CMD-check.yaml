@@ -45,12 +45,12 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y jags
       
-      - name: Install JAGS (windows)
+      - name: Install JAGS (windows-latest)
         if: runner.os == 'Windows'
         run: |
-          curl.exe -L -o jags.exe --url https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Windows/JAGS-4.3.1.exe
-          jags.exe
-          del jags.exe
+          curl.exe -L -o wjags.exe --url https://deac-fra.dl.sourceforge.net/project/mcmc-jags/JAGS/4.x/Windows/JAGS-4.3.1.exe
+          wjags.exe /S
+          del wjags.exe
         shell: cmd
         
       - name: Install JAGS (macOS-latest)
