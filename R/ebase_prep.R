@@ -140,14 +140,14 @@ ebase_prep <- function(dat, Z, interval, ndays = 1){
   # add schmidt number as unitless
   # add DO sat as mmol/m2
   out <- dat %>% 
+    # dplyr::mutate(
+    #   Z = mean(Z, na.rm = T), 
+    #   .by = grp
+    # ) |> 
     dplyr::mutate(
-      Z = mean(Z, na.rm = T), 
-      .by = grp
-    ) |> 
-    dplyr::mutate(
-      DO_obs = Z * DO_obs / 32 * 1000,
+      DO_obs = DO_obs / 32 * 1000,
       sc = ebase_schmidt(Temp, Sal), 
-      DO_sat = Z * ebase_eqboxy(Temp, Sal), 
+      DO_sat = ebase_eqboxy(Temp, Sal), 
     ) %>% 
     dplyr::select(Date, DateTimeStamp, isinterp, DO_obs, DO_sat, Z, dplyr::everything()) |> 
     dplyr::relocate(grp, .after = dplyr::last_col())

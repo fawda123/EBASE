@@ -112,7 +112,7 @@ ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
     PAR <- dat.sub$PAR
     DO_sat <- dat.sub$DO_sat
     sc <- dat.sub$sc
-    Z <- unique(dat.sub$Z)
+    Z <- dat.sub$Z
     U10 <- dat.sub$WSpd
     
     DO_start <- DO_obs[1]
@@ -151,10 +151,10 @@ ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
       Date = dat.sub$Date,
       grp = dat.sub$grp,
       Z = Z, #m
-      DO_obs = dat.sub$DO_obs / Z, # mmol/m2 to mmol/m3
-      DO_mod = metabfit$BUGSoutput$mean$DO_mod / Z, # mmol/m2 to mmol/m3
-      DO_modlo = cred[cred$var == 'DO_mod', 'X2.5.'] / Z,
-      DO_modhi = cred[cred$var == 'DO_mod', 'X97.5.'] / Z,
+      DO_obs = dat.sub$DO_obs, # mmol/m2 to mmol/m3
+      DO_mod = metabfit$BUGSoutput$mean$DO_mod, # mmol/m2 to mmol/m3
+      DO_modlo = cred[cred$var == 'DO_mod', 'X2.5.'],
+      DO_modhi = cred[cred$var == 'DO_mod', 'X97.5.'],
       DateTimeStamp = dat.sub$DateTimeStamp,
       ats = c(NA, metabfit$BUGSoutput$mean$ats), # (mmol/m2/ts)/(W/m2)
       atslo = c(NA, cred[cred$var == 'ats', 'X2.5.']),
@@ -171,7 +171,7 @@ ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
       gets = c(NA, metabfit$BUGSoutput$mean$gets), # O2, mmol/m2/ts
       getslo = c(NA, cred[cred$var == 'gets', 'X2.5.']),
       getshi = c(NA, cred[cred$var == 'gets', 'X97.5.']),
-      dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO_mod)) / Z, # O2, mmol/m2/ts to mmol/m3/ts
+      dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO_mod)), # O2, mmol/m2/ts to mmol/m3/ts
       converge = Rhat.test
     )
   
