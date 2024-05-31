@@ -3,7 +3,7 @@
 #' Estuarine Bayesian Single-station Estimation method for ecosystem metabolism
 #' 
 #' @param dat input data frame
-#' @param Z numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat} that will be averaged within \code{ndays}
+#' @param Z numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}
 #' @param interval timestep interval in seconds
 #' @param ndays numeric for number of days in \code{dat} for optimizing the metabolic equation, see details
 #' @param aprior numeric vector of length two indicating the mean and standard deviation for the prior distribution of the \emph{a} parameter, see details
@@ -151,8 +151,8 @@ ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
       Date = dat.sub$Date,
       grp = dat.sub$grp,
       Z = Z, #m
-      DO_obs = dat.sub$DO_obs, # mmol/m2 to mmol/m3
-      DO_mod = metabfit$BUGSoutput$mean$DO_mod, # mmol/m2 to mmol/m3
+      DO_obs = dat.sub$DO_obs, # mmol/m3
+      DO_mod = metabfit$BUGSoutput$mean$DO_mod, # mmol/m3
       DO_modlo = cred[cred$var == 'DO_mod', 'X2.5.'],
       DO_modhi = cred[cred$var == 'DO_mod', 'X97.5.'],
       DateTimeStamp = dat.sub$DateTimeStamp,
@@ -171,7 +171,7 @@ ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
       gets = c(NA, metabfit$BUGSoutput$mean$gets), # O2, mmol/m2/ts
       getslo = c(NA, cred[cred$var == 'gets', 'X2.5.']),
       getshi = c(NA, cred[cred$var == 'gets', 'X97.5.']),
-      dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO_mod)), # O2, mmol/m2/ts to mmol/m3/ts
+      dDO = c(NA, diff(metabfit$BUGSoutput$mean$DO_mod)), # O2, mmol/m3/ts
       converge = Rhat.test
     )
   
