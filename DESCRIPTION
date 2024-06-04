@@ -1,7 +1,7 @@
 Package: EBASE
 Title: Estuarine Bayesian Single-Station Estimation Method for Ecosystem Metabolism
-Version: 1.0.1
-Date: 2024-03-22
+Version: 1.0.2
+Date: 2024-06-04
 Authors@R: c(
     person(given = "Marcus",
       family = "Beck",
@@ -33,6 +33,7 @@ Description: Estimate ecosystem metabolism in a Bayesian framework for
   estimates of parameters for gross primary production, respiration,
   and gas exchange. Methods adapted from Grace et al. (2015)
   <doi:10.1002/lom3.10011> and Wanninkhof (2014) <doi:10.4319/lom.2014.12.351>.
+  Details in Beck et al. (2024) <doi:10.1002/lom3.10620>.
 Depends: 
   R (>= 3.5)
 Imports:
