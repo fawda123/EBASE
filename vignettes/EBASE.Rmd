@@ -72,7 +72,7 @@ head(dat)
 Also note that any "dangling" observations at the start or end of the time series that do not include an entire day are removed from the input data prior to estimating metabolism.  A warning is returned if these observations are found and removed.  
 
 ```{r}
-res <- ebase(dat, interval = 900, Z = 1.85, n.chains = 2)
+res <- ebase(dat, interval = 900, Z = 1.85, n.chains = 2, nogas = T)
 head(res)
 ```
 

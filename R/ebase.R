@@ -10,6 +10,7 @@
 #' @param rprior numeric vector of length two indicating the mean and standard deviation for the prior distribution of the \emph{R} parameter, see details
 #' @param bprior numeric vector of length two indicating the mean and standard deviation for the prior distribution of the \emph{b} parameter, see details
 #' @param bmax numeric value for the upper limit on the prior distribution for \code{bprior}, set as twice the default value of the mean
+#' @param nogas logical indicating if gas exchange is not included in the metabolic model, see details
 #' @param doave logical indicating if the average dissolved oxygen concentration is used as the starting value for the estimation (default), otherwise the first observation will be used if \code{FALSE}, see details
 #' @param maxinterp numeric value for minimum number of continuous observations that must not be interpolated within a group defined by \code{ndays} to assign as \code{NA} in output, see details
 #' @param n.iter number of MCMC iterations, passed to \code{\link[R2jags]{jags}}
@@ -55,6 +56,8 @@
 #' 
 #' Model fit can also be assessed using the \code{converge} and \code{rsq} columns.  The values in these columns apply to each group in the \code{grp} column as specified with the \code{ndays} argument. The \code{converge} column indicates \code{"Check convergence"} or \code{"Fine"} if the JAGS estimate converged at that iteration (repeated across rows for the group).  The \code{n.chains} argument can be increased if convergence is not achieved. Similarly, the \code{rsq} column shows the r-squared values of the linear fit between the modeled and observed dissolved oxygen (repeated across rows for the group).  These values can also be viewed with \code{\link{fit_plot}}.
 #' 
+#' The \code{nogas} argument can be set to \code{TRUE} to exclude gas exchange from the metabolic estimates.  This will force the prior distribution for \code{b} as mean 0 and standard deviation approximately 0.
+#' 
 #' @references 
 #' 
 #' Grace, M.R., Giling, D.P., Hladyz, S., Caron, V., Thompson, R.M., Nally, R.M., 2015. Fast processing of diel oxygen curves: Estimating stream metabolism with BASE (BAyesian Single-station Estimation). Limnology and Oceanography: Methods 13, e10011. https://doi.org/10.1002/lom3.10011
@@ -68,7 +71,7 @@
 #' # run ebase, use more chains and iterations for a better fit, update.chains as T
 #' ebase(dat, interval = 900, Z = 1.85, n.chains = 2, n.iter = 50, 
 #'  update.chains = FALSE)
-ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300, 150), bprior = c(0.251, 0.125), bmax = 0.502, doave = TRUE, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = NULL, model_file = NULL){
+ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300, 150), bprior = c(0.251, 0.125), bmax = 0.502, nogas = FALSE, doave = TRUE, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = NULL, model_file = NULL){
   
   # prep data
   dat <- ebase_prep(dat, Z = Z, interval = interval, ndays = ndays)
@@ -86,6 +89,10 @@ ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
     stopifnot(file.exists(model_file))
     mod_in <- model_file
   } 
+  
+  # set b prior to zero for no gas exchange
+  if(nogas)
+    bprior <- c(0, 1e-8)
   
   # setup log file
   strt <- Sys.time()

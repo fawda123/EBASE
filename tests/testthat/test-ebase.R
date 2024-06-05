@@ -20,3 +20,17 @@ test_that("Checking ebase output, doave as F", {
   expect_true(file.exists(file.path(tmpdir, "log.txt")))
   
 })
+
+test_that("Checking ebase output, no gas exchange", {
+  
+  # check format
+  result <- EBASE::ebase(dat, interval = 900, Z = 1.85, n.chains = 2, doave = F, 
+                         n.iter = 100, nogas = T,
+                         model_file = system.file("ebase_model.txt", package = "EBASE")) 
+  
+  aved <- round(mean(result$D, na.rm = T))
+  
+  # check log location
+  expect_equal(aved, 0)
+  
+})

@@ -13,6 +13,7 @@ ebase(
   rprior = c(300, 150),
   bprior = c(0.251, 0.125),
   bmax = 0.502,
+  nogas = FALSE,
   doave = TRUE,
   maxinterp = 43200/interval,
   n.iter = 10000,
@@ -41,6 +42,8 @@ ebase(
 
 \item{bmax}{numeric value for the upper limit on the prior distribution for \code{bprior}, set as twice the default value of the mean}
 
+\item{nogas}{logical indicating if gas exchange is not included in the metabolic model, see details}
+
 \item{doave}{logical indicating if the average dissolved oxygen concentration is used as the starting value for the estimation (default), otherwise the first observation will be used if \code{FALSE}, see details}
 
 \item{maxinterp}{numeric value for minimum number of continuous observations that must not be interpolated within a group defined by \code{ndays} to assign as \code{NA} in output, see details}
@@ -65,6 +68,8 @@ A data frame with metabolic estimates for areal gross production (\code{P}, O2 m
 95\% credible intervals for \code{a}, \code{b}, and \code{R} are also returned in the corresponding columns \code{alo}, \code{ahi}, \code{blo}, \code{bhi}, \code{Rlo}, and \code{Rhi}, for the 2.5th and 97.5th percentile estimates for each parameter, respectively.  These values indicate the interval within which there is a 95\% probability that the true parameter is in this range. Note that all values for these parameters are repeated across rows, although only one estimate for each is returned based on the number of days defined by \code{ndays}.
 
 Model fit can also be assessed using the \code{converge} and \code{rsq} columns.  The values in these columns apply to each group in the \code{grp} column as specified with the \code{ndays} argument. The \code{converge} column indicates \code{"Check convergence"} or \code{"Fine"} if the JAGS estimate converged at that iteration (repeated across rows for the group).  The \code{n.chains} argument can be increased if convergence is not achieved. Similarly, the \code{rsq} column shows the r-squared values of the linear fit between the modeled and observed dissolved oxygen (repeated across rows for the group).  These values can also be viewed with \code{\link{fit_plot}}.
+
+The \code{nogas} argument can be set to \code{TRUE} to exclude gas exchange from the metabolic estimates.  This will force the prior distribution for \code{b} as mean 0 and standard deviation approximately 0.
 }
 \description{
 Estuarine Bayesian Single-station Estimation method for ecosystem metabolism
