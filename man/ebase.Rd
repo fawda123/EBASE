@@ -21,7 +21,6 @@ ebase(
   n.burnin = n.iter * 0.5,
   n.chains = 3,
   n.thin = 10,
-  progress = NULL,
   model_file = NULL
 )
 }
@@ -57,8 +56,6 @@ ebase(
 \item{n.chains}{number of MCMC chains to run, passed to \code{\link[R2jags]{jags}}}
 
 \item{n.thin}{number of nth iterations to save for each chain, passed to \code{\link[R2jags]{jags}}}
-
-\item{progress}{character string of path where progress is saved to as 'log.txt', use \code{NULL} to suppress (default)}
 
 \item{model_file}{\code{NULL} to use the model file included with the package or a path to a model text file can be used}
 }

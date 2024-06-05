@@ -18,7 +18,6 @@
 #' @param n.burnin number of MCMC chains to delete, passed to \code{\link[R2jags]{jags}}
 #' @param n.chains number of MCMC chains to run, passed to \code{\link[R2jags]{jags}}
 #' @param n.thin number of nth iterations to save for each chain, passed to \code{\link[R2jags]{jags}}
-#' @param progress character string of path where progress is saved to as 'log.txt', use \code{NULL} to suppress (default)
 #' @param model_file \code{NULL} to use the model file included with the package or a path to a model text file can be used
 #' 
 #' @export
@@ -71,7 +70,7 @@
 #' # run ebase, use more chains and iterations for a better fit, update.chains as T
 #' ebase(dat, interval = 900, Z = 1.85, n.chains = 2, n.iter = 50, 
 #'  update.chains = FALSE)
-ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300, 150), bprior = c(0.251, 0.125), bmax = 0.502, nogas = FALSE, doave = TRUE, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, progress = NULL, model_file = NULL){
+ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300, 150), bprior = c(0.251, 0.125), bmax = 0.502, nogas = FALSE, doave = TRUE, maxinterp = 43200 / interval,  n.iter = 10000, update.chains = TRUE, n.burnin = n.iter*0.5, n.chains = 3, n.thin = 10, model_file = NULL){
   
   # prep data
   dat <- ebase_prep(dat, Z = Z, interval = interval, ndays = ndays)
@@ -94,23 +93,12 @@ ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
   if(nogas)
     bprior <- c(0, 1e-8)
   
-  # setup log file
-  strt <- Sys.time()
-  
   # iterate through each date to estimate metabolism ------------------------
 
   # process
   output <- foreach(i = grps, .packages = c('R2jags', 'rjags', 'dplyr'), .export = c('nstepd', 'metab_update', 'interval', 'aprior', 'rprior', 'bprior', 'bmax')
                                                                          ) %dopar% {
   
-    if(!is.null(progress)){
-      sink(file.path(progress, 'log.txt'))
-      cat('Log entry time', as.character(Sys.time()), '\n')
-      cat('Group ', which(i == grps), ' of ', length(grps), '\n')
-      print(Sys.time() - strt)
-      sink()
-    }
-    
     dat.sub <- dat[dat$grp == i,]
   
     # Define vectors for JAGS
