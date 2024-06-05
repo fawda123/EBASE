@@ -184,36 +184,29 @@ time series that do not include an entire day are removed from the input
 data prior to estimating metabolism. A warning is returned if these
 observations are found and removed.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, Z <span class="op">=</span> <span class="fl">1.85</span>, n.chains <span class="op">=</span> <span class="fl">2</span>, nogas <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ebase.html">ebase</a></span><span class="op">(</span><span class="va">dat</span>, interval <span class="op">=</span> <span class="fl">900</span>, Z <span class="op">=</span> <span class="fl">1.85</span>, n.chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         DateTimeStamp       Date grp    Z  DO_obs   DO_mod DO_modlo DO_modhi</span></span>
-<span><span class="co">#&gt; 1 2012-06-01 00:00:00 2012-06-01   1 1.85 140.625 166.1133 166.1114 166.1153</span></span>
-<span><span class="co">#&gt; 2 2012-06-01 00:15:00 2012-06-01   1 1.85 159.375 165.4616 165.1951 165.7286</span></span>
-<span><span class="co">#&gt; 3 2012-06-01 00:30:00 2012-06-01   1 1.85 150.000 164.8099 164.2778 165.3433</span></span>
-<span><span class="co">#&gt; 4 2012-06-01 00:45:00 2012-06-01   1 1.85 150.000 164.1582 163.3605 164.9580</span></span>
-<span><span class="co">#&gt; 5 2012-06-01 01:00:00 2012-06-01   1 1.85 150.000 163.5065 162.4433 164.5727</span></span>
-<span><span class="co">#&gt; 6 2012-06-01 01:15:00 2012-06-01   1 1.85 156.250 162.8548 161.5260 164.1874</span></span>
-<span><span class="co">#&gt;         dDO converge       rsq         a       alo      ahi            b</span></span>
-<span><span class="co">#&gt; 1        NA     Fine 0.3142849        NA        NA       NA           NA</span></span>
-<span><span class="co">#&gt; 2 -62.56319     Fine 0.3142849 0.9891719 0.6535508 1.329657 7.830449e-09</span></span>
-<span><span class="co">#&gt; 3 -62.56319     Fine 0.3142849 0.9891719 0.6535508 1.329657 7.830449e-09</span></span>
-<span><span class="co">#&gt; 4 -62.56319     Fine 0.3142849 0.9891719 0.6535508 1.329657 7.830449e-09</span></span>
-<span><span class="co">#&gt; 5 -62.56319     Fine 0.3142849 0.9891719 0.6535508 1.329657 7.830449e-09</span></span>
-<span><span class="co">#&gt; 6 -62.56319     Fine 0.3142849 0.9891719 0.6535508 1.329657 7.830449e-09</span></span>
-<span><span class="co">#&gt;            blo          bhi  P Plo Phi        R      Rlo      Rhi            D</span></span>
-<span><span class="co">#&gt; 1           NA           NA NA  NA  NA       NA       NA       NA           NA</span></span>
-<span><span class="co">#&gt; 2 3.484502e-10 2.252671e-08  0   0   0 115.7419 68.42719 162.9067 4.314238e-07</span></span>
-<span><span class="co">#&gt; 3 3.484502e-10 2.252671e-08  0   0   0 115.7419 68.42719 162.9067 5.742696e-07</span></span>
-<span><span class="co">#&gt; 4 3.484502e-10 2.252671e-08  0   0   0 115.7419 68.42719 162.9067 4.845093e-07</span></span>
-<span><span class="co">#&gt; 5 3.484502e-10 2.252671e-08  0   0   0 115.7419 68.42719 162.9067 4.471254e-07</span></span>
-<span><span class="co">#&gt; 6 3.484502e-10 2.252671e-08  0   0   0 115.7419 68.42719 162.9067 3.294653e-07</span></span>
-<span><span class="co">#&gt;            Dlo          Dhi</span></span>
-<span><span class="co">#&gt; 1           NA           NA</span></span>
-<span><span class="co">#&gt; 2 1.919811e-08 1.241107e-06</span></span>
-<span><span class="co">#&gt; 3 2.567699e-08 1.659332e-06</span></span>
-<span><span class="co">#&gt; 4 2.176428e-08 1.400881e-06</span></span>
-<span><span class="co">#&gt; 5 2.017424e-08 1.292692e-06</span></span>
-<span><span class="co">#&gt; 6 1.492831e-08 9.530779e-07</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 2012-06-01 00:00:00 2012-06-01   1 1.85 140.625 166.1132 166.1112 166.1152</span></span>
+<span><span class="co">#&gt; 2 2012-06-01 00:15:00 2012-06-01   1 1.85 159.375 165.4135 165.1514 165.6797</span></span>
+<span><span class="co">#&gt; 3 2012-06-01 00:30:00 2012-06-01   1 1.85 150.000 164.7458 164.2165 165.2784</span></span>
+<span><span class="co">#&gt; 4 2012-06-01 00:45:00 2012-06-01   1 1.85 150.000 164.0582 163.2671 164.8557</span></span>
+<span><span class="co">#&gt; 5 2012-06-01 01:00:00 2012-06-01   1 1.85 150.000 163.3622 162.3135 164.4221</span></span>
+<span><span class="co">#&gt; 6 2012-06-01 01:15:00 2012-06-01   1 1.85 156.250 162.6401 161.3221 163.9645</span></span>
+<span><span class="co">#&gt;         dDO converge       rsq        a       alo      ahi         b      blo</span></span>
+<span><span class="co">#&gt; 1        NA     Fine 0.3316977       NA        NA       NA        NA       NA</span></span>
+<span><span class="co">#&gt; 2 -67.17103     Fine 0.3316977 0.893719 0.5493333 1.237225 0.3099639 0.095399</span></span>
+<span><span class="co">#&gt; 3 -64.09915     Fine 0.3316977 0.893719 0.5493333 1.237225 0.3099639 0.095399</span></span>
+<span><span class="co">#&gt; 4 -66.01783     Fine 0.3316977 0.893719 0.5493333 1.237225 0.3099639 0.095399</span></span>
+<span><span class="co">#&gt; 5 -66.81054     Fine 0.3316977 0.893719 0.5493333 1.237225 0.3099639 0.095399</span></span>
+<span><span class="co">#&gt; 6 -69.32714     Fine 0.3316977 0.893719 0.5493333 1.237225 0.3099639 0.095399</span></span>
+<span><span class="co">#&gt;         bhi  P Plo Phi        R      Rlo      Rhi        D      Dlo      Dhi</span></span>
+<span><span class="co">#&gt; 1        NA NA  NA  NA       NA       NA       NA       NA       NA       NA</span></span>
+<span><span class="co">#&gt; 2 0.4880948  0   0   0 141.3441 91.81687 189.3383 17.07768 5.256220 26.89167</span></span>
+<span><span class="co">#&gt; 3 0.4880948  0   0   0 141.3441 91.81687 189.3383 22.76066 7.016668 35.73653</span></span>
+<span><span class="co">#&gt; 4 0.4880948  0   0   0 141.3441 91.81687 189.3383 19.21110 5.935163 30.23677</span></span>
+<span><span class="co">#&gt; 5 0.4880948  0   0   0 141.3441 91.81687 189.3383 17.74459 5.472476 28.00036</span></span>
+<span><span class="co">#&gt; 6 0.4880948  0   0   0 141.3441 91.81687 189.3383 13.08888 4.054735 20.68587</span></span></code></pre></div>
 <p>The results are returned as a data frame with instantaneous metabolic
 estimates for areal gross production (O2 mmol m-2 d-1, <code>P</code> or
 <span class="math inline">\(aPAR\)</span> from above as volumetric),
