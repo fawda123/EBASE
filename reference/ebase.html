@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EBASE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,6 @@
 <span>  rprior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>, <span class="fl">150</span><span class="op">)</span>,</span>
 <span>  bprior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.251</span>, <span class="fl">0.125</span><span class="op">)</span>,</span>
 <span>  bmax <span class="op">=</span> <span class="fl">0.502</span>,</span>
-<span>  nogas <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  doave <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  maxinterp <span class="op">=</span> <span class="fl">43200</span><span class="op">/</span><span class="va">interval</span>,</span>
 <span>  n.iter <span class="op">=</span> <span class="fl">10000</span>,</span>
@@ -71,6 +70,7 @@
 <span>  n.burnin <span class="op">=</span> <span class="va">n.iter</span> <span class="op">*</span> <span class="fl">0.5</span>,</span>
 <span>  n.chains <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  n.thin <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  model_file <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -109,10 +109,6 @@
 <dd><p>numeric value for the upper limit on the prior distribution for <code>bprior</code>, set as twice the default value of the mean</p></dd>
 
 
-<dt>nogas</dt>
-<dd><p>logical indicating if gas exchange is not included in the metabolic model, see details</p></dd>
-
-
 <dt>doave</dt>
 <dd><p>logical indicating if the average dissolved oxygen concentration is used as the starting value for the estimation (default), otherwise the first observation will be used if <code>FALSE</code>, see details</p></dd>
 
@@ -141,6 +137,10 @@
 <dd><p>number of nth iterations to save for each chain, passed to <code><a href="https://rdrr.io/pkg/R2jags/man/jags.html" class="external-link">jags</a></code></p></dd>
 
 
+<dt>progress</dt>
+<dd><p>character string of path where progress is saved to as 'log.txt', use <code>NULL</code> to suppress (default)</p></dd>
+
+
 <dt>model_file</dt>
 <dd><p><code>NULL</code> to use the model file included with the package or a path to a model text file can be used</p></dd>
 
@@ -156,9 +156,6 @@
 
 
 <p>Model fit can also be assessed using the <code>converge</code> and <code>rsq</code> columns.  The values in these columns apply to each group in the <code>grp</code> column as specified with the <code>ndays</code> argument. The <code>converge</code> column indicates <code>"Check convergence"</code> or <code>"Fine"</code> if the JAGS estimate converged at that iteration (repeated across rows for the group).  The <code>n.chains</code> argument can be increased if convergence is not achieved. Similarly, the <code>rsq</code> column shows the r-squared values of the linear fit between the modeled and observed dissolved oxygen (repeated across rows for the group).  These values can also be viewed with <code><a href="fit_plot.html">fit_plot</a></code>.</p>
-
-
-<p>The <code>nogas</code> argument can be set to <code>TRUE</code> to exclude gas exchange from the metabolic estimates.  This will force the prior distribution for <code>b</code> as mean 0 and standard deviation approximately 0.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
