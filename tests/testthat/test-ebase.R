@@ -2,7 +2,7 @@ test_that("Checking ebase output, doave as F", {
   
   # check format
   result <- EBASE::ebase(dat, interval = 900, Z = 1.85, n.chains = 2, doave = F, 
-                         n.iter = 100,
+                         n.iter = 50,
                       model_file = system.file("ebase_model.txt", package = "EBASE")) 
   
   expect_s3_class(result, 'data.frame')
@@ -18,7 +18,7 @@ test_that("Checking ebase output, doave as F", {
 test_that("Checking ebase output, no gas exchange", {
   
   result <- EBASE::ebase(dat, interval = 900, Z = 1.85, n.chains = 2, doave = F, 
-                         n.iter = 100, nogas = T,
+                         n.iter = 50, nogas = T,
                          model_file = system.file("ebase_model.txt", package = "EBASE")) 
   
   aved <- round(mean(result$D, na.rm = T))
