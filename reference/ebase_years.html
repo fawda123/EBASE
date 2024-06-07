@@ -149,15 +149,15 @@
 
 
 <dt>ncores</dt>
-<dd></dd>
+<dd><p>numeric for number of cores to use for parallel processing, use <code>NULL</code> to suppress</p></dd>
 
 
 <dt>quiet</dt>
-<dd></dd>
+<dd><p>logical to suppress progress messages to the console</p></dd>
 
 
 <dt>maxtry</dt>
-<dd></dd>
+<dd><p>numeric for maximum number of times to retry the model if it fails</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -168,9 +168,8 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    
-
-
+    <p><code><a href="ebase.html">ebase</a></code> is run for each year in the supplied data. This facilitates running <code><a href="ebase.html">ebase</a></code> on long time series by running the model sequentially on each year of data, with progress messages printed to the console if <code>quiet = FALSE</code>. The model run for each year will restart if it fails, up to <code>maxtry</code> times, after which processing continues with the next year.  The model is run in parallel using the number of cores used set by <code>ncores</code>. If <code>ncores = NULL</code>, sequential processing is used.  All other arguments are passed to <code><a href="ebase.html">ebase</a></code>.</p>
+<p>Similar results can be obtained by running <code><a href="ebase.html">ebase</a></code> on the entire data set, but this function is useful for long time series where the model may fail for some years, e.g., when weather data may be missing for some years.</p>
     </div>
 
     <div class="section level2">
