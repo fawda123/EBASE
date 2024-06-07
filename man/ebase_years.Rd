@@ -62,11 +62,11 @@ ebase_years(
 
 \item{model_file}{\code{NULL} to use the model file included with the package or a path to a model text file can be used}
 
-\item{ncores}{}
+\item{ncores}{numeric for number of cores to use for parallel processing, use \code{NULL} to suppress}
 
-\item{quiet}{}
+\item{quiet}{logical to suppress progress messages to the console}
 
-\item{maxtry}{}
+\item{maxtry}{numeric for maximum number of times to retry the model if it fails}
 }
 \value{
 Output identical to that returned by \code{\link{ebase}}, where the results for each year are appended to the data frame as the function progresses through the years. Note that the \code{grp} column that specifies the optimization period defined by \code{ndays} is unique to each year, e.g., values will be repeated across years.
@@ -75,7 +75,9 @@ Output identical to that returned by \code{\link{ebase}}, where the results for 
 Estuarine Bayesian Single-station Estimation method for ecosystem metabolism for long time series
 }
 \details{
+\code{\link{ebase}} is run for each year in the supplied data. This facilitates running \code{\link{ebase}} on long time series by running the model sequentially on each year of data, with progress messages printed to the console if \code{quiet = FALSE}. The model run for each year will restart if it fails, up to \code{maxtry} times, after which processing continues with the next year.  The model is run in parallel using the number of cores used set by \code{ncores}. If \code{ncores = NULL}, sequential processing is used.  All other arguments are passed to \code{\link{ebase}}.
 
+Similar results can be obtained by running \code{\link{ebase}} on the entire data set, but this function is useful for long time series where the model may fail for some years, e.g., when weather data may be missing for some years.
 }
 \examples{
 # get one day of data

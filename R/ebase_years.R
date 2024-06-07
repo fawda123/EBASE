@@ -3,11 +3,11 @@
 #' Estuarine Bayesian Single-station Estimation method for ecosystem metabolism for long time series
 #' 
 #' @inheritParams ebase
-#' @param ncores 
-#' @param quiet 
-#' @param maxtry 
+#' @param ncores numeric for number of cores to use for parallel processing, use \code{NULL} to suppress
+#' @param quiet logical to suppress progress messages to the console
+#' @param maxtry numeric for maximum number of times to retry the model if it fails
 #'
-#' @details \code{\link{ebase} is run for each year in the supplied data. This facilitates running \code{\link{ebase}} on long time series by running the model sequentially on each year of data, with progress messages printed to the console if \code{quiet = FALSE}. The model run for each year will restart if it fails, up to \code{maxtry} times, after which processing continues with the next year.  The model is run in parallel using the number of cores used set by \code{ncores}. If \code{ncores} is not supplied, the number of cores is set as those available on the machine minus 2.  All other arguments are passed to \code{\link{ebase}}.
+#' @details \code{\link{ebase}} is run for each year in the supplied data. This facilitates running \code{\link{ebase}} on long time series by running the model sequentially on each year of data, with progress messages printed to the console if \code{quiet = FALSE}. The model run for each year will restart if it fails, up to \code{maxtry} times, after which processing continues with the next year.  The model is run in parallel using the number of cores used set by \code{ncores}. If \code{ncores = NULL}, sequential processing is used.  All other arguments are passed to \code{\link{ebase}}.
 #' 
 #' Similar results can be obtained by running \code{\link{ebase}} on the entire data set, but this function is useful for long time series where the model may fail for some years, e.g., when weather data may be missing for some years.
 #' 
@@ -37,9 +37,6 @@ ebase_years <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = 
 
   yrs <- unique(lubridate::year(dat$DateTimeStamp))
   
-  if(is.null(ncores))
-    ncores <- parallel::detectCores() - 2
-  
   out <- NULL
   for(yr in yrs){
     
@@ -52,9 +49,11 @@ ebase_years <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = 
     depth <- datsub$Depth
     
     # setup parallel backend
-    cl <- parallel::makeCluster(ncores)
-    registerDoParallel(cl)
-
+    if(!is.null(ncores)){
+      cl <- parallel::makeCluster(ncores)
+      registerDoParallel(cl)
+    }
+    
     # ebase
     res <- try(ebase(datsub, Z = depth, interval = interval, ndays = ndays, aprior = aprior, rprior = rprior,
                      bprior = bprior, bmax = bmax, nogas = nogas, doave = doave, maxinterp = maxinterp, 
@@ -62,13 +61,16 @@ ebase_years <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = 
                      n.thin = n.thin, model_file = model_file), 
                silent = T)
     
-    parallel::stopCluster(cl)
+    if(!is.null(ncores))
+      parallel::stopCluster(cl)
     
     i <- 1
     while(inherits(res, 'try-error')){
 
-      cl <- parallel::makeCluster(ncores)
-      registerDoParallel(cl)
+      if(!is.null(ncores)){
+        cl <- parallel::makeCluster(ncores)
+        registerDoParallel(cl)
+      }
       
       if(!quiet) cat('retrying...\t')
       
@@ -79,7 +81,8 @@ ebase_years <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = 
                        n.thin = n.thin, model_file = model_file),
                  silent = T)
       
-      parallel::stopCluster(cl)
+      if(!is.null(ncores))
+        parallel::stopCluster(cl)
       
       i <- i + 1
       if(i > maxtry) break()
