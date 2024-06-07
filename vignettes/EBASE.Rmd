@@ -151,6 +151,8 @@ The credible intervals can also be retrieved as a data frame using `credible_pre
 credible_prep(res)
 ```
 
+Finally, although `ebase()` can be used to estimate metabolism for time series with several years of data, the `ebase_years()` function can be used to estimate results sequentially for each year.  This is useful because model estimation using `ebase_years()` will continue after a year fails, e.g., when some years have long periods of missing or erroneous data.  This eliminates the need to restart the model or further pre-process the data.  The same arguments for `ebase()` are used for `ebase_years()`.  Progress is printed directly in the console and the user can specify the number of attempts for failed years before proceeding to the following year. 
+
 ## Changing the default arguments 
 
 ### Equation optimization length 
