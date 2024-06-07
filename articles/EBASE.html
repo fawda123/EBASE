@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">EBASE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -332,6 +332,17 @@ to parse the results from <code><a href="../reference/ebase.html">ebase()</a></c
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2012-06-04     4 a       0.728   0.518    0.941</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2012-06-04     4 R     140.    108.     170.   </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2012-06-04     4 b       0.279   0.074<span style="text-decoration: underline;">1</span>   0.468</span></span></code></pre></div>
+<p>Finally, although <code><a href="../reference/ebase.html">ebase()</a></code> can be used to estimate
+metabolism for time series with several years of data, the
+<code><a href="../reference/ebase_years.html">ebase_years()</a></code> function can be used to estimate results
+sequentially for each year. This is useful because model estimation
+using <code><a href="../reference/ebase_years.html">ebase_years()</a></code> will continue after a year fails, e.g.,
+when some years have long periods of missing or erroneous data. This
+eliminates the need to restart the model or further pre-process the
+data. The same arguments for <code><a href="../reference/ebase.html">ebase()</a></code> are used for
+<code><a href="../reference/ebase_years.html">ebase_years()</a></code>. Progress is printed directly in the console
+and the user can specify the number of attempts for failed years before
+proceeding to the following year.</p>
 </div>
 <div class="section level3">
 <h3 id="changing-the-default-arguments">Changing the default arguments<a class="anchor" aria-label="anchor" href="#changing-the-default-arguments"></a>
