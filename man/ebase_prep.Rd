@@ -9,7 +9,7 @@ ebase_prep(dat, Z, interval, ndays = 1)
 \arguments{
 \item{dat}{input data frame}
 
-\item{Z}{numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat} that will be averaged within \code{ndays}}
+\item{Z}{numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}}
 
 \item{interval}{timestep interval in seconds}
 

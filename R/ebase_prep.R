@@ -3,7 +3,7 @@
 #' Prepare data for ebase
 #' 
 #' @param dat input data frame
-#' @param Z numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat} that will be averaged within \code{ndays}
+#' @param Z numeric as single value for water column depth (m) or vector equal in length to number of rows in \code{dat}
 #' @param interval timestep interval in seconds
 #' @param ndays numeric for number of days in \code{dat} for optimizing the metabolic equation, see details
 #' 
@@ -136,14 +136,10 @@ ebase_prep <- function(dat, Z, interval, ndays = 1){
     dat$grp <- ifelse(is.na(dat$grp), maxgrp, dat$grp)
   }
   
-  # convert DO to mmol/m2
+  # convert DO to mmol/m3
   # add schmidt number as unitless
-  # add DO sat as mmol/m2
+  # add DO sat as mmol/m3
   out <- dat %>% 
-    # dplyr::mutate(
-    #   Z = mean(Z, na.rm = T), 
-    #   .by = grp
-    # ) |> 
     dplyr::mutate(
       DO_obs = DO_obs / 32 * 1000,
       sc = ebase_schmidt(Temp, Sal), 

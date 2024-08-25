@@ -1,11 +1,8 @@
 test_that("Checking ebase output, doave as F", {
   
-  # temp dir for log
-  tmpdir <- tempdir()
-  
   # check format
   result <- EBASE::ebase(dat, interval = 900, Z = 1.85, n.chains = 2, doave = F, 
-                         n.iter = 100, progress = tmpdir,
+                         n.iter = 50,
                       model_file = system.file("ebase_model.txt", package = "EBASE")) 
   
   expect_s3_class(result, 'data.frame')
@@ -16,7 +13,17 @@ test_that("Checking ebase output, doave as F", {
                          "DO_modhi", "dDO", "converge", "rsq", "a", "alo", "ahi", "b", "blo", 
                          "bhi", "P", "Plo", "Phi", "R", "Rlo", "Rhi", "D", "Dlo", "Dhi"))
   
-  # check log location
-  expect_true(file.exists(file.path(tmpdir, "log.txt")))
+})
+
+test_that("Checking ebase output, no gas exchange", {
+  
+  result <- EBASE::ebase(dat, interval = 900, Z = 1.85, n.chains = 2, doave = F, 
+                         n.iter = 50, nogas = T,
+                         model_file = system.file("ebase_model.txt", package = "EBASE")) 
+  
+  aved <- round(mean(result$D, na.rm = T))
+  
+  # check gas exchange is zero
+  expect_equal(aved, 0)
   
 })

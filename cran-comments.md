@@ -1,25 +1,17 @@
 ## Resubmission
 
-This is a version up for a minor documentation edit to the vignette and help files.
+This is a minor version update.
 
 ## Test environments
 
-* ubuntu 22.04.4 (R 4.3.3, R 4.2.3, R devel)
-* macOS Monterey 12.7.3 (R 4.3.3)
-* win-builder [http://win-builder.r-project.org/](http://win-builder.r-project.org/) (R 4.3.3, R 4.2.3, R devel)
-* local Windows 10 install (R 4.3.2)
+* ubuntu 22.04.4 (R 4.4.0, R 4.3.3, R devel)
+* macOS Monterey 12.7.3 (R 4.4.0)
+* win-builder [http://win-builder.r-project.org/](http://win-builder.r-project.org/) (R 4.4.0, R 4.3.3, R devel)
+* local Windows 10 install (R 4.3.3)
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
-
-* checking CRAN incoming feasibility ... NOTE
-
-Possibly misspelled words in DESCRIPTION:
-  Estuarine (2:8)
-  estuarine (32:14)
-  
-Neither of these are misspelled.
+0 errors | 0 warnings | 0 notes
 
 ## Downstream dependencies
 

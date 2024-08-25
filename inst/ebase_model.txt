@@ -31,13 +31,15 @@
     
     for (i in 1:(num.measurements-1)){		
       
+      # all units volumetric
       DO_obs[i+1] ~ dnorm(DO_mod[i+1], tau)
       DO_mod[i+1] <- DO_mod[i]
         + (a * PAR[i] / Z[i])
         - (r / Z[i])
         + ((b * pow(U10[i], 2) * pow(sc[i] / 600, -0.5) * (DO_sat[i] - DO_mod[i])) / Z[i])
       
-      # posterior predictive assessment nodes #
+      # posterior predictive assessment nodes
+      # all units areal
       ats[i] <- a 
       bts[i] <- b 
       gppts[i] <- a * PAR[i]
