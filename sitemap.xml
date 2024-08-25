@@ -1,81 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://fawda123.github.io/EBASE/404.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/articles/EBASE.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/index.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/credible_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/credible_prep.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/ebase.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/ebase_eqboxy.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/ebase_form.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/ebase_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/ebase_prep.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/ebase_rho.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/ebase_schmidt.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/ebase_years.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/exdat.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/exres.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/fit_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/interp_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/metab_update.html</loc>
-  </url>
-  <url>
-    <loc>https://fawda123.github.io/EBASE/reference/prior_plot.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://fawda123.github.io/EBASE/404.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/CONTRIBUTING.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/LICENSE.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/articles/EBASE.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/articles/index.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/authors.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/index.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/news/index.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/credible_plot.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/credible_prep.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/ebase.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/ebase_eqboxy.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/ebase_form.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/ebase_plot.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/ebase_prep.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/ebase_rho.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/ebase_schmidt.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/ebase_years.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/exdat.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/exres.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/fit_plot.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/index.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/interp_plot.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/metab_update.html</loc></url>
+<url><loc>https://fawda123.github.io/EBASE/reference/prior_plot.html</loc></url>
 </urlset>
+
