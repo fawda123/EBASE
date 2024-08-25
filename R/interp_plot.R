@@ -36,7 +36,7 @@ interp_plot <- function(dat, param = c('DO_obs', 'DO_sat', 'Z', 'Temp', 'Sal', '
 
   toplo <- dat %>% 
     dplyr::rename(yval = !!param)
-
+browser()
   p <- ggplot2::ggplot(toplo, ggplot2::aes(x = DateTimeStamp, y = yval)) +
     ggplot2::geom_line() + 
     ggplot2::geom_point(ggplot2::aes(color = isinterp)) + 
