@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">EBASE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,7 @@
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>A data frame with 384 observations and 26 variables:</p><dl><dt>DateTimeStamp</dt>
+    <p>A data frame with 384 observations and 29 variables:</p><dl><dt>DateTimeStamp</dt>
 <dd><p>POSIXct, format: "2012-06-01 00:00:00" "2012-06-01 00:15:00" ...</p></dd>
 
 <dt>Date</dt>
@@ -105,13 +105,22 @@
 <dd><p>Numeric, upper credible interval of parameter P</p></dd>
 
 <dt>R</dt>
-<dd><p>Numeric, respiratoin, O2 mmol m-2 d-1</p></dd>
+<dd><p>Numeric, respiration, O2 mmol m-2 d-1</p></dd>
 
 <dt>Rlo</dt>
 <dd><p>Numeric, lower credible interval of parameter R</p></dd>
 
 <dt>Rhi</dt>
 <dd><p>Numeric, upper credible interval of parameter R</p></dd>
+
+<dt>NEM</dt>
+<dd><p>Numeric, net ecosystem metabolism, O2 mmol m-2 d-1</p></dd>
+
+<dt>NEMlo</dt>
+<dd><p>Numeric, lower credible interval of parameter NEM</p></dd>
+
+<dt>NEMhi</dt>
+<dd><p>Numeric, upper credible interval of parameter NEM</p></dd>
 
 <dt>D</dt>
 <dd><p>Numeric, gas exchange, O2 mmol m-2 d-1)</p></dd>
@@ -134,26 +143,33 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">exres</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         DateTimeStamp       Date grp    Z  DO_obs   DO_mod DO_modlo DO_modhi</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2012-06-01 00:00:00 2012-06-01   1 1.85 140.625 166.1133 166.1122 166.1143</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2012-06-01 00:15:00 2012-06-01   1 1.85 159.375 165.4136 165.1512 165.6796</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2012-06-01 00:30:00 2012-06-01   1 1.85 150.000 164.7459 164.2171 165.2783</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2012-06-01 00:45:00 2012-06-01   1 1.85 150.000 164.0582 163.2677 164.8556</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2012-06-01 01:00:00 2012-06-01   1 1.85 150.000 163.3622 162.3142 164.4218</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2012-06-01 01:15:00 2012-06-01   1 1.85 156.250 162.6401 161.3214 163.9644</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         dDO converge       rsq         a       alo     ahi         b      blo</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        NA     Fine 0.3316977        NA        NA      NA        NA       NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -67.17105     Fine 0.3316977 0.8937188 0.5493401 1.23722 0.3099639 0.095399</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -64.09917     Fine 0.3316977 0.8937188 0.5493401 1.23722 0.3099639 0.095399</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -66.01785     Fine 0.3316977 0.8937188 0.5493401 1.23722 0.3099639 0.095399</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -66.81056     Fine 0.3316977 0.8937188 0.5493401 1.23722 0.3099639 0.095399</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 -69.32716     Fine 0.3316977 0.8937188 0.5493401 1.23722 0.3099639 0.095399</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         bhi  P Plo Phi        R      Rlo      Rhi        D      Dlo      Dhi</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        NA NA  NA  NA       NA       NA       NA       NA       NA       NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.4880948  0   0   0 141.3441 91.81771 189.3398 17.07767 5.256151 26.89177</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.4880948  0   0   0 141.3441 91.81771 189.3398 22.76065 7.016575 35.73629</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 0.4880948  0   0   0 141.3441 91.81771 189.3398 19.21109 5.935086 30.23658</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 0.4880948  0   0   0 141.3441 91.81771 189.3398 17.74458 5.472469 28.00020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.4880948  0   0   0 141.3441 91.81771 189.3398 13.08887 4.054759 20.68591</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 2012-06-01 00:00:00 2012-06-01   1 1.85 140.625 166.1132 166.1112 166.1152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2012-06-01 00:15:00 2012-06-01   1 1.85 159.375 165.4135 165.1514 165.6797</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2012-06-01 00:30:00 2012-06-01   1 1.85 150.000 164.7458 164.2165 165.2784</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 2012-06-01 00:45:00 2012-06-01   1 1.85 150.000 164.0582 163.2671 164.8557</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 2012-06-01 01:00:00 2012-06-01   1 1.85 150.000 163.3622 162.3135 164.4221</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2012-06-01 01:15:00 2012-06-01   1 1.85 156.250 162.6401 161.3221 163.9645</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         dDO converge       rsq        a       alo      ahi         b      blo</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        NA     Fine 0.3316977       NA        NA       NA        NA       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -67.17103     Fine 0.3316977 0.893719 0.5493333 1.237225 0.3099639 0.095399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -64.09915     Fine 0.3316977 0.893719 0.5493333 1.237225 0.3099639 0.095399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -66.01783     Fine 0.3316977 0.893719 0.5493333 1.237225 0.3099639 0.095399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -66.81054     Fine 0.3316977 0.893719 0.5493333 1.237225 0.3099639 0.095399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 -69.32714     Fine 0.3316977 0.893719 0.5493333 1.237225 0.3099639 0.095399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         bhi  P Plo Phi        R      Rlo      Rhi       NEM     NEMlo     NEMhi</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        NA NA  NA  NA       NA       NA       NA        NA        NA        NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.4880948  0   0   0 141.3441 91.81687 189.3383 -141.3441 -189.3383 -91.81687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.4880948  0   0   0 141.3441 91.81687 189.3383 -141.3441 -189.3383 -91.81687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 0.4880948  0   0   0 141.3441 91.81687 189.3383 -141.3441 -189.3383 -91.81687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 0.4880948  0   0   0 141.3441 91.81687 189.3383 -141.3441 -189.3383 -91.81687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.4880948  0   0   0 141.3441 91.81687 189.3383 -141.3441 -189.3383 -91.81687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          D      Dlo      Dhi</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       NA       NA       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 17.07768 5.256220 26.89167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 22.76066 7.016668 35.73653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 19.21110 5.935163 30.23677</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 17.74459 5.472476 28.00036</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 13.08888 4.054735 20.68587</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -165,7 +181,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>

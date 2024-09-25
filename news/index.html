@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">EBASE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,6 +33,16 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.0" id="ebase-110">EBASE 1.1.0<a class="anchor" aria-label="anchor" href="#ebase-110"></a></h2>
+<ul><li>Added <code>nogas</code> argument option to <code><a href="../reference/ebase.html">ebase()</a></code> to estimate EBASE without gas exchange</li>
+<li>Removed option for progress file output from <code><a href="../reference/ebase.html">ebase()</a></code> which can unexpectedly cause JAGS to crash</li>
+<li>Added <code><a href="../reference/ebase_years.html">ebase_years()</a></code> function to estimate EBASE on multiple years of data</li>
+<li>Added net ecosystem metabolism (NEM) as output from <code><a href="../reference/ebase.html">ebase()</a></code>
+</li>
+<li>Added <code>asnem</code> argument as option to plot NEM, P, and R using <code><a href="../reference/ebase_plot.html">ebase_plot()</a></code>
+</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.2" id="ebase-102">EBASE 1.0.2<a class="anchor" aria-label="anchor" href="#ebase-102"></a></h2><p class="text-muted">CRAN release: 2024-06-04</p>
 <ul><li>Added check in <code><a href="../reference/ebase_prep.html">ebase_prep()</a></code> for ascending date</li>
 <li>Fix to model formula in JAGS file and <code><a href="../reference/ebase_prep.html">ebase_prep()</a></code> for correct handling of Z either as fixed of continuous. This is a minor change and does not affect the results of the model for fixed Z, but previously produced incorrect rates if continuous.</li>
@@ -56,7 +66,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
