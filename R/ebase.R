@@ -37,6 +37,10 @@
 #' 
 #' \deqn{ Z\frac{dC_d}{dt} = P - R + D}
 #' 
+#' Net ecosystem metabolism (NEM) is then estimated as:
+#' 
+#' \deqn{NEM = P - R}
+#' 
 #' Gross production is provided by \emph{aPAR}, respiration is provided by \emph{R}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{R}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The first modeled value starts at the mean oxygen concentration for all measurements in the optimization period.  The estimated concentration at each time step is also returned for comparison to observed as one measure of model performance.   
 #' 
 #' The prior distributions for the \emph{a}, \emph{R}, and \emph{b} parameters are defined in the model file included with the package as normal distributions with mean and standard deviations provided by the \code{aprior}, \code{rprior}, and \code{bprior} arguments. The default values were chosen based on approximate values from national syntheses of metabolic estimates.  An additional constraint is that all the prior distributions are truncated to be positive values as required by the core metabolism equation above. The upper limit for \emph{b} is set as two times 0.251, as given in eqn. 4 in Wanninkhof 2014. Units for each parameter are (mmol m-2 d-1)/(W m-2) for \emph{a}, mmol m-2 d-1 for \emph{R}, and (cm hr-1)/(m2 s-2) for \emph{b}. 
@@ -49,7 +53,7 @@
 #' 
 #' The \code{doave} argument can be used to define which dissolved oxygen value is used as the starting point in the Bayesian estimation for the optimization period.  The default setting (\code{doave = TRUE}) will use the average of all the dissolved oxygen values in the optimization period defined by \code{ndays}.  For example, the average of all dissolved oxygen values in each 24 hour period will be used if \code{doave = TRUE} and \code{ndays = 1}.  The first dissolved oxygen observation of the time series in the optimization period will be used as the starting point if \code{doave = F}.  In this case, the simulated dissolved oxygen time series will always start at the first observed dissolved oxygen value for each optimization period. 
 #' 
-#' @return A data frame with metabolic estimates for areal gross production (\code{P}, O2 mmol m-2 d-1), respiration (\code{R},  O2 mmol m-2 d-1), and gas exchange (\code{D}, O2 mmol m-2 d-1, positive values as ingassing, negative values as outgassing).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of (mmol m-2 d-1)/(W m-2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm hr-1)/(m2 s-2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).  Observed dissolved oxygen (\code{DO_obs}, mmol m-3), modeled dissolved oxygen (\code{DO_mod}, mmol m-3), and delta dissolved oxygen of the modeled results (\code{dDO}, mmol m-3 d-1) are also returned.  Note that delta dissolved oxygen is a daily rate.
+#' @return A data frame with metabolic estimates for areal gross production (\code{P}, O2 mmol m-2 d-1), respiration (\code{R},  O2 mmol m-2 d-1), and gas exchange (\code{D}, O2 mmol m-2 d-1, positive values as ingassing, negative values as outgassing).  \code{NEM} (net ecosystem metabolism, O2 mmol m-2 d-1) is also returned as \code{P} - \code{R}. Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of (mmol m-2 d-1)/(W m-2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm hr-1)/(m2 s-2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).  Observed dissolved oxygen (\code{DO_obs}, mmol m-3), modeled dissolved oxygen (\code{DO_mod}, mmol m-3), and delta dissolved oxygen of the modeled results (\code{dDO}, mmol m-3 d-1) are also returned.  Note that delta dissolved oxygen is a daily rate.
 #' 
 #' 95% credible intervals for \code{a}, \code{b}, and \code{R} are also returned in the corresponding columns \code{alo}, \code{ahi}, \code{blo}, \code{bhi}, \code{Rlo}, and \code{Rhi}, for the 2.5th and 97.5th percentile estimates for each parameter, respectively.  These values indicate the interval within which there is a 95% probability that the true parameter is in this range. Note that all values for these parameters are repeated across rows, although only one estimate for each is returned based on the number of days defined by \code{ndays}. 
 #' 
@@ -118,7 +122,7 @@ ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
     dat.list <- list("num.measurements", "nstepd", "interval", "aprior", "rprior", "bprior", "bmax", "DO_obs", "PAR", "DO_sat", "Z", "sc", "U10", "DO_start")
   
     # Define monitoring variables (returned by jags)
-    params <- c("ats", "bts", "gppts", "erts", "gets", "DO_mod")
+    params <- c("ats", "bts", "gppts", "erts", "gets", "nemts", "DO_mod")
   
     ## Call jags ##
     metabfit <- do.call(jags.parallel,
@@ -163,6 +167,9 @@ ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
       erts = c(NA, metabfit$BUGSoutput$mean$erts), # O2, mmol/m2/ts
       ertslo = c(NA, cred[cred$var == 'erts', 'X2.5.']),
       ertshi = c(NA, cred[cred$var == 'erts', 'X97.5.']),
+      nemts = c(NA, metabfit$BUGSoutput$mean$nemts), # O2, mmol/m2/ts
+      nemtslo = c(NA, cred[cred$var == 'nemts', 'X2.5.']),
+      nemtshi = c(NA, cred[cred$var == 'nemts', 'X97.5.']),
       gets = c(NA, metabfit$BUGSoutput$mean$gets), # O2, mmol/m2/ts
       getslo = c(NA, cred[cred$var == 'gets', 'X2.5.']),
       getshi = c(NA, cred[cred$var == 'gets', 'X97.5.']),
@@ -196,12 +203,16 @@ ebase <- function(dat, Z, interval, ndays = 1, aprior = c(4, 2), rprior = c(300,
       R = erts * nstepd, # O2 mmol/m2/ts to O2 mmol/m2/d
       Rlo = ertslo * nstepd, 
       Rhi = ertshi * nstepd,
+      NEM = nemts * nstepd, # O2 mmol/m2/ts to O2 mmol/m2/d
+      NEMlo = nemtslo * nstepd, 
+      NEMhi = nemtshi * nstepd,
       D = gets * nstepd, # O2 mmol/m2/ts to O2 mmol/m2/d
       Dlo = getslo * nstepd, 
       Dhi = getshi * nstepd,
       dDO = dDO * nstepd #  # O2 mmol/m3/ts to O2 mmol/m3/d
     ) %>%
-    dplyr::select(-ats, -atslo, -atshi, -bts, -btslo, -btshi, -gppts, -gpptslo, -gpptshi, -erts, -ertslo, -ertshi, -gets, -getslo, -getshi)
+    dplyr::select(-ats, -atslo, -atshi, -bts, -btslo, -btshi, -gppts, -gpptslo, -gpptshi, -erts, -ertslo, -ertshi, 
+                  -nemts, -nemtslo, -nemtshi, -gets, -getslo, -getshi)
   
   out <- ebase_form(out, dat, interval, maxinterp)
   

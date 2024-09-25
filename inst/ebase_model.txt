@@ -44,6 +44,7 @@
       bts[i] <- b 
       gppts[i] <- a * PAR[i]
       erts[i] <- r
+      nemts[i] <- a * PAR[i] - r
       gets[i] <- (b * pow(U10[i], 2) * pow(sc[i] / 600, -0.5) * (DO_sat[i] - DO_mod[i]))
       
     }

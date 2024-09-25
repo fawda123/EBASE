@@ -5,7 +5,7 @@
 \alias{exres}
 \title{Example results for four days from Apalachicola NERRS}
 \format{
-A data frame with 384 observations and 26 variables:
+A data frame with 384 observations and 29 variables:
 \describe{
 \item{DateTimeStamp}{POSIXct, format: "2012-06-01 00:00:00" "2012-06-01 00:15:00" ...}
 \item{Date}{Date, format: "2012-06-01" "2012-06-01" ...}
@@ -27,9 +27,12 @@ A data frame with 384 observations and 26 variables:
 \item{P}{Numeric, production, O2 mmol m-2 d-1}
 \item{Plo}{Numeric, lower credible interval of parameter P}
 \item{Phi}{Numeric, upper credible interval of parameter P}
-\item{R}{Numeric, respiratoin, O2 mmol m-2 d-1}
+\item{R}{Numeric, respiration, O2 mmol m-2 d-1}
 \item{Rlo}{Numeric, lower credible interval of parameter R}
 \item{Rhi}{Numeric, upper credible interval of parameter R}
+\item{NEM}{Numeric, net ecosystem metabolism, O2 mmol m-2 d-1}
+\item{NEMlo}{Numeric, lower credible interval of parameter NEM}
+\item{NEMhi}{Numeric, upper credible interval of parameter NEM}
 \item{D}{Numeric, gas exchange, O2 mmol m-2 d-1)}
 \item{Dlo}{Numeric, lower credible interval of parameter D}
 \item{Dhi}{Numeric, upper credible interval of parameter D}

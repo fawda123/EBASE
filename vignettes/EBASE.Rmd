@@ -53,6 +53,12 @@ $$
 Z\frac{dC_d}{dt} = P - R + D
 $$
 
+Net ecosystem metabolism (NEM) is then estimated as:
+
+$$
+NEM = P - R
+$$
+
 The metabolic estimates are defined by the change in dissolved oxygen over the time step $\frac{dC_d}{dt}$, where gross production is provided by $aPAR$, respiration is provided by $R$, and gas exchange is provided by the remainder.  Required inputs for the equation are dissolved oxygen concentration as $C_d$, solar radiation as $PAR$, water column depth as $Z$ (meters), and wind speed as $U$.  Other inputs for the schmidt number $Sc$ and dissolved oxygen at saturation $C_{Sat}$ are calculated from the observed data.  The remaining three parameters $a$, $R$, and $b$ are estimated by likelihood given the observed data with the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The first modeled value starts at the mean oxygen concentration for all measurements in the optimization period.  The estimated concentration is also returned at each time step, which can be compared to observed as one measure of model performance.
 
 The following shows how to use the `ebase()` function with a subset of four days from the `exdat()` example dataset.  Running the model on the entire year will take a few minutes, so a subset is used: 
@@ -76,7 +82,7 @@ res <- ebase(dat, interval = 900, Z = 1.85, n.chains = 2)
 head(res)
 ```
 
-The results are returned as a data frame with instantaneous metabolic estimates for areal gross production (O2 mmol m-2 d-1, `P` or $aPAR$ from above as volumetric), respiration (O2 mmol m-2 d-1, `R` from above as volumetric), and gas exchange (O2 mmol m-2 d-1, `D` or the remainder of the equation from above as volumetric, positive values as ingassing, negative values as outgassing).  Additional parameters estimated by the model that are returned include `a` and `b` as shown in the above equation.  The `a` parameter is a constant that represents the primary production per quantum of light with units of  (mmol m-2 d-1)/(W m-2) and is used to estimate gross production [@Grace15].  The `b` parameter is a constant used to estimate gas exchange in (cm hr-1)/(m2 s-2) (provided as 0.251 in eqn. 4 in @Wanninkhof14).
+The results are returned as a data frame with instantaneous metabolic estimates for areal gross production (O2 mmol m-2 d-1, `P` or $aPAR$ from above as volumetric), respiration (O2 mmol m-2 d-1, `R` from above as volumetric), and gas exchange (O2 mmol m-2 d-1, `D` or the remainder of the equation from above as volumetric, positive values as ingassing, negative values as outgassing). `NEM` (net ecosystem metabolism, O2 mmol m-2 d-1) is also returned as `P` - `R`. Additional parameters estimated by the model that are returned include `a` and `b` as shown in the above equation.  The `a` parameter is a constant that represents the primary production per quantum of light with units of  (mmol m-2 d-1)/(W m-2) and is used to estimate gross production [@Grace15].  The `b` parameter is a constant used to estimate gas exchange in (cm hr-1)/(m2 s-2) (provided as 0.251 in eqn. 4 in @Wanninkhof14).
 
 A plot of the results can be made with `ebase_plot()`.
 
@@ -88,6 +94,12 @@ The daily averages can also be plotted by using `instantaneous = FALSE`.
 
 ```{r, fig.height = 3, fig.width = 9}
 ebase_plot(res, instantaneous = FALSE)
+```
+
+Similarly, a plot of net ecosystem metabolism (NEM) with production and respiration can be made with `ebase_plot()` using `asnem = T`.  This plot shows NEM as the difference between production and respiration.  Gas exchange is not shown and respiration is expressed negatively to show the negative contribution to NEM. 
+
+```{r, fig.height = 3, fig.width = 9}
+ebase_plot(res, asnem = T)
 ```
 
 Execution time of the model can also be reduced by using multiple processors.  This is done using [doParrallel](https://cran.r-project.org/package=doParallel) package and registering a parallel backend as below. 

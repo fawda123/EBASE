@@ -4,25 +4,34 @@
 \alias{ebase_plot}
 \title{Plot results from EBASE}
 \usage{
-ebase_plot(res, instantaneous = TRUE)
+ebase_plot(res, asnem = FALSE, instantaneous = TRUE)
 }
 \arguments{
 \item{res}{output data frame from \code{\link{ebase}}}
 
+\item{asnem}{logical indicating if \code{NEM} is plotted with \code{P} and negative \code{R}, see details}
+
 \item{instantaneous}{logical indicating if results are instantaneous (default) or averaged to daily}
 }
 \value{
-A \code{\link[ggplot2]{ggplot}} object
+A \code{\link[ggplot2]{ggplot}}
 }
 \description{
 Plot results from EBASE
 }
 \details{
-All metabolic estimates are plotted as positive values (\code{D} is represented as net ingassing).
+The plot shows \code{P}, \code{R}, and \code{D} over time as positive values if \code{asnem = F} (default). Positive values for \code{D} are ingassing, negative outgassing.
+
+If \code{asnem = T}, \code{NEM} is plotted as a separate line as the difference between \code{P} and \code{R}. \code{R} is shown as negative values to indicate the negative influence on \code{NEM}. \code{D} is also excluded.
+
+If \code{instantaneous = F}, the plot shows daily-averaged values.  The y-axis units are the same for daily or instantaneous values.
 }
 \examples{
 # plot instantaneous
 ebase_plot(exres)
+
+# plot NEM, negative R, exclude D
+ebase_plot(exres, asnem = TRUE)
 
 # plot daily-averaged
 ebase_plot(exres, instantaneous = FALSE)

@@ -1,3 +1,11 @@
+# EBASE 1.1.0
+
+* Added `nogas` argument option to `ebase()` to estimate EBASE without gas exchange
+* Removed option for progress file output from `ebase()` which can unexpectedly cause JAGS to crash
+* Added `ebase_years()` function to estimate EBASE on multiple years of data
+* Added net ecosystem metabolism (NEM) as output from `ebase()`
+* Added `asnem` argument as option to plot NEM, P, and R using `ebase_plot()`
+
 # EBASE 1.0.2
 
 * Added check in `ebase_prep()` for ascending date

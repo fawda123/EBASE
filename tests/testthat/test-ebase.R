@@ -11,7 +11,8 @@ test_that("Checking ebase output, doave as F", {
   nms <- names(result)
   expect_equal(nms, c("DateTimeStamp", "Date", "grp", "Z", "DO_obs", "DO_mod", "DO_modlo",
                          "DO_modhi", "dDO", "converge", "rsq", "a", "alo", "ahi", "b", "blo", 
-                         "bhi", "P", "Plo", "Phi", "R", "Rlo", "Rhi", "D", "Dlo", "Dhi"))
+                         "bhi", "P", "Plo", "Phi", "R", "Rlo", "Rhi", "NEM", "NEMlo", "NEMhi",
+                        "D", "Dlo", "Dhi"))
   
 })
 

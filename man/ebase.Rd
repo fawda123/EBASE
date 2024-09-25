@@ -60,7 +60,7 @@ ebase(
 \item{model_file}{\code{NULL} to use the model file included with the package or a path to a model text file can be used}
 }
 \value{
-A data frame with metabolic estimates for areal gross production (\code{P}, O2 mmol m-2 d-1), respiration (\code{R},  O2 mmol m-2 d-1), and gas exchange (\code{D}, O2 mmol m-2 d-1, positive values as ingassing, negative values as outgassing).  Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of (mmol m-2 d-1)/(W m-2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm hr-1)/(m2 s-2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).  Observed dissolved oxygen (\code{DO_obs}, mmol m-3), modeled dissolved oxygen (\code{DO_mod}, mmol m-3), and delta dissolved oxygen of the modeled results (\code{dDO}, mmol m-3 d-1) are also returned.  Note that delta dissolved oxygen is a daily rate.
+A data frame with metabolic estimates for areal gross production (\code{P}, O2 mmol m-2 d-1), respiration (\code{R},  O2 mmol m-2 d-1), and gas exchange (\code{D}, O2 mmol m-2 d-1, positive values as ingassing, negative values as outgassing).  \code{NEM} (net ecosystem metabolism, O2 mmol m-2 d-1) is also returned as \code{P} - \code{R}. Additional parameters estimated by the model that are returned include \code{a} and \code{b}.  The \code{a} parameter is a constant that represents the primary production per quantum of light with units of (mmol m-2 d-1)/(W m-2) and is used to estimate gross production (Grace et al., 2015).  The \code{b} parameter is a constant used to estimate gas exchange in (cm hr-1)/(m2 s-2) (provided as 0.251 in eqn. 4 in Wanninkhof 2014).  Observed dissolved oxygen (\code{DO_obs}, mmol m-3), modeled dissolved oxygen (\code{DO_mod}, mmol m-3), and delta dissolved oxygen of the modeled results (\code{dDO}, mmol m-3 d-1) are also returned.  Note that delta dissolved oxygen is a daily rate.
 
 95\% credible intervals for \code{a}, \code{b}, and \code{R} are also returned in the corresponding columns \code{alo}, \code{ahi}, \code{blo}, \code{bhi}, \code{Rlo}, and \code{Rhi}, for the 2.5th and 97.5th percentile estimates for each parameter, respectively.  These values indicate the interval within which there is a 95\% probability that the true parameter is in this range. Note that all values for these parameters are repeated across rows, although only one estimate for each is returned based on the number of days defined by \code{ndays}.
 
@@ -81,6 +81,10 @@ The metabolic estimates are based on a mass balance equation in Grace et al. 201
 More simply:
 
 \deqn{ Z\frac{dC_d}{dt} = P - R + D}
+
+Net ecosystem metabolism (NEM) is then estimated as:
+
+\deqn{NEM = P - R}
 
 Gross production is provided by \emph{aPAR}, respiration is provided by \emph{R}, and gas exchange is provided by the remainder.  The likelihood of the parameters \emph{a}, \emph{R}, and \emph{b} given the observed data are estimated from the JAGS model using prior distributions shown in the model file. At each time step, the change in oxygen concentration between time steps is calculated from the equation using model inputs and parameter guesses, and then a finite difference approximation is used to estimate modeled oxygen concentration.  The first modeled value starts at the mean oxygen concentration for all measurements in the optimization period.  The estimated concentration at each time step is also returned for comparison to observed as one measure of model performance.
 
