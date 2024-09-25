@@ -4,10 +4,10 @@ This is a minor version update.
 
 ## Test environments
 
-* ubuntu 22.04.4 (R 4.4.0, R 4.3.3, R devel)
-* macOS Monterey 12.7.3 (R 4.4.0)
-* win-builder [http://win-builder.r-project.org/](http://win-builder.r-project.org/) (R 4.4.0, R 4.3.3, R devel)
-* local Windows 10 install (R 4.3.3)
+* ubuntu 22.04.5 (R 4.4.1, R 4.3.3, R devel)
+* macOS 12.7.6 (R 4.4.1)
+* win-builder [http://win-builder.r-project.org/](http://win-builder.r-project.org/) (release, old-release, devel)
+* local Windows 10 install (R 4.3.2)
 
 ## R CMD check results
 
